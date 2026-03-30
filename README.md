@@ -79,6 +79,31 @@ Any time you edit and save an HTML page inside the `frontend/` directory, the ba
 
 ## 🏛️ Architecture & Key Components
 
+```mermaid
+flowchart TD
+    User([User]) -->|Browses Site / Chats| Frontend[Frontend HTML/JS]
+    Admin([Admin]) -->|Uploads / Manages PDFs| AdminPanel[Admin Panel]
+    
+    Frontend -->|POST /chat/stream| FastAPI[FastAPI Backend]
+    AdminPanel -->|POST /upload| FastAPI
+    
+    subgraph Data Processing
+        FastAPI -->|Extracts & Embeds| Ingestion[Ingestion Engine]
+        Ingestion -->|Saves Vectors| ChromaDB[(ChromaDB)]
+        Static[Website HTML Changed] -->|Watchdog Detects| SiteIndexer[Site Indexer]
+        SiteIndexer -->|Saves Vectors| ChromaDB
+    end
+    
+    subgraph Inference & RAG
+        FastAPI -->|Semantic Search| Retrieval[Retrieval Engine]
+        Retrieval <-->|Fetches Top-K Context| ChromaDB
+        Retrieval -->|Prompt + Context| Ollama((Ollama LLaMA 3.1))
+    end
+    
+    Ollama -->|Streams Response| FastAPI
+    FastAPI -->|SSE Stream| Frontend
+```
+
 - `backend/main.py`: Central FastAPI application routing, background task handling, and static file serving.
 - `backend/retrieval.py`: Handles querying ChromaDB with user input, generating a contextual prompt, and managing the stream from Ollama.
 - `backend/ingestion.py`: Logic for chunking and embedding PDF documents.
