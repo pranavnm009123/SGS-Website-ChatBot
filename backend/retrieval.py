@@ -40,7 +40,7 @@ def _apply_margin(docs, metas, dists, margin):
 
 
 def _build_prompt(question, context):
-    return f"""You are Alex, a friendly and knowledgeable virtual assistant for Acme Corp. You are part of the team.
+    return f"""You are Alex, a friendly and knowledgeable virtual assistant for SGS Technologies. You are part of the team.
 
 RULES:
 - Speak in first-person plural ("we", "our", "us") as a company representative.

@@ -62,7 +62,7 @@
         '</div>' +
         '<div>' +
           '<h4>Alex</h4>' +
-          '<small>Acme Corp Assistant</small>' +
+          '<small>SGS Technologies Assistant</small>' +
         '</div>' +
       '</div>' +
       '<div class="widget-header-actions">' +
@@ -81,7 +81,7 @@
         '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>' +
       '</button>' +
     '</div>' +
-    '<div class="widget-footer">Powered by <strong>Acme Corp</strong> AI</div>';
+    '<div class="widget-footer">Powered by <strong>SGS Technologies</strong> AI</div>';
 
   document.body.appendChild(btn);
   document.body.appendChild(panel);
@@ -218,7 +218,7 @@
   }
 
   function showWelcome() {
-    appendBubble("Hi there! I'm Alex, your Acme Corp assistant. I can answer questions about our services, team, pricing, and uploaded documents. How can I help?", 'bot', false);
+    appendBubble("Hi there! I'm Alex, your SGS Technologies assistant. I can answer questions about our services, team, pricing, and uploaded documents. How can I help?", 'bot', false);
     addSuggestions();
     scroll();
   }
