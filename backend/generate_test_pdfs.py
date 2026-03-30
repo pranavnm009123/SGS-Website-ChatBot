@@ -8,7 +8,7 @@ os.makedirs(pdf_dir, exist_ok=True)
 class PDF(FPDF):
     def header(self):
         self.set_font("helvetica", "B", 15)
-        self.cell(w=0, h=10, text="Official Fictional Documents Archive", border=False, align="C", new_x="LMARGIN", new_y="NEXT")
+        self.cell(w=0, h=10, text="Acme Corp - Confidential Document", border=False, align="C", new_x="LMARGIN", new_y="NEXT")
         self.ln(10)
 
     def footer(self):
@@ -18,122 +18,137 @@ class PDF(FPDF):
 
 documents = [
     {
-        "filename": "Galactic_Calendar_Rev42.pdf",
-        "title": "Galactic Standard Calendar Revision 42",
+        "filename": "Acme_Corp_Overview.pdf",
+        "title": "Acme Corp Company Overview",
         "content": (
-            "The Galactic Standard Calendar (GSC) has been updated to Revision 42 to account for "
-            "the temporal fluctuations caused by the recent hyper-lane expansion.\n\n"
-            "Key Changes:\n"
-            "1. The year now consists of 400 standard days.\n"
-            "2. 'Zorblax' has been added as the 13th month.\n"
-            "3. Leap seconds are now strictly prohibited to prevent spontaneous chronal implosions."
+            "Acme Corp was founded in 2010 and has grown from a two-person startup into a "
+            "global technology consultancy serving clients across 30 countries.\n\n"
+            "Key Statistics:\n"
+            "- Clients Served: 500+\n"
+            "- Years in Business: 15\n"
+            "- Team Members: 120+\n"
+            "- Countries: 30\n\n"
+            "Our mission is simple: help organizations harness the power of technology to do more, "
+            "move faster, and create lasting impact."
         )
     },
     {
-        "filename": "Deep_Sea_Mining_Protocol.pdf",
-        "title": "Deep Sea Mining Safety Protocol v1",
+        "filename": "SLA_Starter_Plan.pdf",
+        "title": "Service Level Agreement: Starter Plan",
         "content": (
-            "This protocol outlines the safety requirements for deep-sea mining operations in the "
-            "Mariana Trench sector.\n\n"
-            "Requirements:\n"
-            "- All submersibles must be rated for 11,000 meters depth.\n"
-            "- Personnel must undergo 4 weeks of high-pressure acclimatization.\n"
-            "- Beware of giant squids: standard repellant must be deployed every 12 hours."
+            "This document outlines the Service Level Agreement (SLA) for the Acme Corp Starter Plan.\n\n"
+            "Pricing: $5,000 / month\n\n"
+            "Included Services:\n"
+            "- Up to 2 dedicated engineers\n"
+            "- Weekly check-ins\n"
+            "- Email support\n"
+            "- Basic CI/CD setup\n\n"
+            "Support Response Time: Within 24 hours via email."
         )
     },
     {
-        "filename": "Jurassic_Evacuation_Routes.pdf",
-        "title": "Jurassic Park Evacuation Routes",
+        "filename": "SLA_Growth_Plan.pdf",
+        "title": "Service Level Agreement: Growth Plan",
         "content": (
-            "In the event of a dinosaur containment failure, immediately proceed to the nearest "
-            "evacuation bunker.\n\n"
-            "Routes:\n"
-            "- Sector A (T-Rex Paddock): Follow the red flares to Bunker 1.\n"
-            "- Sector B (Raptor Pen): Do not run. Walk slowly to Bunker 2.\n"
-            "- Sector C (Triceratops Range): Wait for the armored transport."
+            "This document outlines the Service Level Agreement (SLA) for the Acme Corp Growth Plan.\n\n"
+            "Pricing: $15,000 / month (Most Popular)\n\n"
+            "Included Services:\n"
+            "- Up to 6 dedicated engineers\n"
+            "- Dedicated project manager\n"
+            "- Slack + priority support\n"
+            "- Full DevOps & cloud setup\n"
+            "- Monthly strategy sessions\n\n"
+            "Support Response Time: Within 4 hours via Slack."
         )
     },
     {
-        "filename": "Time_Travel_Ethics.pdf",
-        "title": "Time Travel Paradox Prevention Guide",
+        "filename": "Case_Study_Cloud.pdf",
+        "title": "Case Study: Global Cloud Migration",
         "content": (
-            "Time travel is a privilege, not a right. To prevent the collapse of reality, adhere "
-            "to these ethical guidelines:\n\n"
-            "1. Do not interact with your past self.\n"
-            "2. Do not alter historical events prior to 1950.\n"
-            "3. If you accidentally become your own grandparent, report to the Temporal "
-            "Authority immediately for quantum untangling."
+            "Service Area: Cloud & Infrastructure\n\n"
+            "Client Challenge: A multi-national retailer needed to scale their infrastructure "
+            "for holiday traffic while reducing long-term costs.\n\n"
+            "Acme Corp Solution: We architected a scalable, resilient cloud environment on AWS "
+            "using Kubernetes and container orchestration. A CI/CD pipeline was set up to "
+            "automate deployments.\n\n"
+            "Results: Zero downtime during peak sales, 30% reduction in monthly cloud costs via FinOps."
         )
     },
     {
-        "filename": "Mars_Colony_Hydroponics.pdf",
-        "title": "Mars Colony Hydroponics Manual",
+        "filename": "Case_Study_AI.pdf",
+        "title": "Case Study: Generative AI Integration",
         "content": (
-            "Harvesting crops on Mars requires precise environmental control.\n\n"
-            "Optimal Settings:\n"
-            "- Humidity: 65%\n"
-            "- Temperature: 22 degrees Celsius\n"
-            "- Light Cycle: 16 hours on, 8 hours simulated darkness.\n\n"
-            "Note: Martian soil supplements must be purified of perchlorates before use."
+            "Service Area: AI & Machine Learning\n\n"
+            "Client Challenge: A financial institution wanted to improve customer service "
+            "response times and accuracy using their internal knowledge base.\n\n"
+            "Acme Corp Solution: We implemented a RAG (Retrieval-Augmented Generation) knowledge "
+            "system using state-of-the-art NLP and document intelligence.\n\n"
+            "Results: Customer inquiries handled 40% faster, with a 25% increase in customer satisfaction."
         )
     },
     {
-        "filename": "Cybernetic_Maintenance.pdf",
-        "title": "Cybernetic Implant Maintenance Manual",
+        "filename": "Cybersecurity_Framework.pdf",
+        "title": "Cybersecurity Service Framework",
         "content": (
-            "Regular maintenance of your cybernetic enhancements ensures longevity and prevents "
-            "spontaneous shutdown.\n\n"
-            "Schedule:\n"
-            "- Daily: Clean neural connection ports with a dry cloth.\n"
-            "- Weekly: Run the internal diagnostic software (version 8.4 or higher).\n"
-            "- Monthly: Replace servo fluids in mechanical limbs."
+            "Acme Corp protects your digital assets through proactive security assessments, "
+            "architecture reviews, and compliance planning.\n\n"
+            "Our Core Security Offerings:\n"
+            "1. Penetration Testing: Identifying vulnerabilities before they can be exploited.\n"
+            "2. Zero-Trust Architecture: Ensuring internal and external threats are mitigated.\n"
+            "3. SOC 2 & ISO 27001 Readiness: Helping your business meet global compliance standards.\n"
+            "4. Incident Response Planning: Preparing your team for swift action in case of a breach."
         )
     },
     {
-        "filename": "Unicorn_Husbandry.pdf",
-        "title": "Unicorn Husbandry Best Practices",
+        "filename": "UX_Design_Process.pdf",
+        "title": "UX & Product Design Methodology",
         "content": (
-            "Caring for unicorns requires a delicate touch and a pure heart.\n\n"
-            "Diet:\n"
-            "- 50% enchanted oats.\n"
-            "- 30% wild clover.\n"
-            "- 20% rainbow-infused water.\n\n"
-            "Warning: Never feed a unicorn after midnight or expose their horns to direct moonlight."
+            "At Acme Corp, we create intuitive, beautiful experiences grounded in user research "
+            "and accessibility best practices. Led by Carlos Rivera, Head of Design.\n\n"
+            "Our Process incorporates:\n"
+            "- UX Research & Journey Mapping: Understanding the user.\n"
+            "- Wireframing & Prototyping: Rapid iteration.\n"
+            "- Design Systems: Ensuring consistency across products.\n"
+            "- Usability Testing: Validating designs with real users."
         )
     },
     {
-        "filename": "Atlantis_Brochure.pdf",
-        "title": "Atlantis Tourism Brochure",
+        "filename": "Data_Architecture.pdf",
+        "title": "Modern Data & Analytics Architecture",
         "content": (
-            "Welcome to Atlantis, the jewel of the ocean floor!\n\n"
-            "Attractions:\n"
-            "- The Poseidon Arena: Watch the famous mermaid synchronized swimming team.\n"
-            "- Coral Gardens: A serene park made entirely of bioluminescent coral.\n"
-            "- Sub-Aqua Dining: Enjoy the finest kelp-based cuisine in the city.\n\n"
-            "Remember to calibrate your gill-implants before arrival."
+            "Acme Corp turns raw data into strategic insights.\n\n"
+            "Capabilities:\n"
+            "- Data Warehouse Design: Scalable storage for all your enterprise data.\n"
+            "- ETL / ELT Pipeline Engineering: Robust pipelines to move and transform data.\n"
+            "- Business Intelligence Dashboards: Visualizing metrics that matter.\n"
+            "- Real-Time Streaming Analytics: Acting on data as it arrives."
         )
     },
     {
-        "filename": "Quantum_Teleportation.pdf",
-        "title": "Quantum Teleportation Ethics Guidelines",
+        "filename": "Leadership_Profiles.pdf",
+        "title": "Acme Corp Leadership Team Profiles",
         "content": (
-            "Teleportation involves the theoretical destruction and recreation of consciousness.\n\n"
-            "Guidelines operators must follow:\n"
-            "1. Operators must confirm the destination buffer is empty before initiating transport.\n"
-            "2. If a fly enters the telepod, abort the sequence immediately.\n"
-            "3. Retain a backup of the traveler's pattern for 72 hours in case of reconstruction errors."
+            "The people guiding Acme Corp's vision and strategy:\n\n"
+            "Sarah Mitchell - CEO & Co-Founder\n"
+            "15 years in enterprise technology. Former VP at Salesforce.\n\n"
+            "James Okafor - CTO & Co-Founder\n"
+            "Distributed systems expert. Led platform engineering at Stripe.\n\n"
+            "Priya Anand - VP of Product\n"
+            "Product strategist passionate about user-centric design.\n\n"
+            "Carlos Rivera - Head of Design\n"
+            "Award-winning UX designer. Previously at IDEO and Google."
         )
     },
     {
-        "filename": "Dragon_Feeding_2050.pdf",
-        "title": "Dragon Feeding Schedule 2050",
+        "filename": "Custom_Software_Lifecycle.pdf",
+        "title": "Custom Software Development Lifecycle",
         "content": (
-            "Official feeding schedule for the National Dragon Reserve.\n\n"
-            "Schedule:\n"
-            "- Fire Drakes: 50 sheep every Tuesday at noon.\n"
-            "- Frost Wyrms: 2 tons of frozen fish every Thursday.\n"
-            "- Acid Spitters: Chemical neutralizer pellets and sulfur cakes on weekends.\n\n"
-            "Keep hands and flammable items away from the enclosures at all times."
+            "Acme Corp builds bespoke applications from the ground up - web, mobile, and desktop.\n\n"
+            "Our Development Pillars:\n"
+            "- Full-Stack Web Applications: Using modern frameworks.\n"
+            "- Native & Cross-Platform Mobile: Reaching users anywhere.\n"
+            "- API Design & Integration: Connecting disparate systems.\n"
+            "- Legacy System Modernization: Bringing old systems up to date with zero downtime in transition."
         )
     }
 ]
@@ -153,4 +168,4 @@ for doc in documents:
     pdf.output(pdf_path)
     print(f"Generated {pdf_path}")
 
-print("All 10 completely unique, fictional PDFs generated successfully.")
+print("All 10 Acme Corp PDFs generated successfully.")
