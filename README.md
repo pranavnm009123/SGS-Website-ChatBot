@@ -85,7 +85,4 @@ Any time you edit and save an HTML page inside the `frontend/` directory, the ba
 - `backend/site_indexer.py`: Logic for stripping HTML tags from static pages and generating website vectors, alongside the `watchdog` process.
 - `backend/db.py`: Singleton manager for the local persistent ChromaDB collection.
 - `backend/doc_registry.py`: JSON-based tracker for document processing states (`pending` -> `processing` -> `approved`).
-- `frontend/widget.js`: Self-contained script bounding the chat UI logic, maintaining session history locally in the browser. 
-
----
-*Created by the Google DeepMind Antigravity AI agent.*
+- `frontend/widget.js`: Self-contained script bounding the chat UI logic, maintaining session history locally in the browser.
