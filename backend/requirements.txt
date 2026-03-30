@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+python-multipart
+pydantic[email]
+pymupdf
+pdfplumber
+chromadb
+sentence-transformers
+langchain
+langchain-community
+slowapi
+requests
+watchdog

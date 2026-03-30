@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — Acme Corp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">Acme<span>Corp</span></a>
+      <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/services">Services</a></li>
+        <li><a href="/contact" class="active">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero" style="padding: 5rem 0 3rem;">
+      <div class="container">
+        <div class="hero-badge">Let's Talk</div>
+        <h1>Get in <span>Touch</span></h1>
+        <p class="lead">Have a project in mind or want to learn more about what we do? We'd love to hear from you.</p>
+      </div>
+    </section>
+
+    <!-- Contact section -->
+    <section class="section" style="padding-top: 2rem;">
+      <div class="container">
+        <div class="contact-layout">
+          <!-- Info -->
+          <div class="contact-info">
+            <div class="contact-item">
+              <div class="contact-item-icon">📍</div>
+              <div class="contact-item-text">
+                <div class="label">Office</div>
+                <p>123 Innovation Drive<br>San Francisco, CA 94107</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">📧</div>
+              <div class="contact-item-text">
+                <div class="label">Email</div>
+                <p>hello@acmecorp.com</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">📞</div>
+              <div class="contact-item-text">
+                <div class="label">Phone</div>
+                <p>+1 (415) 555-0192</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-item-icon">🕘</div>
+              <div class="contact-item-text">
+                <div class="label">Hours</div>
+                <p>Monday – Friday<br>9:00 AM – 6:00 PM PST</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form -->
+          <div class="contact-form-card">
+            <h3 style="margin-bottom:1.5rem;">Send us a message</h3>
+            <form id="contact-form" onsubmit="handleSubmit(event)">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="first-name">First Name</label>
+                  <input type="text" id="first-name" class="form-control" placeholder="Jane" required>
+                </div>
+                <div class="form-group">
+                  <label for="last-name">Last Name</label>
+                  <input type="text" id="last-name" class="form-control" placeholder="Smith" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" class="form-control" placeholder="jane@company.com" required>
+              </div>
+              <div class="form-group">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" class="form-control" placeholder="Project inquiry">
+              </div>
+              <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" class="form-control" placeholder="Tell us about your project or question..." required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;" id="submit-btn">
+                Send Message
+              </button>
+              <div id="form-feedback" style="margin-top:1rem; font-size:.9rem;"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Acme Corp. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    async function handleSubmit(e) {
+      e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      const feedback = document.getElementById('form-feedback');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      feedback.textContent = '';
+
+      try {
+        const res = await fetch('/submit-contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            first_name: document.getElementById('first-name').value.trim(),
+            last_name: document.getElementById('last-name').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            subject: document.getElementById('subject').value.trim(),
+            message: document.getElementById('message').value.trim(),
+          })
+        });
+
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.detail || 'Something went wrong.');
+        }
+
+        const data = await res.json();
+        feedback.style.color = '#10b981';
+        feedback.textContent = '\u2713 ' + data.message;
+        document.getElementById('contact-form').reset();
+      } catch (err) {
+        feedback.style.color = '#ef4444';
+        feedback.textContent = 'Error: ' + err.message;
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Send Message';
+    }
+  </script>
+  <script src="/static/widget.js"></script>
+</body>
+</html>

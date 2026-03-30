@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Acme Corp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">Acme<span>Corp</span></a>
+      <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about" class="active">About</a></li>
+        <li><a href="/services">Services</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero" style="padding: 5rem 0 3rem;">
+      <div class="container">
+        <div class="hero-badge">Our Story</div>
+        <h1>We are <span>Acme Corp</span></h1>
+        <p class="lead">Founded in 2010, Acme Corp has grown from a two-person startup into a global technology consultancy serving clients across 30 countries.</p>
+      </div>
+    </section>
+
+    <!-- Mission & Stats -->
+    <section class="section" style="padding-top: 2rem;">
+      <div class="container">
+        <div class="about-grid">
+          <div>
+            <p class="lead">Our mission is simple: help organizations harness the power of technology to do more, move faster, and create lasting impact.</p>
+            <p>We believe great software starts with great people. That's why we invest heavily in our team — attracting curious, driven engineers, designers, and strategists who bring creative thinking to every engagement.</p>
+            <ul class="values-list" style="margin-top: 1.5rem;">
+              <li>Integrity in every decision we make</li>
+              <li>Collaboration over individual heroics</li>
+              <li>Continuous learning and improvement</li>
+              <li>Delivering measurable outcomes for clients</li>
+            </ul>
+          </div>
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="number">500+</div>
+              <div class="label">Clients Served</div>
+            </div>
+            <div class="stat-card">
+              <div class="number">15yr</div>
+              <div class="label">In Business</div>
+            </div>
+            <div class="stat-card">
+              <div class="number">120+</div>
+              <div class="label">Team Members</div>
+            </div>
+            <div class="stat-card">
+              <div class="number">30</div>
+              <div class="label">Countries</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Team -->
+    <section class="section" style="padding-top: 0;">
+      <div class="container">
+        <div class="section-header">
+          <h2>Leadership Team</h2>
+          <p>The people guiding Acme Corp's vision and strategy.</p>
+        </div>
+        <div class="team-grid">
+          <div class="team-card">
+            <div class="team-avatar">👩‍💼</div>
+            <h3>Sarah Mitchell</h3>
+            <div class="role">CEO & Co-Founder</div>
+            <p style="margin-top:.5rem; font-size:.88rem;">15 years in enterprise technology. Former VP at Salesforce.</p>
+          </div>
+          <div class="team-card">
+            <div class="team-avatar">👨‍💻</div>
+            <h3>James Okafor</h3>
+            <div class="role">CTO & Co-Founder</div>
+            <p style="margin-top:.5rem; font-size:.88rem;">Distributed systems expert. Led platform engineering at Stripe.</p>
+          </div>
+          <div class="team-card">
+            <div class="team-avatar">👩‍🔬</div>
+            <h3>Priya Anand</h3>
+            <div class="role">VP of Product</div>
+            <p style="margin-top:.5rem; font-size:.88rem;">Product strategist passionate about user-centric design.</p>
+          </div>
+          <div class="team-card">
+            <div class="team-avatar">👨‍🎨</div>
+            <h3>Carlos Rivera</h3>
+            <div class="role">Head of Design</div>
+            <p style="margin-top:.5rem; font-size:.88rem;">Award-winning UX designer. Previously at IDEO and Google.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-strip">
+      <div class="container">
+        <h2>Want to work with us?</h2>
+        <p>We're always looking for talented people and ambitious clients.</p>
+        <div class="hero-actions">
+          <a href="/contact" class="btn btn-primary" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4)">Get in Touch</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Acme Corp. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/static/widget.js"></script>
+</body>
+</html>

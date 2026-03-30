@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Acme Corp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <div class="admin-layout">
+    <div class="admin-header">
+      <div>
+        <h1>Admin Panel</h1>
+        <p style="color:var(--text-muted);margin-top:.25rem;">Manage documents and site content</p>
+      </div>
+      <a href="/" class="btn btn-outline">← Back to Site</a>
+    </div>
+
+    <!-- Upload card -->
+    <div class="upload-card">
+      <h3 style="margin-bottom:1.25rem;">Upload PDF Document</h3>
+      <div id="drop-zone" class="drop-zone">
+        <div class="drop-zone-icon">📄</div>
+        <p>Drag & drop PDFs here, or <strong>click to browse</strong></p>
+        <small>PDF only · max 50 MB each · multiple files OK</small>
+        <input type="file" id="file-input" hidden accept=".pdf" multiple>
+      </div>
+      <div id="upload-status"></div>
+    </div>
+
+    <!-- Document library -->
+    <div class="docs-card">
+      <div class="docs-card-header">
+        <h3>Document Library</h3>
+        <button class="btn btn-outline btn-sm" id="reindex-btn">↺ Re-index Website</button>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Filename</th>
+              <th>Pages</th>
+              <th>Chunks</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="docs-tbody">
+            <tr><td colspan="5" style="color:var(--text-muted);text-align:center;">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/admin.js"></script>
+</body>
+</html>

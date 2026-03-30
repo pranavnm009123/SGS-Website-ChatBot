@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services — Acme Corp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">Acme<span>Corp</span></a>
+      <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/services" class="active">Services</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero" style="padding: 5rem 0 3rem;">
+      <div class="container">
+        <div class="hero-badge">What We Offer</div>
+        <h1>Services Built for <span>Scale</span></h1>
+        <p class="lead">From custom software development to AI integrations and cloud infrastructure, we offer end-to-end technology services tailored to your goals.</p>
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section class="section" style="padding-top: 2rem;">
+      <div class="container">
+        <div class="services-grid">
+          <div class="service-card">
+            <div class="service-icon">🛠️</div>
+            <h3>Custom Software Development</h3>
+            <p>Bespoke applications built from the ground up — web, mobile, and desktop — designed around your workflows.</p>
+            <ul class="service-features">
+              <li>Full-stack web applications</li>
+              <li>Native & cross-platform mobile</li>
+              <li>API design & integration</li>
+              <li>Legacy system modernization</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">☁️</div>
+            <h3>Cloud & Infrastructure</h3>
+            <p>Architecting scalable, resilient cloud environments on AWS, GCP, and Azure with DevOps best practices.</p>
+            <ul class="service-features">
+              <li>Cloud migration & lift-and-shift</li>
+              <li>Kubernetes & container orchestration</li>
+              <li>CI/CD pipeline setup</li>
+              <li>Cost optimization & FinOps</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">🤖</div>
+            <h3>AI & Machine Learning</h3>
+            <p>Embedding AI into your products — from predictive analytics to generative AI and intelligent automation.</p>
+            <ul class="service-features">
+              <li>RAG knowledge systems</li>
+              <li>Predictive & prescriptive analytics</li>
+              <li>NLP and document intelligence</li>
+              <li>MLOps & model deployment</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">🔒</div>
+            <h3>Cybersecurity</h3>
+            <p>Protecting your digital assets through proactive security assessments, architecture reviews, and compliance.</p>
+            <ul class="service-features">
+              <li>Penetration testing</li>
+              <li>Zero-trust architecture</li>
+              <li>SOC 2 & ISO 27001 readiness</li>
+              <li>Incident response planning</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">📊</div>
+            <h3>Data & Analytics</h3>
+            <p>Turning raw data into strategic insights with modern data warehouses, pipelines, and dashboards.</p>
+            <ul class="service-features">
+              <li>Data warehouse design</li>
+              <li>ETL / ELT pipeline engineering</li>
+              <li>Business intelligence dashboards</li>
+              <li>Real-time streaming analytics</li>
+            </ul>
+          </div>
+          <div class="service-card">
+            <div class="service-icon">🎨</div>
+            <h3>UX & Product Design</h3>
+            <p>Creating intuitive, beautiful experiences grounded in user research and accessibility best practices.</p>
+            <ul class="service-features">
+              <li>UX research & journey mapping</li>
+              <li>Wireframing & prototyping</li>
+              <li>Design systems</li>
+              <li>Usability testing</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="section" style="padding-top: 0;">
+      <div class="container">
+        <div class="section-header">
+          <h2>Engagement Models</h2>
+          <p>Flexible arrangements to fit project-based work, ongoing retainers, and everything in between.</p>
+        </div>
+        <div class="pricing-grid">
+          <div class="pricing-card">
+            <h3>Starter</h3>
+            <div class="price">$5k <span>/ month</span></div>
+            <ul>
+              <li>Up to 2 dedicated engineers</li>
+              <li>Weekly check-ins</li>
+              <li>Email support</li>
+              <li>Basic CI/CD setup</li>
+            </ul>
+            <a href="/contact" class="btn btn-outline" style="width:100%;justify-content:center;">Get Started</a>
+          </div>
+          <div class="pricing-card featured">
+            <div class="pricing-badge">Most Popular</div>
+            <h3>Growth</h3>
+            <div class="price">$15k <span>/ month</span></div>
+            <ul>
+              <li>Up to 6 dedicated engineers</li>
+              <li>Dedicated project manager</li>
+              <li>Slack + priority support</li>
+              <li>Full DevOps & cloud setup</li>
+              <li>Monthly strategy sessions</li>
+            </ul>
+            <a href="/contact" class="btn btn-primary" style="width:100%;justify-content:center;">Get Started</a>
+          </div>
+          <div class="pricing-card">
+            <h3>Enterprise</h3>
+            <div class="price">Custom</div>
+            <ul>
+              <li>Unlimited team scaling</li>
+              <li>Executive sponsorship</li>
+              <li>24/7 on-call support</li>
+              <li>SLA guarantees</li>
+              <li>Onsite workshops available</li>
+            </ul>
+            <a href="/contact" class="btn btn-outline" style="width:100%;justify-content:center;">Contact Sales</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-strip">
+      <div class="container">
+        <h2>Not sure which service fits?</h2>
+        <p>Book a free 30-minute discovery call and we'll map out the right solution for you.</p>
+        <div class="hero-actions">
+          <a href="/contact" class="btn btn-primary" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4)">Book a Call</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Acme Corp. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/static/widget.js"></script>
+</body>
+</html>

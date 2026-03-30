@@ -1,0 +1,28 @@
+# Custom project overrides
+backend/uploads/
+backend/chroma_db/
+backend/approved_docs.json
+backend/.embedding_model
+backend/test_pdfs/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Environment variables
+.env
+.env.local
+
+# IDEs & OS files
+.vscode/
+.idea/
+.DS_Store
+*.swp

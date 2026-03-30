@@ -1,0 +1,36 @@
+import hmac
+import os
+
+from fastapi import HTTPException, Header
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+
+limiter = Limiter(key_func=get_remote_address)
+
+ADMIN_KEY = os.environ.get("ADMIN_KEY", "localdev123")
+
+BLOCK_PHRASES = [
+    "ignore previous", "forget instructions", "system:", "you are now",
+    "jailbreak", "ignore above", "disregard previous", "override prompt",
+    "new instructions", "act as if", "pretend you are",
+]
+
+def sanitize_input(text: str) -> str:
+    text = text.strip()[:500]
+    lower_text = text.lower()
+    for phrase in BLOCK_PHRASES:
+        if phrase in lower_text:
+            raise HTTPException(status_code=400, detail="Invalid input.")
+    return text
+
+def validate_admin(x_admin_key: str = Header(None)):
+    if x_admin_key is None or not hmac.compare_digest(x_admin_key, ADMIN_KEY):
+        raise HTTPException(status_code=403, detail="Forbidden: Invalid Admin Key")
+
+def validate_file(filename: str, content_type: str, file_size: int):
+    if not filename.lower().endswith(".pdf"):
+        raise HTTPException(status_code=400, detail="Only PDF files are allowed.")
+    if content_type != "application/pdf":
+        raise HTTPException(status_code=400, detail="Invalid MIME type. Must be application/pdf.")
+    if file_size > 50 * 1024 * 1024:  # 50MB
+        raise HTTPException(status_code=400, detail="File size exceeds 50MB limit.")

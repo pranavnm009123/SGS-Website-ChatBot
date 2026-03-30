@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acme Corp — Innovative Solutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">Acme<span>Corp</span></a>
+      <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/" class="active">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/services">Services</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badge">Trusted by 500+ companies worldwide</div>
+        <h1>Build the Future with<br><span>Acme Corp</span></h1>
+        <p class="lead">We deliver cutting-edge technology solutions that transform how organizations operate, collaborate, and grow — from strategy to execution.</p>
+        <div class="hero-actions">
+          <a href="/services" class="btn btn-primary">Explore Services</a>
+          <a href="/contact" class="btn btn-outline">Get in Touch</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Why Choose Acme Corp?</h2>
+          <p>We combine deep technical expertise with a people-first approach to deliver outcomes that matter.</p>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🚀</div>
+            <h3>Fast Delivery</h3>
+            <p>Agile processes and an experienced team mean your project ships on time, every time.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3>Enterprise Security</h3>
+            <p>Security-first architecture ensures your data and operations are always protected.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">☁️</div>
+            <h3>Cloud Native</h3>
+            <p>Scalable cloud infrastructure built for high availability and global reach.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🤝</div>
+            <h3>Dedicated Support</h3>
+            <p>A committed partnership from discovery through post-launch support.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-strip">
+      <div class="container">
+        <h2>Ready to get started?</h2>
+        <p>Join hundreds of organizations that trust Acme Corp to power their growth.</p>
+        <div class="hero-actions">
+          <a href="/contact" class="btn btn-primary" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4)">Contact Us</a>
+          <a href="/about" class="btn btn-outline">Learn About Us</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Acme Corp. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/static/widget.js"></script>
+</body>
+</html>
