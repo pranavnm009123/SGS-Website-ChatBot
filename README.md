@@ -1,6 +1,6 @@
-# SGS Technologies Policy Chatbot & Website
+# ACME Corp Policy Chatbot & Website
 
-A full-stack, locally hosted web application and Retrieval-Augmented Generation (RAG) chatbot designed for "SGS Technologies" (or any corporate entity). The project combines a modern frontend website with an intelligent FastAPI backend powered by local LLMs (Ollama) and vector search (ChromaDB) to answer user questions using both website content and uploaded PDF documents.
+A full-stack, locally hosted web application and Retrieval-Augmented Generation (RAG) chatbot designed for "ACME Corp" (or any corporate entity). The project combines a modern frontend website with an intelligent FastAPI backend powered by local LLMs (Ollama) and vector search (ChromaDB) to answer user questions using both website content and uploaded PDF documents.
 
 ## 🚀 Features
 

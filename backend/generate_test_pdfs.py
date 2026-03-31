@@ -8,7 +8,7 @@ os.makedirs(pdf_dir, exist_ok=True)
 class PDF(FPDF):
     def header(self):
         self.set_font("helvetica", "B", 15)
-        self.cell(w=0, h=10, text="Acme Corp - Confidential Document", border=False, align="C", new_x="LMARGIN", new_y="NEXT")
+        self.cell(w=0, h=10, text="ACME Corp - Confidential Document", border=False, align="C", new_x="LMARGIN", new_y="NEXT")
         self.ln(10)
 
     def footer(self):
@@ -18,10 +18,10 @@ class PDF(FPDF):
 
 documents = [
     {
-        "filename": "Acme_Corp_Overview.pdf",
-        "title": "Acme Corp Company Overview",
+        "filename": "ACME_Corp_Overview.pdf",
+        "title": "ACME Corp Company Overview",
         "content": (
-            "Acme Corp was founded in 2010 and has grown from a two-person startup into a "
+            "ACME Corp was founded in 2010 and has grown from a two-person startup into a "
             "global technology consultancy serving clients across 30 countries.\n\n"
             "Key Statistics:\n"
             "- Clients Served: 500+\n"
@@ -36,7 +36,7 @@ documents = [
         "filename": "SLA_Starter_Plan.pdf",
         "title": "Service Level Agreement: Starter Plan",
         "content": (
-            "This document outlines the Service Level Agreement (SLA) for the Acme Corp Starter Plan.\n\n"
+            "This document outlines the Service Level Agreement (SLA) for the ACME Corp Starter Plan.\n\n"
             "Pricing: $5,000 / month\n\n"
             "Included Services:\n"
             "- Up to 2 dedicated engineers\n"
@@ -50,7 +50,7 @@ documents = [
         "filename": "SLA_Growth_Plan.pdf",
         "title": "Service Level Agreement: Growth Plan",
         "content": (
-            "This document outlines the Service Level Agreement (SLA) for the Acme Corp Growth Plan.\n\n"
+            "This document outlines the Service Level Agreement (SLA) for the ACME Corp Growth Plan.\n\n"
             "Pricing: $15,000 / month (Most Popular)\n\n"
             "Included Services:\n"
             "- Up to 6 dedicated engineers\n"
@@ -68,7 +68,7 @@ documents = [
             "Service Area: Cloud & Infrastructure\n\n"
             "Client Challenge: A multi-national retailer needed to scale their infrastructure "
             "for holiday traffic while reducing long-term costs.\n\n"
-            "Acme Corp Solution: We architected a scalable, resilient cloud environment on AWS "
+            "ACME Corp Solution: We architected a scalable, resilient cloud environment on AWS "
             "using Kubernetes and container orchestration. A CI/CD pipeline was set up to "
             "automate deployments.\n\n"
             "Results: Zero downtime during peak sales, 30% reduction in monthly cloud costs via FinOps."
@@ -81,7 +81,7 @@ documents = [
             "Service Area: AI & Machine Learning\n\n"
             "Client Challenge: A financial institution wanted to improve customer service "
             "response times and accuracy using their internal knowledge base.\n\n"
-            "Acme Corp Solution: We implemented a RAG (Retrieval-Augmented Generation) knowledge "
+            "ACME Corp Solution: We implemented a RAG (Retrieval-Augmented Generation) knowledge "
             "system using state-of-the-art NLP and document intelligence.\n\n"
             "Results: Customer inquiries handled 40% faster, with a 25% increase in customer satisfaction."
         )
@@ -90,7 +90,7 @@ documents = [
         "filename": "Cybersecurity_Framework.pdf",
         "title": "Cybersecurity Service Framework",
         "content": (
-            "Acme Corp protects your digital assets through proactive security assessments, "
+            "ACME Corp protects your digital assets through proactive security assessments, "
             "architecture reviews, and compliance planning.\n\n"
             "Our Core Security Offerings:\n"
             "1. Penetration Testing: Identifying vulnerabilities before they can be exploited.\n"
@@ -103,7 +103,7 @@ documents = [
         "filename": "UX_Design_Process.pdf",
         "title": "UX & Product Design Methodology",
         "content": (
-            "At Acme Corp, we create intuitive, beautiful experiences grounded in user research "
+            "At ACME Corp, we create intuitive, beautiful experiences grounded in user research "
             "and accessibility best practices. Led by Carlos Rivera, Head of Design.\n\n"
             "Our Process incorporates:\n"
             "- UX Research & Journey Mapping: Understanding the user.\n"
@@ -116,7 +116,7 @@ documents = [
         "filename": "Data_Architecture.pdf",
         "title": "Modern Data & Analytics Architecture",
         "content": (
-            "Acme Corp turns raw data into strategic insights.\n\n"
+            "ACME Corp turns raw data into strategic insights.\n\n"
             "Capabilities:\n"
             "- Data Warehouse Design: Scalable storage for all your enterprise data.\n"
             "- ETL / ELT Pipeline Engineering: Robust pipelines to move and transform data.\n"
@@ -126,9 +126,9 @@ documents = [
     },
     {
         "filename": "Leadership_Profiles.pdf",
-        "title": "Acme Corp Leadership Team Profiles",
+        "title": "ACME Corp Leadership Team Profiles",
         "content": (
-            "The people guiding Acme Corp's vision and strategy:\n\n"
+            "The people guiding ACME Corp's vision and strategy:\n\n"
             "Sarah Mitchell - CEO & Co-Founder\n"
             "15 years in enterprise technology. Former VP at Salesforce.\n\n"
             "James Okafor - CTO & Co-Founder\n"
@@ -143,7 +143,7 @@ documents = [
         "filename": "Custom_Software_Lifecycle.pdf",
         "title": "Custom Software Development Lifecycle",
         "content": (
-            "Acme Corp builds bespoke applications from the ground up - web, mobile, and desktop.\n\n"
+            "ACME Corp builds bespoke applications from the ground up - web, mobile, and desktop.\n\n"
             "Our Development Pillars:\n"
             "- Full-Stack Web Applications: Using modern frameworks.\n"
             "- Native & Cross-Platform Mobile: Reaching users anywhere.\n"
@@ -168,4 +168,4 @@ for doc in documents:
     pdf.output(pdf_path)
     print(f"Generated {pdf_path}")
 
-print("All 10 Acme Corp PDFs generated successfully.")
+print("All 10 ACME Corp PDFs generated successfully.")
