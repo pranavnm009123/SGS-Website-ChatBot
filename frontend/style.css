@@ -567,35 +567,36 @@ textarea.form-control { resize: vertical; min-height: 120px; }
 .wm-source-tag {
   display: inline-flex;
   align-items: center;
-  gap: .2rem;
-  font-size: .62rem;
-  padding: .15rem .45rem;
-  border-radius: 4px;
-  background: #f0ecff;
-  border: 1px solid #ddd6fe;
+  gap: .3rem;
+  font-size: .65rem;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  background: #ede9fe;
+  border: 1px solid #c4b5fd;
   color: #5b21b6;
   text-decoration: none;
   font-weight: 500;
   transition: all .15s;
-  max-width: 160px;
+  max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 a.wm-source-tag { cursor: pointer; }
 a.wm-source-tag:hover {
-  background: #e0d7ff;
+  background: #ddd6fe;
   border-color: #a78bfa;
   color: #4c1d95;
 }
 .wm-source-pdf {
-  background: #fef3c7;
-  border-color: #fcd34d;
-  color: #92400e;
+  background: #ede9fe;
+  border-color: #c4b5fd;
+  color: #5b21b6;
 }
 .wm-source-pdf:hover {
-  background: #fde68a;
-  border-color: #f59e0b;
+  background: #ddd6fe;
+  border-color: #a78bfa;
+  color: #4c1d95;
 }
 
 /* Suggested questions */
@@ -629,16 +630,16 @@ a.wm-source-tag:hover {
 /* Typing indicator — iMessage style */
 .wm-typing {
   background: #e9e9eb;
-  padding: .6rem .85rem;
-  border-radius: 18px;
-  border-bottom-left-radius: 6px;
+  padding: .4rem .6rem;
+  border-radius: 12px;
+  border-bottom-left-radius: 4px;
   display: flex;
-  gap: .35rem;
+  gap: .25rem;
   align-items: center;
   width: fit-content;
 }
 .wm-typing span {
-  width: 8px; height: 8px;
+  width: 6px; height: 6px;
   background: #8e8e93;
   border-radius: 50%;
   animation: imsgDot 1.4s infinite ease-in-out;

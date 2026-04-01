@@ -1,11 +1,12 @@
 (function () {
   'use strict';
 
-  const STORAGE_KEY = 'acme_widget_history_v4';
-  const OPEN_KEY    = 'acme_widget_open';
+  const STORAGE_KEY = 'sgs_widget_history_v1';
+  const OPEN_KEY    = 'sgs_widget_open';
   // Clean up old storage keys
-  ['acme_widget_history', 'acme_widget_history_v2', 'acme_widget_history_v3'].forEach(function (k) {
-    sessionStorage.removeItem(k);
+  ['acme_widget_history', 'acme_widget_history_v2', 'acme_widget_history_v3', 'acme_widget_history_v4', 'acme_widget_open'].forEach(function (k) {
+    localStorage.removeItem(k);
+    localStorage.removeItem(k);
   });
 
   var SUGGESTED_QUESTIONS = [
@@ -99,7 +100,7 @@
   btn.addEventListener('click', function () { panel.classList.contains('open') ? closePanel() : openPanel(); });
   closeBtn.addEventListener('click', closePanel);
   refreshBtn.addEventListener('click', function () {
-    sessionStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(STORAGE_KEY);
     msgList.innerHTML = '';
     showWelcome();
   });
@@ -139,22 +140,31 @@
     if (!sources || !sources.length) return;
     var wrap = document.createElement('div');
     wrap.className = 'wm-sources';
+    var linkIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
     sources.forEach(function (s) {
+      var a = document.createElement('a');
+      var url;
       if (s.type === 'website') {
-        var a = document.createElement('a');
         a.className = 'wm-source-tag';
-        a.href = s.url;
-        a.innerHTML = escapeHtml(s.page_name);
-        wrap.appendChild(a);
+        url = window.location.origin + s.url;
+        a.href = url;
+        a.innerHTML = escapeHtml(s.page_name) + ' ' + linkIcon;
       } else {
-        var a = document.createElement('a');
         a.className = 'wm-source-tag wm-source-pdf';
-        a.href = s.url || ('/pdf/' + encodeURIComponent(s.filename));
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        a.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> ' + escapeHtml(s.filename);
-        wrap.appendChild(a);
+        url = window.location.origin + (s.url || ('/pdf/' + encodeURIComponent(s.filename)));
+        a.href = url;
+        a.innerHTML = escapeHtml(s.filename) + ' ' + linkIcon;
       }
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        try {
+          saveHistory();
+          sessionStorage.setItem('sgs_source_nav', '1');
+        } catch (_) {}
+        setTimeout(function () { window.location.href = url; }, 50);
+      });
+      wrap.appendChild(a);
     });
     msgList.appendChild(wrap);
   }
@@ -202,12 +212,12 @@
     msgList.querySelectorAll('.wm-row, .wm-sources').forEach(function (el) {
       entries.push({ cls: el.className, html: el.innerHTML });
     });
-    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
   }
 
   function loadHistory() {
     try {
-      var entries = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]');
+      var entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
       entries.forEach(function (e) {
         var el = document.createElement('div');
         el.className = e.cls;
@@ -248,9 +258,8 @@
         body: JSON.stringify({ question: question })
       });
 
-      typing.remove();
-
       if (res.status === 429) {
+        typing.remove();
         appendBubble('Too many messages \u2014 please wait a moment and try again.', 'bot', false);
         scroll();
         saveHistory();
@@ -261,6 +270,7 @@
       }
 
       if (!res.ok) {
+        typing.remove();
         appendBubble('Something went wrong. Please try again.', 'bot', false);
         scroll();
         saveHistory();
@@ -270,9 +280,9 @@
         return;
       }
 
-      // Create empty bot bubble for streaming
-      var result = appendBubble('', 'bot', false);
-      var bubble = result.bubble;
+      // Bot bubble created lazily on first token
+      var typingRemoved = false;
+      var bubble = null;
       var fullText = '';
 
       var reader = res.body.getReader();
@@ -296,6 +306,11 @@
           try {
             var evt = JSON.parse(payload);
             if (evt.type === 'token') {
+              if (!typingRemoved) {
+                typing.remove();
+                typingRemoved = true;
+                bubble = appendBubble('', 'bot', false).bubble;
+              }
               fullText += evt.content;
               bubble.innerHTML = renderMarkdown(fullText);
               scroll();
@@ -311,6 +326,10 @@
         }
       }
 
+      if (!typingRemoved) {
+        typing.remove();
+        bubble = appendBubble('', 'bot', false).bubble;
+      }
       if (!fullText) {
         bubble.textContent = 'No answer returned.';
       }
@@ -333,7 +352,12 @@
   });
 
   // ── Init ─────────────────────────────────────────────────────────────────────
-  loadHistory();
+  if (sessionStorage.getItem('sgs_source_nav')) {
+    sessionStorage.removeItem('sgs_source_nav');
+    loadHistory();
+  } else {
+    localStorage.removeItem(STORAGE_KEY);
+  }
   if (!msgList.children.length) showWelcome();
   scroll();
 })();

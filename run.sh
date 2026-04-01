@@ -33,8 +33,8 @@ then
     sleep 5
 fi
 
-echo "Pulling llama3.1 model (this may take a while if first time)..."
-ollama pull llama3.1
+echo "Pulling qwen3:8b model (this may take a while if first time)..."
+ollama pull qwen3:8b
 
 # 4. Start Backend
 echo "Starting FastAPI server..."

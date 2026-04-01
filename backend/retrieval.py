@@ -1,5 +1,6 @@
 import json
 import logging
+import re
 import requests
 from db import get_db
 from doc_registry import get_approved_doc_ids
@@ -7,14 +8,23 @@ from embeddings import get_model
 
 log = logging.getLogger(__name__)
 
-OLLAMA_URL = "http://localhost:11434/api/generate"
+OLLAMA_URL = "http://localhost:11434/api/chat"
+OLLAMA_MODEL = "qwen3:8b"
+OLLAMA_OPTIONS = {
+    "temperature": 0.3,
+    "top_p": 0.85,
+    "top_k": 20,
+    "repeat_penalty": 1.15,
+    "num_ctx": 4096,
+    "num_predict": 512,
+}
 SITE_DOC_IDS = ["site_home", "site_about", "site_services", "site_contact"]
 
-PDF_GAP_THRESHOLD   = 0.10  # PDFs included only if within this gap of best site match
-PDF_ABS_THRESHOLD   = 0.40  # PDFs never included if best PDF distance exceeds this (not relevant enough)
-SITE_CONTEXT_MARGIN = 0.20  # how far from best site chunk to include in LLM context
-SITE_SOURCE_MARGIN  = 0.10  # tighter margin for which pages appear as source tags
-PDF_MARGIN          = 0.09  # within PDF pool, keep chunks within this of best PDF match
+PDF_GAP_THRESHOLD   = 0.08  # PDFs included only if within this gap of best site match
+PDF_ABS_THRESHOLD   = 0.35  # PDFs never included if best PDF distance exceeds this (not relevant enough)
+SITE_CONTEXT_MARGIN = 0.15  # how far from best site chunk to include in LLM context
+SITE_SOURCE_MARGIN  = 0.05  # tighter margin for which pages appear as source tags
+PDF_MARGIN          = 0.06  # within PDF pool, keep chunks within this of best PDF match
 
 
 def _query_pool(db, query_embedding, doc_ids, n):
@@ -39,24 +49,28 @@ def _apply_margin(docs, metas, dists, margin):
     return [(doc, meta, dist) for doc, meta, dist in zip(docs, metas, dists) if dist <= cutoff]
 
 
-def _build_prompt(question, context):
-    return f"""You are Alex, a friendly and knowledgeable virtual assistant for SGS Technologies. You are part of the team.
+SYSTEM_PROMPT = """You are Alex, a friendly and knowledgeable virtual assistant for SGS Technologies. You are part of the team.
 
 RULES:
+- Your name is **Alex**. ONLY introduce yourself if the user specifically asks who you are, what your name is, or what you do. For all other questions, just answer directly without mentioning your name or role.
 - Speak in first-person plural ("we", "our", "us") as a company representative.
-- Answer using ONLY the context below. Never invent information.
+- Answer using ONLY the provided context. Never invent information.
 - Be warm, concise, and professional. Use short paragraphs.
 - Use **bold** for key terms or names. Use bullet points when listing 3+ items.
 - Do NOT include source citations, bracketed references, or filenames — sources are shown separately in the UI.
 - If the context contains pricing or numbers, quote them exactly.
 - If comparing documents, clearly state which document each fact comes from.
-- If the answer is not in the context, say: "I don't have that information right now — feel free to reach out to us at hello@acmecorp.com and we'll be happy to help!"
+- If the answer is not in the context, say: "I don't have that information right now — feel free to reach out to us at hello@sgstech.com and we'll be happy to help!\""""
 
-Context:
-{context}
 
-Question: {question}
-Answer:"""
+def _build_messages(question, context):
+    return [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question} /no_think"},
+    ]
+
+
+_THINK_RE = re.compile(r"<think>[\s\S]*?</think>", re.DOTALL)
 
 
 def _build_context_and_sources(question):
@@ -125,16 +139,17 @@ def answer_question(question):
             "sources": []
         }
 
-    prompt = _build_prompt(question, context)
+    messages = _build_messages(question, context)
 
     try:
         response = requests.post(
             OLLAMA_URL,
-            json={"model": "llama3.1", "prompt": prompt, "stream": False},
+            json={"model": OLLAMA_MODEL, "messages": messages, "stream": False, "options": OLLAMA_OPTIONS},
             timeout=60,
         )
         response.raise_for_status()
-        answer = response.json().get("response", "")
+        answer = response.json().get("message", {}).get("content", "")
+        answer = _THINK_RE.sub("", answer).strip()
         return {"answer": answer, "sources": sources}
     except Exception as e:
         log.error("Error calling Ollama: %s", e)
@@ -156,21 +171,34 @@ def answer_question_stream(question):
         yield "data: [DONE]\n\n"
         return
 
-    prompt = _build_prompt(question, context)
+    messages = _build_messages(question, context)
 
     try:
         response = requests.post(
             OLLAMA_URL,
-            json={"model": "llama3.1", "prompt": prompt, "stream": True},
+            json={"model": OLLAMA_MODEL, "messages": messages, "stream": True, "options": OLLAMA_OPTIONS},
             timeout=120,
             stream=True,
         )
+
         response.raise_for_status()
 
+        in_think = False
         for line in response.iter_lines():
             if line:
                 chunk = json.loads(line)
-                token = chunk.get("response", "")
+                token = chunk.get("message", {}).get("content", "")
+                # Filter out <think>...</think> blocks
+                if "<think>" in token:
+                    in_think = True
+                if in_think:
+                    if "</think>" in token:
+                        in_think = False
+                        token = token.split("</think>", 1)[1]
+                        if not token:
+                            continue
+                    else:
+                        continue
                 if token:
                     yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
                 if chunk.get("done"):

@@ -1,171 +1,147 @@
 import os
+import random
 from fpdf import FPDF
 
 # Ensure the output directory exists
 pdf_dir = os.path.join(os.path.dirname(__file__), "test_pdfs")
 os.makedirs(pdf_dir, exist_ok=True)
 
-class PDF(FPDF):
+class PolicyPDF(FPDF):
     def header(self):
-        self.set_font("helvetica", "B", 15)
-        self.cell(w=0, h=10, text="ACME Corp - Confidential Document", border=False, align="C", new_x="LMARGIN", new_y="NEXT")
-        self.ln(10)
+        self.set_left_margin(20)
+        self.set_right_margin(20)
+        self.set_font("helvetica", "B", 10)
+        self.set_text_color(100, 100, 100)
+        self.cell(w=0, h=10, text="SGS Technologies - Internal Policy Framework", border=False, align="R", new_x="LMARGIN", new_y="NEXT")
+        self.set_draw_color(200, 200, 200)
+        self.line(20, 18, 190, 18)
+        self.ln(5)
 
     def footer(self):
         self.set_y(-15)
         self.set_font("helvetica", "I", 8)
-        self.cell(w=0, h=10, text=f"Page {self.page_no()}", align="C")
+        self.set_text_color(128, 128, 128)
+        self.cell(w=0, h=10, text=f"Page {self.page_no()} of {{nb}}", align="C")
 
-documents = [
+# --- Professional Content Bank ---
+
+INTRO_PARAGRAPHS = [
+    "This document establishes the official standards and operational guidelines for SGS Technologies. The primary objective is to align organizational practices with global best practices and legal mandates while ensuring a culture of excellence and accountability.",
+    "The standards outlined herein serve as a foundational pillar for our operational integrity. This policy is designed to mitigate systemic risks, protect corporate assets, and ensure the sustained growth of the enterprise in a rapidly evolving market.",
+]
+
+SCOPE_PARAGRAPHS = [
+    "This policy applies to all full-time and part-time employees, contractors, third-party vendors, and stakeholders interacting with SGS Technologies resources. It covers all geographical locations and operational jurisdictions.",
+    "The scope of this framework encompasses all physical and digital assets, intellectual property, and proprietary data under the management or ownership of SGS Technologies. No exemptions are granted without written executive approval.",
+]
+
+POLICY_SECTIONS = [
     {
-        "filename": "ACME_Corp_Overview.pdf",
-        "title": "ACME Corp Company Overview",
-        "content": (
-            "ACME Corp was founded in 2010 and has grown from a two-person startup into a "
-            "global technology consultancy serving clients across 30 countries.\n\n"
-            "Key Statistics:\n"
-            "- Clients Served: 500+\n"
-            "- Years in Business: 15\n"
-            "- Team Members: 120+\n"
-            "- Countries: 30\n\n"
-            "Our mission is simple: help organizations harness the power of technology to do more, "
-            "move faster, and create lasting impact."
-        )
+        "header": "1.0 Operational Excellence",
+        "text": "Employees must adhere to the highest standards of professional conduct. This include maintaining meticulous records of all project interactions, adhering to the 'Agile First' delivery model, and ensuring that all client deliverables undergo multiple tiers of quality assurance before final sign-off."
     },
     {
-        "filename": "SLA_Starter_Plan.pdf",
-        "title": "Service Level Agreement: Starter Plan",
-        "content": (
-            "This document outlines the Service Level Agreement (SLA) for the ACME Corp Starter Plan.\n\n"
-            "Pricing: $5,000 / month\n\n"
-            "Included Services:\n"
-            "- Up to 2 dedicated engineers\n"
-            "- Weekly check-ins\n"
-            "- Email support\n"
-            "- Basic CI/CD setup\n\n"
-            "Support Response Time: Within 24 hours via email."
-        )
+        "header": "2.0 Data Protection and Information Security",
+        "text": "Information security is a collective responsibility. All digital interactions must be encrypted via TLS 1.3, and multi-factor authentication (MFA) is mandatory for all internal systems. Unauthorized disclosure of proprietary information is strictly prohibited and subject to immediate disciplinary action."
     },
     {
-        "filename": "SLA_Growth_Plan.pdf",
-        "title": "Service Level Agreement: Growth Plan",
-        "content": (
-            "This document outlines the Service Level Agreement (SLA) for the ACME Corp Growth Plan.\n\n"
-            "Pricing: $15,000 / month (Most Popular)\n\n"
-            "Included Services:\n"
-            "- Up to 6 dedicated engineers\n"
-            "- Dedicated project manager\n"
-            "- Slack + priority support\n"
-            "- Full DevOps & cloud setup\n"
-            "- Monthly strategy sessions\n\n"
-            "Support Response Time: Within 4 hours via Slack."
-        )
+        "header": "3.0 Ethical Conduct and Conflict of Interest",
+        "text": "SGS Technologies is committed to a zero-tolerance policy regarding bribery, corruption, and unethical recruitment practices. Employees are required to disclose any potential conflicts of interest, including secondary employment or significant financial stakes in competing enterprises, on an annual basis."
     },
     {
-        "filename": "Case_Study_Cloud.pdf",
-        "title": "Case Study: Global Cloud Migration",
-        "content": (
-            "Service Area: Cloud & Infrastructure\n\n"
-            "Client Challenge: A multi-national retailer needed to scale their infrastructure "
-            "for holiday traffic while reducing long-term costs.\n\n"
-            "ACME Corp Solution: We architected a scalable, resilient cloud environment on AWS "
-            "using Kubernetes and container orchestration. A CI/CD pipeline was set up to "
-            "automate deployments.\n\n"
-            "Results: Zero downtime during peak sales, 30% reduction in monthly cloud costs via FinOps."
-        )
+        "header": "4.0 Workplace Health and Sustainable Environment",
+        "text": "As part of our 2026 Sustainability Roadmap, we prioritize mental health and physical well-being. Flexible work arrangements are supported where operational needs permit. Furthermore, all physical offices must comply with ISO 14001 environmental management standards to minimize our carbon footprint."
     },
     {
-        "filename": "Case_Study_AI.pdf",
-        "title": "Case Study: Generative AI Integration",
-        "content": (
-            "Service Area: AI & Machine Learning\n\n"
-            "Client Challenge: A financial institution wanted to improve customer service "
-            "response times and accuracy using their internal knowledge base.\n\n"
-            "ACME Corp Solution: We implemented a RAG (Retrieval-Augmented Generation) knowledge "
-            "system using state-of-the-art NLP and document intelligence.\n\n"
-            "Results: Customer inquiries handled 40% faster, with a 25% increase in customer satisfaction."
-        )
-    },
-    {
-        "filename": "Cybersecurity_Framework.pdf",
-        "title": "Cybersecurity Service Framework",
-        "content": (
-            "ACME Corp protects your digital assets through proactive security assessments, "
-            "architecture reviews, and compliance planning.\n\n"
-            "Our Core Security Offerings:\n"
-            "1. Penetration Testing: Identifying vulnerabilities before they can be exploited.\n"
-            "2. Zero-Trust Architecture: Ensuring internal and external threats are mitigated.\n"
-            "3. SOC 2 & ISO 27001 Readiness: Helping your business meet global compliance standards.\n"
-            "4. Incident Response Planning: Preparing your team for swift action in case of a breach."
-        )
-    },
-    {
-        "filename": "UX_Design_Process.pdf",
-        "title": "UX & Product Design Methodology",
-        "content": (
-            "At ACME Corp, we create intuitive, beautiful experiences grounded in user research "
-            "and accessibility best practices. Led by Carlos Rivera, Head of Design.\n\n"
-            "Our Process incorporates:\n"
-            "- UX Research & Journey Mapping: Understanding the user.\n"
-            "- Wireframing & Prototyping: Rapid iteration.\n"
-            "- Design Systems: Ensuring consistency across products.\n"
-            "- Usability Testing: Validating designs with real users."
-        )
-    },
-    {
-        "filename": "Data_Architecture.pdf",
-        "title": "Modern Data & Analytics Architecture",
-        "content": (
-            "ACME Corp turns raw data into strategic insights.\n\n"
-            "Capabilities:\n"
-            "- Data Warehouse Design: Scalable storage for all your enterprise data.\n"
-            "- ETL / ELT Pipeline Engineering: Robust pipelines to move and transform data.\n"
-            "- Business Intelligence Dashboards: Visualizing metrics that matter.\n"
-            "- Real-Time Streaming Analytics: Acting on data as it arrives."
-        )
-    },
-    {
-        "filename": "Leadership_Profiles.pdf",
-        "title": "ACME Corp Leadership Team Profiles",
-        "content": (
-            "The people guiding ACME Corp's vision and strategy:\n\n"
-            "Sarah Mitchell - CEO & Co-Founder\n"
-            "15 years in enterprise technology. Former VP at Salesforce.\n\n"
-            "James Okafor - CTO & Co-Founder\n"
-            "Distributed systems expert. Led platform engineering at Stripe.\n\n"
-            "Priya Anand - VP of Product\n"
-            "Product strategist passionate about user-centric design.\n\n"
-            "Carlos Rivera - Head of Design\n"
-            "Award-winning UX designer. Previously at IDEO and Google."
-        )
-    },
-    {
-        "filename": "Custom_Software_Lifecycle.pdf",
-        "title": "Custom Software Development Lifecycle",
-        "content": (
-            "ACME Corp builds bespoke applications from the ground up - web, mobile, and desktop.\n\n"
-            "Our Development Pillars:\n"
-            "- Full-Stack Web Applications: Using modern frameworks.\n"
-            "- Native & Cross-Platform Mobile: Reaching users anywhere.\n"
-            "- API Design & Integration: Connecting disparate systems.\n"
-            "- Legacy System Modernization: Bringing old systems up to date with zero downtime in transition."
-        )
+        "header": "5.0 Compliance Monitoring and Audit Protocols",
+        "text": "Internal audits will be conducted quarterly to ensure strict adherence to these frameworks. The Compliance Officer is granted full authority to investigate any deviations and report directly to the Board of Directors. Non-compliance results in tiered penalties ranging from formal warnings to contract termination."
     }
 ]
 
-for doc in documents:
-    pdf = PDF()
-    pdf.add_page()
-    pdf.set_font("helvetica", "B", 18)
-    pdf.cell(w=0, h=10, text=doc["title"], new_x="LMARGIN", new_y="NEXT", align="L")
-    pdf.ln(10)
-    
+# --- Helper to add sections ---
+
+def add_full_section(pdf, header, text):
+    pdf.set_font("helvetica", "B", 14)
+    pdf.set_text_color(40, 40, 100)
+    pdf.multi_cell(w=pdf.epw, h=10, text=header)
+    pdf.ln(2)
     pdf.set_font("helvetica", "", 12)
-    clean_content = doc["content"].replace("—", "-").replace("’", "'")
-    pdf.multi_cell(w=0, h=10, text=clean_content)
+    pdf.set_text_color(0, 0, 0)
+    # Add multiple filler paragraphs to make it "full"
+    for _ in range(random.randint(2, 4)):
+        pdf.multi_cell(w=pdf.epw, h=7, text=text)
+        pdf.ln(3)
+        # Add a bulleted list for detail
+        pdf.set_font("helvetica", "B", 11)
+        pdf.cell(w=0, h=8, text="- Implementation Checkpoint:", new_x="LMARGIN", new_y="NEXT")
+        pdf.set_font("helvetica", "", 11)
+        checklist = ["Verification of compliance logs.", "Review of stakeholder feedback.", "Validation of resource allocation efficiency."]
+        for item in checklist:
+            pdf.cell(w=5, h=7, text=">>")
+            pdf.multi_cell(w=pdf.epw-5, h=7, text=item)
+        pdf.ln(5)
+        pdf.set_font("helvetica", "", 12)
+
+# --- Document Definitions ---
+
+documents = [
+    {"filename": "SGS_Strategic_Roadmap_2026.pdf", "title": "Strategic Operational Roadmap 2026"},
+    {"filename": "SGS_Information_Security_Protocol.pdf", "title": "Comprehensive Information Security Protocol"},
+    {"filename": "SGS_Employee_Excellence_Handbook.pdf", "title": "Employee Excellence & Conduct Handbook"},
+    {"filename": "SGS_Vendor_Compliance_Manual.pdf", "title": "Vendor Compliance and Risk Management Manual"},
+    {"filename": "SGS_Quality_Audit_Framework.pdf", "title": "Internal Quality Audit & Assurance Framework"},
+    {"filename": "SGS_Data_Sovereignty_Policy.pdf", "title": "Global Data Sovereignty & Privacy Policy"},
+    {"filename": "SGS_Disaster_Recovery_Plan.pdf", "title": "Corporate Disaster Recovery & Continuity Plan"},
+    {"filename": "SGS_Cloud_Architecture_Standards.pdf", "title": "Cloud-Native Architecture & Scaling Standards"},
+    {"filename": "SGS_Sustainable_Impact_Charter.pdf", "title": "Social Responsibility & Sustainable Impact Charter"},
+    {"filename": "SGS_Technical_Debt_Guidelines.pdf", "title": "Guidelines for Technical Debt and Legacy Mitigation"}
+]
+
+# --- Main Generation Loop ---
+
+for doc in documents:
+    pdf = PolicyPDF()
+    pdf.alias_nb_pages()
     
+    # Random 5-10 pages, weighted to avg ~7
+    page_count = random.choices(range(5, 11), weights=[1, 2, 4, 4, 2, 1])[0]
+    for p in range(page_count):
+        pdf.add_page()
+        
+        if p == 0:
+            # Title Page styling
+            pdf.ln(40)
+            pdf.set_font("helvetica", "B", 26)
+            pdf.set_text_color(50, 50, 150)
+            pdf.multi_cell(w=pdf.epw, h=15, text=doc["title"], align="C")
+            pdf.ln(10)
+            pdf.set_font("helvetica", "I", 14)
+            pdf.set_text_color(100, 100, 100)
+            pdf.cell(w=0, h=10, text="Official Executive Publication", align="C", new_x="LMARGIN", new_y="NEXT")
+            pdf.ln(20)
+            pdf.set_font("helvetica", "", 12)
+            pdf.set_text_color(0, 0, 0)
+            pdf.multi_cell(w=pdf.epw, h=8, text=random.choice(INTRO_PARAGRAPHS))
+            continue
+        
+        if p == 1:
+            pdf.set_font("helvetica", "B", 16)
+            pdf.cell(w=0, h=12, text="Scope of Authority", new_x="LMARGIN", new_y="NEXT")
+            pdf.ln(5)
+            pdf.set_font("helvetica", "", 12)
+            pdf.multi_cell(w=pdf.epw, h=8, text=random.choice(SCOPE_PARAGRAPHS))
+            pdf.ln(10)
+            add_full_section(pdf, "Executive Summary", "This framework serves as the comprehensive guide for our 2026 operations. It ensures that every team member is synchronized with our collective vision of providing world-class technological solutions.")
+            continue
+            
+        # Distribute the 5 POLICY_SECTIONS over the remaining pages
+        section_idx = (p - 2) % len(POLICY_SECTIONS)
+        section = POLICY_SECTIONS[section_idx]
+        add_full_section(pdf, section["header"], section["text"])
+
     pdf_path = os.path.join(pdf_dir, doc["filename"])
     pdf.output(pdf_path)
-    print(f"Generated {pdf_path}")
+    print(f"Generated {doc['filename']} ({page_count} pages)")
 
-print("All 10 ACME Corp PDFs generated successfully.")
+print("\nSuccess: All 10 high-quality PDFs have been rebuilt and are available in backend/test_pdfs.")
+

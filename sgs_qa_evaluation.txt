@@ -1,0 +1,126 @@
+SGS Technologies — Expanded Policy & Website Q&A Evaluation Set
+Generated: 2026-04-01
+
+================================================================================
+PART 1: QUESTIONS FROM PDF DOCUMENTS (10 TOTAL)
+================================================================================
+
+--- SINGLE DOCUMENT QUESTIONS ---
+
+1. [EASY] According to the SGS_Information_Security_Protocol, what specific version of TLS is mandatory for all digital interaction encryption?
+   - ANSWER: TLS 1.3.
+   - SOURCE: SGS_Information_Security_Protocol.pdf, Page 3 (Section 2.0: Data Protection)
+
+2. [EASY] In the SGS_Employee_Excellence_Handbook, how frequently are employees required to disclose potential conflicts of interest, such as secondary employment?
+   - ANSWER: On an annual basis.
+   - SOURCE: SGS_Employee_Excellence_Handbook.pdf, Page 4 (Section 3.0: Ethical Conduct)
+
+3. [MEDIUM] Based on the SGS_Data_Sovereignty_Policy, what specific tier of penalties can be applied for non-compliance with the established frameworks?
+   - ANSWER: Tiered penalties ranging from formal warnings to contract termination.
+   - SOURCE: SGS_Data_Sovereignty_Policy.pdf, Page 6 (Section 5.0: Compliance Monitoring)
+
+4. [MEDIUM] Under the 'Workplace Health and Sustainable Environment' section in the SGS_Sustainable_Impact_Charter, which ISO standard must all physical offices comply with?
+   - ANSWER: ISO 14001.
+   - SOURCE: SGS_Sustainable_Impact_Charter.pdf, Page 5 (Section 4.0: Workplace Health)
+
+5. [EASY] According to the SGS_Technical_Debt_Guidelines, how often will internal audits be conducted to ensure strict adherence to the policy frameworks?
+   - ANSWER: Quarterly.
+   - SOURCE: SGS_Technical_Debt_Guidelines.pdf, Page 6 (Section 5.0: Compliance Monitoring)
+
+--- MULTIPLE/CROSS-DOCUMENT QUESTIONS ---
+
+6. [MEDIUM] Both the Cloud Architecture and Information Security Protocols discuss system access. What is the mandatory authentication method (MFA) required for all internal SGS systems?
+   - ANSWER: Multi-factor authentication (MFA).
+   - SOURCE: SGS_Cloud_Architecture_Standards.pdf (Page 3) & SGS_Information_Security_Protocol.pdf (Page 3)
+
+7. [MEDIUM] Looking at both the Strategic Roadmap and the Quality Audit Framework, what is the name of the core delivery model that employees must use for all project interactions?
+   - ANSWER: The 'Agile First' delivery model.
+   - SOURCE: SGS_Strategic_Roadmap_2026.pdf (Page 2) & SGS_Quality_Audit_Framework.pdf (Page 2)
+
+8. [HARD] Between the Vendor Compliance Manual and the Ethical Conduct policy, what specific types of secondary financial stakes are employees required to disclose?
+   - ANSWER: Significant financial stakes in competing enterprises.
+   - SOURCE: SGS_Vendor_Compliance_Manual.pdf (Page 4) & SGS_Corporate_Governance.pdf (Page 4)
+
+9. [HARD] How does the general 'Operational Excellence' policy across SGS documents define the requirement for client deliverables before final sign-off?
+   - ANSWER: They must undergo multiple tiers of quality assurance.
+   - SOURCE: Found in Section 1.0 (Page 2) of all SGS Policy PDFs.
+
+10. [MEDIUM] Across the various policy frameworks, which specific individual/role is granted the authority to report investigations directly to the Board of Directors?
+    - ANSWER: The Compliance Officer.
+    - SOURCE: Found in Section 5.0 (Page 6) of all SGS Policy PDFs.
+
+================================================================================
+PART 2: QUESTIONS FROM WEBSITE CONTENT (5 TOTAL)
+================================================================================
+
+11. [EASY] According to the homepage, how many companies worldwide trust SGS Technologies?
+    - ANSWER: Over 500 companies.
+    - SOURCE: Website (index.html), Hero Section Badge.
+
+12. [MEDIUM] For government sector work, which two specific compliance standards (one security, one accessibility) does SGS build its digital services to meet?
+    - ANSWER: FedRAMP (Security) and Section 508 (Accessibility).
+    - SOURCE: Website (index.html), "Trusted Across Industries" - Government Section.
+
+13. [EASY] On the 'Why Choose SGS' section of the website, what are the four core features highlighted as technical advantages?
+    - ANSWER: Fast Delivery, Enterprise Security, Cloud Native, and Dedicated Support.
+    - SOURCE: Website (index.html), "Why Choose SGS Technologies?" Section.
+
+14. [MEDIUM] Which specific executive (Name and Company) provided the testimonial stating that SGS cut their legal review costs by 60%?
+    - ANSWER: David Park, VP Engineering at ClearLaw.
+    - SOURCE: Website (index.html), Testimonials Section.
+
+15. [EASY] According to the Financial Services section on the website, what are the three specific types of systems SGS builds for the finance industry?
+    - ANSWER: Real-time fraud detection, regulatory reporting dashboards, and secure transaction processing systems.
+    - SOURCE: Website (index.html), "Trusted Across Industries" - Financial Services Section.
+
+================================================================================
+PART 3: HYBRID QUESTIONS (WEBSITE + PDFs)
+================================================================================
+
+16. [MEDIUM] The website mentions Rachel Torres (COO at MedFirst) saw processing time drop to 20 minutes. According to the 'Operational Excellence' section in the PDFs, what delivery model is credited for this efficiency?
+    - ANSWER: The 'Agile First' delivery model.
+    - SOURCE: Website (Testimonials) + Any SGS PDF, Page 2 (Section 1.0).
+
+17. [MEDIUM] SGS provides HIPAA-compliant platforms for Healthcare on its website. Looking at 'Data Protection' (Section 2.0) in the PDFs, what encryption protocol is mandated to protect such data?
+    - ANSWER: TLS 1.3.
+    - SOURCE: Website (Industries) + Any SGS PDF, Page 3 (Section 2.0).
+
+18. [HARD] The website lists "Enterprise Security" as a key feature. According to the 'Compliance Monitoring' sections in the PDFs, who investigates deviations from these security standards?
+    - ANSWER: The Compliance Officer investigating and reporting to the Board.
+    - SOURCE: Website (Features) + Any SGS PDF, Page 6 (Section 5.0).
+
+19. [MEDIUM] SGS claims to build for "sustainable growth" on its homepage. How is this roadmap implemented in physical offices according to the Sustainable Impact Charter?
+    - ANSWER: Mandatory compliance with ISO 14001 environmental management standards.
+    - SOURCE: Website (Hero/CTA) + SGS_Sustainable_Impact_Charter.pdf, Page 5 (Section 4.0).
+
+20. [HARD] The website highlights David Park's AI integration success. Based on the 'Ethical Conduct' policy, what annual disclosure would David Park likely need to make if he were an SGS employee?
+    - ANSWER: Annual disclosure of potential conflicts of interest, including financial stakes in competing enterprises.
+    - SOURCE: Website (Testimonials) + Any SGS PDF, Page 4 (Section 3.0).
+
+================================================================================
+PART 4: MULTI-DOCUMENT QUESTIONS (3-5 PDFs)
+================================================================================
+
+21. [HARD] Based on the Cloud Architecture, Information Security, and Data Sovereignty PDFs, what three-layered approach does SGS use for system integrity (Version, Auth, and Audit)?
+    - ANSWER: TLS 1.3 encryption, Multi-factor authentication (MFA), and Quarterly internal audits.
+    - SOURCE: SGS_Cloud_Architecture_Standards.pdf (P3), SGS_Information_Security_Protocol.pdf (P3), SGS_Data_Sovereignty_Policy.pdf (P6).
+
+22. [HARD] Synthesize the annual reporting requirements found in the Employee Handbook, Corporate Governance, and Vendor Compliance Manual. What is the primary focus of these disclosures?
+    - ANSWER: Reporting potential conflicts of interest, bribery/corruption zero-tolerance, and financial stakes in competitors.
+    - SOURCE: Handbook (P4), Governance (P4), Vendor Manual (P4).
+
+23. [HARD] Using the Strategic Roadmap, Quality Audit Framework, and Project Management Methodology, identify the mandatory requirement for all client deliverables before they reach sign-off.
+    - ANSWER: Meticulous record keeping and undergoing multiple tiers of quality assurance.
+    - SOURCE: Strategic Roadmap (P2), Quality Audit (P2), Project Mgmt (P2).
+
+24. [VERY HARD] Combine the risk mitigation strategies from the Disaster Recovery Plan, Cybersecurity Incident Response, and Technical Debt Guidelines. At what point in the 'Project Lifecycle' must these strategies be integrated?
+    - ANSWER: Risk mitigation must be integrated into every phase of the project lifecycle.
+    - SOURCE: DR Plan (P2), Incident Response (P2), Tech Debt (P2).
+
+25. [MEDIUM] List four "SGS Policy" documents where the 'Workplace Health and Sustainable Environment' (Section 4.0) appears on Page 5.
+    - ANSWER: Any 4 from the 10 SGS PDFs (e.g., Strategic Roadmap, InfoSec Protocol, Employee Handbook, Sustainable Impact Charter).
+    - SOURCE: All SGS Policy PDFs (P5).
+
+================================================================================
+END OF ENHANCED EVALUATION SET
+================================================================================
