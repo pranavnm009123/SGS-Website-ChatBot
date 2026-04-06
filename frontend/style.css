@@ -636,8 +636,48 @@ textarea.form-control { resize: vertical; min-height: 110px; }
   color: #fff; box-shadow: 0 6px 24px rgba(26,115,232,.4), 0 2px 8px rgba(0,0,0,.1);
   transition: transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s;
 }
+#chat-widget-btn .widget-fab-icon {
+  display: flex; align-items: center; justify-content: center;
+  line-height: 0;
+}
+#chat-widget-btn .widget-fab-unread-dot {
+  position: absolute; top: 6px; right: 6px; width: 12px; height: 12px;
+  border-radius: 50%; background: #ef4444; border: 2px solid var(--navy);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.35);
+  opacity: 0; transform: scale(0); pointer-events: none;
+  transition: opacity .2s, transform .25s cubic-bezier(.34,1.56,.64,1);
+}
+#chat-widget-btn.widget-fab-unread .widget-fab-unread-dot {
+  opacity: 1; transform: scale(1);
+}
+@keyframes widgetFabThinkingPulse {
+  0%, 100% { box-shadow: 0 6px 24px rgba(26,115,232,.4), 0 2px 8px rgba(0,0,0,.1), 0 0 0 0 rgba(96,165,250,.45); }
+  50% { box-shadow: 0 6px 28px rgba(26,115,232,.55), 0 2px 10px rgba(0,0,0,.12), 0 0 0 10px rgba(96,165,250,0); }
+}
+#chat-widget-btn.widget-fab-thinking {
+  animation: widgetFabThinkingPulse 1.4s ease-in-out infinite;
+}
+@keyframes widgetFabShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-4px); }
+  40% { transform: translateX(4px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
+#chat-widget-btn.widget-fab-unread .widget-fab-icon {
+  animation: widgetFabShake .55s ease-in-out 3;
+}
+@media (prefers-reduced-motion: reduce) {
+  #chat-widget-btn.widget-fab-thinking {
+    animation: none;
+  }
+  #chat-widget-btn.widget-fab-unread .widget-fab-icon {
+    animation: none;
+  }
+}
 #chat-widget-btn:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(26,115,232,.5), 0 4px 12px rgba(0,0,0,.15); }
 #chat-widget-btn.active { transform: scale(.9) rotate(90deg); }
+#chat-widget-btn.active:hover { transform: scale(.95) rotate(90deg); }
 
 #chat-widget-panel {
   position: fixed; bottom: 5.5rem; right: 1.75rem; z-index: 999;
@@ -664,6 +704,25 @@ textarea.form-control { resize: vertical; min-height: 110px; }
 .widget-status-dot {
   position: absolute; bottom: 0; right: 0; width: 12px; height: 12px;
   background: var(--green); border-radius: 50%; border: 2px solid var(--blue);
+  transition: background .2s, box-shadow .2s;
+}
+.widget-status-dot.is-offline {
+  background: #ef4444;
+  box-shadow: none;
+}
+.widget-status-dot.is-thinking {
+  background: var(--green);
+  animation: widgetStatusThinkingBlink 0.85s ease-in-out infinite;
+}
+@keyframes widgetStatusThinkingBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.32; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .widget-status-dot.is-thinking {
+    animation: none;
+    opacity: 1;
+  }
 }
 .widget-header h4 { font-size: 1rem; color: #fff; margin-bottom: .1rem; font-weight: 700; }
 .widget-header small { font-size: .72rem; color: rgba(255,255,255,.8); }

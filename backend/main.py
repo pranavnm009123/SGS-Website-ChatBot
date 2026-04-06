@@ -33,6 +33,15 @@ FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "fronten
 OLLAMA_URL = "http://localhost:11434"
 
 
+def _ollama_tags_url():
+    """Resolve GET /api/tags URL from OLLAMA_URL (same env as retrieval.py)."""
+    chat = os.getenv("OLLAMA_URL", "http://localhost:11434/api/chat").rstrip("/")
+    if chat.endswith("/api/chat"):
+        root = chat[: -len("/api/chat")]
+        return (root or "http://localhost:11434") + "/api/tags"
+    return "http://localhost:11434/api/tags"
+
+
 def _check_ollama():
     try:
         r = requests.get(OLLAMA_URL, timeout=5)
@@ -332,6 +341,17 @@ async def reindex_site(x_admin_key: str = Header(None)):
 
 
 # ── Chat ─────────────────────────────────────────────────────────────────────
+
+@app.get("/api/chat-status")
+async def chat_status():
+    """Lightweight check for the widget: is Ollama reachable (model can run)?"""
+    try:
+        r = requests.get(_ollama_tags_url(), timeout=3)
+        ok = r.status_code == 200
+    except Exception:
+        ok = False
+    return {"ollama_ok": ok}
+
 
 @app.post("/chat")
 @limiter.limit("10/minute")

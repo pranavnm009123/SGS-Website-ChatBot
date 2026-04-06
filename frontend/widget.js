@@ -16,6 +16,9 @@
     window.localStorage.removeItem(k);
   });
 
+  var FAB_LABEL_DEFAULT = 'Chat with Alex';
+  var FAB_LABEL_UNREAD = 'New reply — open chat';
+
   var SUGGESTED_QUESTIONS = [
     'What services does SGS offer?',
     'Where are your office locations?',
@@ -56,8 +59,14 @@
   // ── Build DOM ────────────────────────────────────────────────────────────────
   var btn = document.createElement('button');
   btn.id = 'chat-widget-btn';
-  btn.title = 'Chat with Alex';
-  btn.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>';
+  btn.type = 'button';
+  btn.title = FAB_LABEL_DEFAULT;
+  btn.setAttribute('aria-label', FAB_LABEL_DEFAULT);
+  btn.innerHTML =
+    '<span class="widget-fab-icon">' +
+      '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>' +
+    '</span>' +
+    '<span class="widget-fab-unread-dot" aria-hidden="true"></span>';
 
   var panel = document.createElement('div');
   panel.id = 'chat-widget-panel';
@@ -99,8 +108,51 @@
   var sendBtn    = panel.querySelector('#widget-send');
   var closeBtn   = panel.querySelector('.widget-close');
   var refreshBtn = panel.querySelector('#widget-refresh');
+  var statusDot  = panel.querySelector('.widget-status-dot');
+  statusDot.setAttribute('aria-label', 'Assistant online');
 
   var activeStreamController = null;
+  var lastKnownModelOnline = true;
+  var chatStatusIntervalId = null;
+
+  function updateStatusDotFromModelState() {
+    if (statusDot.classList.contains('is-thinking')) return;
+    statusDot.classList.toggle('is-offline', !lastKnownModelOnline);
+    if (lastKnownModelOnline) {
+      statusDot.removeAttribute('title');
+      statusDot.setAttribute('aria-label', 'Assistant online');
+    } else {
+      statusDot.title = 'AI model offline';
+      statusDot.setAttribute('aria-label', 'AI model offline');
+    }
+  }
+
+  function pollChatStatus() {
+    fetch('/api/chat-status', { cache: 'no-store' })
+      .then(function (r) {
+        if (!r.ok) {
+          lastKnownModelOnline = false;
+          updateStatusDotFromModelState();
+          return null;
+        }
+        return r.json();
+      })
+      .then(function (j) {
+        if (!j) return;
+        lastKnownModelOnline = !!j.ollama_ok;
+        updateStatusDotFromModelState();
+      })
+      .catch(function () {
+        lastKnownModelOnline = false;
+        updateStatusDotFromModelState();
+      });
+  }
+
+  function startChatStatusPolling() {
+    pollChatStatus();
+    if (chatStatusIntervalId) clearInterval(chatStatusIntervalId);
+    chatStatusIntervalId = setInterval(pollChatStatus, 45000);
+  }
 
   function abortActiveStream() {
     if (activeStreamController) {
@@ -110,8 +162,20 @@
   }
 
   // ── Toggle ───────────────────────────────────────────────────────────────────
-  function openPanel()  { panel.classList.add('open'); btn.classList.add('active'); storage.setItem(OPEN_KEY, '1'); }
-  function closePanel() { panel.classList.remove('open'); btn.classList.remove('active'); storage.removeItem(OPEN_KEY); }
+  function openPanel() {
+    panel.classList.add('open');
+    btn.classList.add('active');
+    btn.classList.remove('widget-fab-unread');
+    btn.setAttribute('aria-label', FAB_LABEL_DEFAULT);
+    btn.title = FAB_LABEL_DEFAULT;
+    storage.setItem(OPEN_KEY, '1');
+    pollChatStatus();
+  }
+  function closePanel() {
+    panel.classList.remove('open');
+    btn.classList.remove('active');
+    storage.removeItem(OPEN_KEY);
+  }
 
   btn.addEventListener('click', function () { panel.classList.contains('open') ? closePanel() : openPanel(); });
   closeBtn.addEventListener('click', closePanel);
@@ -263,6 +327,13 @@
 
   function resetConversation() {
     abortActiveStream();
+    activeStreamController = null;
+    btn.classList.remove('widget-fab-thinking', 'widget-fab-unread');
+    statusDot.classList.remove('is-thinking');
+    btn.setAttribute('aria-label', FAB_LABEL_DEFAULT);
+    btn.title = FAB_LABEL_DEFAULT;
+    updateStatusDotFromModelState();
+    pollChatStatus();
     storage.removeItem(STORAGE_KEY);
     msgList.innerHTML = '';
     showWelcome();
@@ -271,6 +342,18 @@
   }
 
   refreshBtn.addEventListener('click', resetConversation);
+
+  /** Network drops when switching tabs / sleeping the tab often surface as TypeError, not AbortError. */
+  function isTransientNetworkError(err) {
+    if (!err || err.name === 'AbortError') return false;
+    if (typeof TypeError !== 'undefined' && err instanceof TypeError) return true;
+    var m = String(err.message || '').toLowerCase();
+    if (m.indexOf('network') !== -1) return true;
+    if (m.indexOf('failed to fetch') !== -1) return true;
+    if (m.indexOf('load failed') !== -1) return true;
+    if (m.indexOf('aborted') !== -1 && err.name !== 'AbortError') return true;
+    return false;
+  }
 
   // ── Send (streaming) ──────────────────────────────────────────────────────────
   async function send() {
@@ -290,106 +373,146 @@
     input.disabled = true;
     sendBtn.disabled = true;
 
+    btn.classList.remove('widget-fab-unread');
+    btn.setAttribute('aria-label', FAB_LABEL_DEFAULT);
+    btn.title = FAB_LABEL_DEFAULT;
+    btn.classList.add('widget-fab-thinking');
+    statusDot.classList.add('is-thinking');
+    statusDot.title = 'Alex is responding\u2026';
+    statusDot.setAttribute('aria-label', 'Alex is responding');
+
     appendBubble(question, 'user', false);
     scroll();
 
     var typing = addTyping();
 
+    var streamOk = false;
     try {
-      var res = await fetch('/chat/stream', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: question }),
-        signal: signal
-      });
-
-      if (signal.aborted) return;
-
-      if (res.status === 429) {
-        typing.remove();
-        appendBubble('Too many messages \u2014 please wait a moment and try again.', 'bot', false);
-        scroll();
-        return;
-      }
-
-      if (!res.ok) {
-        typing.remove();
-        appendBubble('Something went wrong. Please try again.', 'bot', false);
-        scroll();
-        return;
-      }
-
-      // Bot bubble created lazily on first token
-      var typingRemoved = false;
-      var bubble = null;
-      var fullText = '';
-
-      var reader = res.body.getReader();
-      var decoder = new TextDecoder();
-      var buffer = '';
-
-      while (true) {
-        var chunk = await reader.read();
-        if (chunk.done) break;
+      for (var attempt = 0; attempt < 2; attempt++) {
         if (signal.aborted) return;
-        buffer += decoder.decode(chunk.value, { stream: true });
 
-        var lines = buffer.split('\n');
-        buffer = lines.pop() || '';
+        var typingRemoved = false;
+        var bubble = null;
+        var fullText = '';
 
-        for (var i = 0; i < lines.length; i++) {
-          var line = lines[i].trim();
-          if (!line.startsWith('data: ')) continue;
-          var payload = line.slice(6);
-          if (payload === '[DONE]') continue;
+        try {
+          var res = await fetch('/chat/stream', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question: question }),
+            signal: signal
+          });
 
-          try {
-            var evt = JSON.parse(payload);
-            if (evt.type === 'token') {
-              if (!typingRemoved) {
-                typing.remove();
-                typingRemoved = true;
-                bubble = appendBubble('', 'bot', false).bubble;
-              }
-              fullText += evt.content;
-              bubble.innerHTML = renderMarkdown(fullText);
-              scroll();
-            } else if (evt.type === 'sources') {
-              appendSources(evt.sources);
-              scroll();
-            } else if (evt.type === 'error') {
-              fullText = evt.content;
-              bubble.innerHTML = renderMarkdown(fullText);
-              scroll();
+          if (signal.aborted) return;
+
+          if (res.status === 429) {
+            typing.remove();
+            appendBubble('Too many messages \u2014 please wait a moment and try again.', 'bot', false);
+            scroll();
+            return;
+          }
+
+          if (!res.ok) {
+            typing.remove();
+            appendBubble('Something went wrong. Please try again.', 'bot', false);
+            scroll();
+            return;
+          }
+
+          var reader = res.body.getReader();
+          var decoder = new TextDecoder();
+          var buffer = '';
+
+          while (true) {
+            var chunk = await reader.read();
+            if (chunk.done) break;
+            if (signal.aborted) return;
+            buffer += decoder.decode(chunk.value, { stream: true });
+
+            var lines = buffer.split('\n');
+            buffer = lines.pop() || '';
+
+            for (var i = 0; i < lines.length; i++) {
+              var line = lines[i].trim();
+              if (!line.startsWith('data: ')) continue;
+              var payload = line.slice(6);
+              if (payload === '[DONE]') continue;
+
+              try {
+                var evt = JSON.parse(payload);
+                if (evt.type === 'token') {
+                  if (!typingRemoved) {
+                    typing.remove();
+                    typingRemoved = true;
+                    bubble = appendBubble('', 'bot', false).bubble;
+                  }
+                  fullText += evt.content;
+                  bubble.innerHTML = renderMarkdown(fullText);
+                  scroll();
+                } else if (evt.type === 'sources') {
+                  appendSources(evt.sources);
+                  scroll();
+                } else if (evt.type === 'error') {
+                  fullText = evt.content;
+                  bubble.innerHTML = renderMarkdown(fullText);
+                  scroll();
+                }
+              } catch (_) {}
             }
-          } catch (_) {}
+          }
+
+          if (signal.aborted) return;
+
+          if (!typingRemoved) {
+            typing.remove();
+            bubble = appendBubble('', 'bot', false).bubble;
+          }
+          if (!fullText && bubble) {
+            bubble.textContent = 'No answer returned.';
+          }
+
+          streamOk = true;
+          break;
+        } catch (err) {
+          if (err.name === 'AbortError' || signal.aborted) {
+            try { typing.remove(); } catch (_) {}
+            return;
+          }
+          var typingStillVisible = typing && typing.parentNode;
+          var canRetry =
+            attempt === 0 &&
+            typingStillVisible &&
+            isTransientNetworkError(err) &&
+            !signal.aborted;
+          if (canRetry) {
+            await new Promise(function (r) { setTimeout(r, 400); });
+            continue;
+          }
+          try { typing.remove(); } catch (_) {}
+          if (!signal.aborted) {
+            appendBubble('Could not reach the server. Please try again shortly.', 'bot', false);
+            scroll();
+          }
+          return;
         }
       }
-
-      if (signal.aborted) return;
-
-      if (!typingRemoved) {
-        typing.remove();
-        bubble = appendBubble('', 'bot', false).bubble;
-      }
-      if (!fullText && bubble) {
-        bubble.textContent = 'No answer returned.';
-      }
-
-    } catch (err) {
-      if (err.name === 'AbortError') {
-        try { typing.remove(); } catch (_) {}
-        return;
-      }
-      try { typing.remove(); } catch (_) {}
-      if (!signal.aborted) {
-        appendBubble('Could not reach the server. Please try again shortly.', 'bot', false);
-      }
     } finally {
-      if (activeStreamController === controller) {
+      var ownedThisSend = (activeStreamController === controller);
+      if (ownedThisSend) {
         activeStreamController = null;
       }
-      if (!signal.aborted) {
+      if (ownedThisSend) {
+        btn.classList.remove('widget-fab-thinking');
+        statusDot.classList.remove('is-thinking');
+        updateStatusDotFromModelState();
+        pollChatStatus();
+      }
+      if (!signal.aborted && ownedThisSend) {
+        if (streamOk && !panel.classList.contains('open')) {
+          btn.classList.add('widget-fab-unread');
+          btn.setAttribute('aria-label', FAB_LABEL_UNREAD);
+          btn.title = FAB_LABEL_UNREAD;
+        }
         scroll();
         saveHistory();
         input.disabled = false;
@@ -406,9 +529,14 @@
 
   // ── Init ─────────────────────────────────────────────────────────────────────
   window.addEventListener('pagehide', saveHistory);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') pollChatStatus();
+  });
   loadHistory();
   if (!msgList.children.length) showWelcome();
   scroll();
+
+  startChatStatusPolling();
 
   if (storage.getItem(OPEN_KEY)) openPanel();
 })();
