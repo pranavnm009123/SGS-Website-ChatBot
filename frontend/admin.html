@@ -3,72 +3,75 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin — SGS Technologies</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <title>Admin — SGS Technologie</title>
   <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/theme.js"></script>
 </head>
 <body>
 
+  <nav class="site-nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">SGS <span>Technologie</span></a>
+      <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/services">Services</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li><a href="/admin" class="active">Admin</a></li>
+      </ul>
+    </div>
+  </nav>
+
   <div class="admin-layout">
     <div class="admin-header">
-      <div>
-        <h1>Admin Panel</h1>
-        <p style="color:var(--text-muted);margin-top:.25rem;">Manage documents and site content</p>
+      <h1>Document Admin</h1>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" id="reindex-btn">&#8634; Re-index Website</button>
+        <button class="btn btn-danger btn-sm" id="purge-btn" style="background:#b45309;">&#128465; Remove All PDFs</button>
+        <button class="btn btn-danger btn-sm" id="purge-all-btn">&#9888; Purge Entire DB</button>
       </div>
-      <a href="/" class="btn btn-outline">← Back to Site</a>
     </div>
 
-    <!-- Upload card -->
     <div class="upload-card">
-      <h3 style="margin-bottom:1.25rem;">Upload PDF Document</h3>
-      <div id="drop-zone" class="drop-zone">
-        <div class="drop-zone-icon">📄</div>
-        <p>Drag & drop PDFs here, or <strong>click to browse</strong></p>
-        <small>PDF only · max 50 MB each · multiple files OK</small>
-        <input type="file" id="file-input" hidden accept=".pdf" multiple>
+      <h3 style="margin-bottom:1rem;color:var(--navy);">Upload Documents</h3>
+      <div class="drop-zone" id="drop-zone">
+        <input type="file" id="file-input" accept=".pdf" multiple hidden>
+        <div class="drop-zone-icon">&#128196;</div>
+        <p>Drop PDF files here or click to browse</p>
+        <small>Max file size: 20 MB &middot; PDF only</small>
       </div>
       <div id="upload-status"></div>
     </div>
 
-    <!-- Document library -->
     <div class="docs-card">
       <div class="docs-card-header">
-        <h3>Document Library</h3>
-        <div style="display:flex;gap:.5rem;">
-          <button class="btn btn-outline btn-sm" id="reindex-btn">↺ Re-index Website</button>
-          <button class="btn btn-sm" id="purge-btn" style="background:#7f1d1d;color:#fca5a5;border:1px solid #991b1b;">🗑 Remove All PDFs</button>
-        </div>
+        <h3 style="color:var(--navy);">Document Library</h3>
       </div>
-      <div style="overflow-x:auto;">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Filename</th>
-              <th>Pages</th>
-              <th>Chunks</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="docs-tbody">
-            <tr><td colspan="5" style="color:var(--text-muted);text-align:center;">Loading…</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Danger zone -->
-    <div class="docs-card" style="border:1px solid #7f1d1d;margin-top:1.5rem;">
-      <div class="docs-card-header" style="flex-direction:column;align-items:flex-start;gap:.5rem;">
-        <h3 style="color:#f87171;">Danger Zone</h3>
-        <p style="color:var(--text-muted);font-size:.85rem;margin:0;">
-          Wipe the entire database — removes <strong>all PDFs</strong>, <strong>all website vectors</strong>, and <strong>all indexed data</strong>. The chatbot will have no knowledge until content is re-uploaded and the site is re-indexed.
-        </p>
-        <button class="btn btn-sm" id="purge-all-btn" style="background:#450a0a;color:#f87171;border:1px solid #7f1d1d;margin-top:.5rem;">⚠ Purge Entire Database</button>
-      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Filename</th>
+            <th>Pages</th>
+            <th>Chunks</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="docs-tbody">
+          <tr><td colspan="5" style="color:var(--text-muted);text-align:center;">Loading...</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-bottom" style="border-top:none;">&copy; 2026 SGS Technologie. All rights reserved.</div>
+    </div>
+  </footer>
+
   <script src="/static/admin.js"></script>
+  <script src="/static/widget.js"></script>
 </body>
 </html>

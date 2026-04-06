@@ -3,17 +3,24 @@
 
   const STORAGE_KEY = 'sgs_widget_history_v1';
   const OPEN_KEY    = 'sgs_widget_open';
+  var storage = (function () {
+    try {
+      return window.sessionStorage;
+    } catch (_) {
+      return window.localStorage;
+    }
+  })();
   // Clean up old storage keys
   ['acme_widget_history', 'acme_widget_history_v2', 'acme_widget_history_v3', 'acme_widget_history_v4', 'acme_widget_open'].forEach(function (k) {
-    localStorage.removeItem(k);
-    localStorage.removeItem(k);
+    storage.removeItem(k);
+    window.localStorage.removeItem(k);
   });
 
   var SUGGESTED_QUESTIONS = [
-    'What services do you offer?',
-    'Tell me about your pricing',
-    'Who is on the leadership team?',
-    'How can I contact you?'
+    'What services does SGS offer?',
+    'Where are your office locations?',
+    'Tell me about your products',
+    'How can I contact SGS?'
   ];
 
   // ── Markdown renderer (lightweight) ────────────────────────────────────────
@@ -63,7 +70,7 @@
         '</div>' +
         '<div>' +
           '<h4>Alex</h4>' +
-          '<small>SGS Technologies Assistant</small>' +
+          '<small>SGS Technologie Assistant</small>' +
         '</div>' +
       '</div>' +
       '<div class="widget-header-actions">' +
@@ -82,7 +89,7 @@
         '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>' +
       '</button>' +
     '</div>' +
-    '<div class="widget-footer">Powered by <strong>SGS Technologies</strong> AI</div>';
+    '<div class="widget-footer">Powered by <strong>SGS Technologie</strong> AI</div>';
 
   document.body.appendChild(btn);
   document.body.appendChild(panel);
@@ -103,8 +110,8 @@
   }
 
   // ── Toggle ───────────────────────────────────────────────────────────────────
-  function openPanel()  { panel.classList.add('open'); btn.classList.add('active'); localStorage.setItem(OPEN_KEY, '1'); }
-  function closePanel() { panel.classList.remove('open'); btn.classList.remove('active'); localStorage.removeItem(OPEN_KEY); }
+  function openPanel()  { panel.classList.add('open'); btn.classList.add('active'); storage.setItem(OPEN_KEY, '1'); }
+  function closePanel() { panel.classList.remove('open'); btn.classList.remove('active'); storage.removeItem(OPEN_KEY); }
 
   btn.addEventListener('click', function () { panel.classList.contains('open') ? closePanel() : openPanel(); });
   closeBtn.addEventListener('click', closePanel);
@@ -163,7 +170,6 @@
         e.stopPropagation();
         try {
           saveHistory();
-          sessionStorage.setItem('sgs_source_nav', '1');
         } catch (_) {}
         setTimeout(function () { window.location.href = url; }, 50);
       });
@@ -215,14 +221,14 @@
     msgList.querySelectorAll('.wm-row, .wm-sources').forEach(function (el) {
       entries.push({ cls: el.className, html: el.innerHTML });
     });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    storage.setItem(STORAGE_KEY, JSON.stringify(entries));
   }
 
   var linkIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
 
   function loadHistory() {
     try {
-      var entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+      var entries = JSON.parse(storage.getItem(STORAGE_KEY) || '[]');
       entries.forEach(function (e) {
         var el = document.createElement('div');
         el.className = e.cls;
@@ -239,7 +245,6 @@
               ev.stopPropagation();
               try {
                 saveHistory();
-                sessionStorage.setItem('sgs_source_nav', '1');
               } catch (_) {}
               setTimeout(function () { window.location.href = url; }, 50);
             });
@@ -251,14 +256,14 @@
   }
 
   function showWelcome() {
-    appendBubble("Hi there! I'm Alex, your SGS Technologies assistant. I can answer questions about our services, team, pricing, and uploaded documents. How can I help?", 'bot', false);
+    appendBubble("Hi there! I'm Alex, your SGS Technologie assistant. I can answer questions about our services, products, office locations, and uploaded documents. How can I help?", 'bot', false);
     addSuggestions();
     scroll();
   }
 
   function resetConversation() {
     abortActiveStream();
-    localStorage.removeItem(STORAGE_KEY);
+    storage.removeItem(STORAGE_KEY);
     msgList.innerHTML = '';
     showWelcome();
     input.disabled = false;
@@ -400,15 +405,10 @@
   });
 
   // ── Init ─────────────────────────────────────────────────────────────────────
-  if (sessionStorage.getItem('sgs_source_nav')) {
-    sessionStorage.removeItem('sgs_source_nav');
-    loadHistory();
-  } else {
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(OPEN_KEY);
-  }
+  window.addEventListener('pagehide', saveHistory);
+  loadHistory();
   if (!msgList.children.length) showWelcome();
   scroll();
 
-  if (localStorage.getItem(OPEN_KEY)) openPanel();
+  if (storage.getItem(OPEN_KEY)) openPanel();
 })();

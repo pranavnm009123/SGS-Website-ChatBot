@@ -3,172 +3,187 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Services — SGS Technologies</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <title>Services — SGS Technologie</title>
   <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/theme.js"></script>
 </head>
 <body>
 
   <nav class="site-nav">
     <div class="container nav-inner">
-      <a href="/" class="nav-logo">SGS<span>Tech</span></a>
+      <a href="/" class="nav-logo">SGS <span>Technologie</span></a>
       <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
       <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/services" class="active">Services</a></li>
-        <li><a href="/contact">Contact</a></li>
+        <li>
+          <a href="#" class="active">What we do <span class="arrow">&#9662;</span></a>
+          <div class="nav-dropdown">
+            <div class="dropdown-label">Services</div>
+            <a href="/services">All Services</a>
+            <a href="/software-engineering">Software Engineering</a>
+            <a href="/cloud-services">Cloud Services</a>
+            <a href="/cyber-security">Cyber Security</a>
+            <a href="/data-engineering">Data Engineering</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-label">Products</div>
+            <a href="/products">Our Products</a>
+          </div>
+        </li>
+        <li>
+          <a href="#">Who we are <span class="arrow">&#9662;</span></a>
+          <div class="nav-dropdown">
+            <a href="/about">About SGS</a>
+            <a href="/about#philosophy">Approach &amp; Philosophy</a>
+            <a href="/about#certifications">Certifications</a>
+          </div>
+        </li>
+        <li>
+          <a href="#">Insights <span class="arrow">&#9662;</span></a>
+          <div class="nav-dropdown">
+            <a href="/testimonials">Testimonials</a>
+            <a href="/testimonials#case-studies">Case Studies</a>
+          </div>
+        </li>
+        <li><a href="/careers">Careers</a></li>
+        <li class="nav-cta"><a href="/contact" class="btn btn-green btn-sm">Contact Us</a></li>
       </ul>
     </div>
   </nav>
 
   <main>
-    <!-- Hero -->
-    <section class="hero" style="padding: 5rem 0 3rem;">
+    <section class="page-hero">
       <div class="container">
-        <div class="hero-badge">What We Offer</div>
-        <h1>Services Built for <span>Scale</span></h1>
-        <p class="lead">From custom software development to AI integrations and cloud infrastructure, we offer end-to-end technology services tailored to your goals.</p>
+        <div class="breadcrumb"><a href="/">Home</a> <span>/</span> Services</div>
+        <h1>Our Services</h1>
+        <p>A trusted software development partner delivering custom solutions to perfection.</p>
       </div>
     </section>
 
-    <!-- Services -->
-    <section class="section" style="padding-top: 2rem;">
-      <div class="container">
-        <div class="services-grid">
-          <div class="service-card">
-            <div class="service-icon">🛠️</div>
-            <h3>Custom Software Development</h3>
-            <p>Bespoke applications built from the ground up — web, mobile, and desktop — designed around your workflows.</p>
-            <ul class="service-features">
-              <li>Full-stack web applications</li>
-              <li>Native & cross-platform mobile</li>
-              <li>API design & integration</li>
-              <li>Legacy system modernization</li>
-            </ul>
-          </div>
-          <div class="service-card">
-            <div class="service-icon">☁️</div>
-            <h3>Cloud & Infrastructure</h3>
-            <p>Architecting scalable, resilient cloud environments on AWS, GCP, and Azure with DevOps best practices.</p>
-            <ul class="service-features">
-              <li>Cloud migration & lift-and-shift</li>
-              <li>Kubernetes & container orchestration</li>
-              <li>CI/CD pipeline setup</li>
-              <li>Cost optimization & FinOps</li>
-            </ul>
-          </div>
-          <div class="service-card">
-            <div class="service-icon">🤖</div>
-            <h3>AI & Machine Learning</h3>
-            <p>Embedding AI into your products — from predictive analytics to generative AI and intelligent automation.</p>
-            <ul class="service-features">
-              <li>RAG knowledge systems</li>
-              <li>Predictive & prescriptive analytics</li>
-              <li>NLP and document intelligence</li>
-              <li>MLOps & model deployment</li>
-            </ul>
-          </div>
-          <div class="service-card">
-            <div class="service-icon">🔒</div>
-            <h3>Cybersecurity</h3>
-            <p>Protecting your digital assets through proactive security assessments, architecture reviews, and compliance.</p>
-            <ul class="service-features">
-              <li>Penetration testing</li>
-              <li>Zero-trust architecture</li>
-              <li>SOC 2 & ISO 27001 readiness</li>
-              <li>Incident response planning</li>
-            </ul>
-          </div>
-          <div class="service-card">
-            <div class="service-icon">📊</div>
-            <h3>Data & Analytics</h3>
-            <p>Turning raw data into strategic insights with modern data warehouses, pipelines, and dashboards.</p>
-            <ul class="service-features">
-              <li>Data warehouse design</li>
-              <li>ETL / ELT pipeline engineering</li>
-              <li>Business intelligence dashboards</li>
-              <li>Real-time streaming analytics</li>
-            </ul>
-          </div>
-          <div class="service-card">
-            <div class="service-icon">🎨</div>
-            <h3>UX & Product Design</h3>
-            <p>Creating intuitive, beautiful experiences grounded in user research and accessibility best practices.</p>
-            <ul class="service-features">
-              <li>UX research & journey mapping</li>
-              <li>Wireframing & prototyping</li>
-              <li>Design systems</li>
-              <li>Usability testing</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Pricing -->
-    <section class="section" style="padding-top: 0;">
+    <section class="section">
       <div class="container">
         <div class="section-header">
-          <h2>Engagement Models</h2>
-          <p>Flexible arrangements to fit project-based work, ongoing retainers, and everything in between.</p>
+          <h2>What We Offer</h2>
+          <p>End-to-end technology services tailored to your business goals.</p>
         </div>
-        <div class="pricing-grid">
-          <div class="pricing-card">
-            <h3>Starter</h3>
-            <div class="price">$5k <span>/ month</span></div>
-            <ul>
-              <li>Up to 2 dedicated engineers</li>
-              <li>Weekly check-ins</li>
-              <li>Email support</li>
-              <li>Basic CI/CD setup</li>
-            </ul>
-            <a href="/contact" class="btn btn-outline" style="width:100%;justify-content:center;">Get Started</a>
+        <div class="services-grid">
+          <a href="/software-engineering" class="card" style="text-decoration:none;color:inherit;">
+            <div class="card-icon">&#128187;</div>
+            <h3>Software Engineering</h3>
+            <p>Custom software, web apps, mobile apps, and legacy modernization for enterprises of all sizes.</p>
+          </a>
+          <div class="card">
+            <div class="card-icon">&#128202;</div>
+            <h3>Application Services &amp; Modernization</h3>
+            <p>Breathe new life into legacy systems with modern architectures, microservices, and cloud-native approaches.</p>
           </div>
-          <div class="pricing-card featured">
-            <div class="pricing-badge">Most Popular</div>
-            <h3>Growth</h3>
-            <div class="price">$15k <span>/ month</span></div>
-            <ul>
-              <li>Up to 6 dedicated engineers</li>
-              <li>Dedicated project manager</li>
-              <li>Slack + priority support</li>
-              <li>Full DevOps & cloud setup</li>
-              <li>Monthly strategy sessions</li>
-            </ul>
-            <a href="/contact" class="btn btn-primary" style="width:100%;justify-content:center;">Get Started</a>
+          <div class="card">
+            <div class="card-icon">&#9881;</div>
+            <h3>Business Process Engineering</h3>
+            <p>Streamline and automate business workflows to improve efficiency, reduce costs, and accelerate growth.</p>
           </div>
-          <div class="pricing-card">
-            <h3>Enterprise</h3>
-            <div class="price">Custom</div>
-            <ul>
-              <li>Unlimited team scaling</li>
-              <li>Executive sponsorship</li>
-              <li>24/7 on-call support</li>
-              <li>SLA guarantees</li>
-              <li>Onsite workshops available</li>
-            </ul>
-            <a href="/contact" class="btn btn-outline" style="width:100%;justify-content:center;">Contact Sales</a>
+          <a href="/cloud-services" class="card" style="text-decoration:none;color:inherit;">
+            <div class="card-icon">&#9729;&#65039;</div>
+            <h3>Cloud Services</h3>
+            <p>Cloud migration, infrastructure management, and scalable solutions on AWS, Azure, and Google Cloud.</p>
+          </a>
+          <a href="/cyber-security" class="card" style="text-decoration:none;color:inherit;">
+            <div class="card-icon">&#128274;</div>
+            <h3>Cyber Security</h3>
+            <p>Protect your digital assets with proactive security assessments, architecture reviews, and compliance.</p>
+          </a>
+          <a href="/data-engineering" class="card" style="text-decoration:none;color:inherit;">
+            <div class="card-icon">&#128200;</div>
+            <h3>Data Engineering</h3>
+            <p>Build data pipelines, warehouses, and analytics platforms to turn raw data into strategic insights.</p>
+          </a>
+          <div class="card">
+            <div class="card-icon">&#127912;</div>
+            <h3>Design Experience</h3>
+            <p>User-centric UI/UX design that creates intuitive, beautiful, and accessible digital experiences.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">&#128227;</div>
+            <h3>Digital Marketing Transformation</h3>
+            <p>Data-driven marketing strategies, SEO, content, and analytics to drive growth and customer acquisition.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">&#127959;</div>
+            <h3>Infrastructure Engineering</h3>
+            <p>Design, build, and manage robust IT infrastructure for reliability, scalability, and performance.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">&#128101;</div>
+            <h3>IT Staff Augmentation</h3>
+            <p>Scale your team with skilled professionals who integrate seamlessly into your existing workflows.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">&#128736;</div>
+            <h3>Platform Services</h3>
+            <p>Salesforce, ServiceNow, and Microsoft implementation services to power your enterprise platform.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">&#9989;</div>
+            <h3>Quality Engineering</h3>
+            <p>Comprehensive testing, QA automation, and performance engineering for reliable software delivery.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon">&#129302;</div>
+            <h3>Technology Strategy &amp; Advisory</h3>
+            <p>Strategic consulting to align technology investments with your business objectives and growth roadmap.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="cta-strip">
-      <div class="container">
-        <h2>Not sure which service fits?</h2>
-        <p>Book a free 30-minute discovery call and we'll map out the right solution for you.</p>
-        <div class="hero-actions">
-          <a href="/contact" class="btn btn-primary" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4)">Book a Call</a>
-        </div>
+    <section class="cta-section">
+      <div class="container" style="text-align:center;">
+        <h2>Not Sure Which Service Fits?</h2>
+        <p style="max-width:500px;margin:0 auto 2rem;">Talk to our experts and we'll map out the right solution for your business needs.</p>
+        <a href="/contact" class="btn btn-green btn-lg">Get a Free Consultation</a>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
     <div class="container">
-      <p>© 2026 SGS Technologies. All rights reserved.</p>
+      <div class="footer-main">
+        <div class="footer-brand">
+          <a href="/" class="nav-logo" style="color:#fff;">SGS <span style="color:var(--blue-light);">Technologie</span></a>
+          <p>Delivering solutions beyond expectations since 2003.</p>
+          <div class="footer-contact-item">&#128205; <a href="https://maps.google.com/?q=9995+Gate+Parkway+N+Jacksonville+FL+32246">9995 Gate Parkway N, Suite 400, Jacksonville, FL 32246</a></div>
+          <div class="footer-contact-item">&#128231; <a href="mailto:info@sgstechnologies.net">info@sgstechnologies.net</a></div>
+          <div class="footer-contact-item">&#128222; <a href="tel:9043324534">(904) 332-4534</a></div>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="/software-engineering">Software Engineering</a></li>
+            <li><a href="/cloud-services">Cloud Services</a></li>
+            <li><a href="/cyber-security">Cyber Security</a></li>
+            <li><a href="/data-engineering">Data Engineering</a></li>
+            <li><a href="/services">All Services</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/testimonials">Testimonials</a></li>
+            <li><a href="/careers">Careers</a></li>
+            <li><a href="/contact">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/products">SMART&trade;</a></li>
+            <li><a href="/products">eNotify</a></li>
+            <li><a href="/products">e-WOTC</a></li>
+            <li><a href="/products">iDesk</a></li>
+            <li><a href="/products">All Products</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">&copy; 2026 SGS Technologie. All rights reserved.</div>
     </div>
   </footer>
 

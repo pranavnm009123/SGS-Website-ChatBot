@@ -5,6 +5,16 @@ backend/approved_docs.json
 backend/.embedding_model
 backend/test_pdfs/
 
+# Eval: only sgs_qa_evaluation.txt is tracked — outputs and runners stay local
+eval_model_results.json
+eval_scores.json
+eval_report.md
+local_eval_sgs.py
+run_sgs_eval.py
+score_sgs_eval.py
+
+../CODEBASE_AUDIT.md
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

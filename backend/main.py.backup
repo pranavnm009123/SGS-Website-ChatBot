@@ -72,7 +72,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="SGS Technologie API",
+    title="SGS Technologies API",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
     openapi_url="/api/openapi.json",
@@ -133,34 +133,6 @@ async def read_contact():
 async def read_admin():
     return FileResponse(os.path.join(FRONTEND_DIR, "admin.html"))
 
-@app.get("/careers")
-async def read_careers():
-    return FileResponse(os.path.join(FRONTEND_DIR, "careers.html"))
-
-@app.get("/products")
-async def read_products():
-    return FileResponse(os.path.join(FRONTEND_DIR, "products.html"))
-
-@app.get("/testimonials")
-async def read_testimonials():
-    return FileResponse(os.path.join(FRONTEND_DIR, "testimonials.html"))
-
-@app.get("/software-engineering")
-async def read_software_engineering():
-    return FileResponse(os.path.join(FRONTEND_DIR, "software-engineering.html"))
-
-@app.get("/cloud-services")
-async def read_cloud_services():
-    return FileResponse(os.path.join(FRONTEND_DIR, "cloud-services.html"))
-
-@app.get("/cyber-security")
-async def read_cyber_security():
-    return FileResponse(os.path.join(FRONTEND_DIR, "cyber-security.html"))
-
-@app.get("/data-engineering")
-async def read_data_engineering():
-    return FileResponse(os.path.join(FRONTEND_DIR, "data-engineering.html"))
-
 
 # ── Contact form ─────────────────────────────────────────────────────────────
 
@@ -195,7 +167,7 @@ async def serve_pdf(filename: str):
 async def upload_pdf(request: Request, file: UploadFile = File(...)):
     content = await file.read()
     file_size = len(content)
-    validate_file(file.filename, file.content_type, file_size, content)
+    validate_file(file.filename, file.content_type, file_size)
 
     safe_filename = os.path.basename(file.filename)
     filepath = os.path.join(UPLOAD_DIR, safe_filename)

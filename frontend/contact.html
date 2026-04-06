@@ -3,128 +3,165 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact — SGS Technologies</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <title>Contact Us — SGS Technologie</title>
   <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/theme.js"></script>
 </head>
 <body>
 
   <nav class="site-nav">
     <div class="container nav-inner">
-      <a href="/" class="nav-logo">SGS<span>Tech</span></a>
+      <a href="/" class="nav-logo">SGS <span>Technologie</span></a>
       <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
       <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/services">Services</a></li>
-        <li><a href="/contact" class="active">Contact</a></li>
+        <li>
+          <a href="#">What we do <span class="arrow">&#9662;</span></a>
+          <div class="nav-dropdown">
+            <div class="dropdown-label">Services</div>
+            <a href="/services">All Services</a>
+            <a href="/software-engineering">Software Engineering</a>
+            <a href="/cloud-services">Cloud Services</a>
+            <a href="/cyber-security">Cyber Security</a>
+            <a href="/data-engineering">Data Engineering</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-label">Products</div>
+            <a href="/products">Our Products</a>
+          </div>
+        </li>
+        <li>
+          <a href="#">Who we are <span class="arrow">&#9662;</span></a>
+          <div class="nav-dropdown">
+            <a href="/about">About SGS</a>
+            <a href="/about#philosophy">Approach &amp; Philosophy</a>
+            <a href="/about#certifications">Certifications</a>
+          </div>
+        </li>
+        <li>
+          <a href="#">Insights <span class="arrow">&#9662;</span></a>
+          <div class="nav-dropdown">
+            <a href="/testimonials">Testimonials</a>
+            <a href="/testimonials#case-studies">Case Studies</a>
+          </div>
+        </li>
+        <li><a href="/careers">Careers</a></li>
+        <li class="nav-cta"><a href="/contact" class="btn btn-green btn-sm active">Contact Us</a></li>
       </ul>
     </div>
   </nav>
 
   <main>
-    <!-- Hero -->
-    <section class="hero" style="padding: 5rem 0 3rem;">
+    <section class="page-hero">
       <div class="container">
-        <div class="hero-badge">Let's Talk</div>
-        <h1>Get in <span>Touch</span></h1>
-        <p class="lead">Have a project in mind or want to learn more about what we do? We'd love to hear from you.</p>
+        <div class="breadcrumb"><a href="/">Home</a> <span>/</span> Contact Us</div>
+        <h1>Just a Click Away</h1>
+        <p>Let's start something great together. Reach out and we'll respond within 24 hours.</p>
       </div>
     </section>
 
-    <!-- Contact section -->
-    <section class="section" style="padding-top: 2rem;">
+    <section class="section">
       <div class="container">
         <div class="contact-layout">
-          <!-- Info -->
           <div class="contact-info">
+            <h3 style="margin-bottom:.5rem;color:var(--navy);">Headquarters</h3>
             <div class="contact-item">
-              <div class="contact-item-icon">📍</div>
+              <div class="contact-item-icon">&#128205;</div>
               <div class="contact-item-text">
-                <div class="label">Office</div>
-                <p>123 Innovation Drive<br>San Francisco, CA 94107</p>
+                <div class="label">Address</div>
+                <p>9995 Gate Parkway N, Suite 400<br>Jacksonville, FL 32246</p>
               </div>
             </div>
             <div class="contact-item">
-              <div class="contact-item-icon">📧</div>
+              <div class="contact-item-icon">&#128231;</div>
               <div class="contact-item-text">
                 <div class="label">Email</div>
-                <p>hello@sgstech.com</p>
+                <p><a href="mailto:info@sgstechnologies.net">info@sgstechnologies.net</a></p>
               </div>
             </div>
             <div class="contact-item">
-              <div class="contact-item-icon">📞</div>
+              <div class="contact-item-icon">&#128222;</div>
               <div class="contact-item-text">
                 <div class="label">Phone</div>
-                <p>+1 (415) 555-0192</p>
+                <p>(904) 332-4534</p>
               </div>
             </div>
             <div class="contact-item">
-              <div class="contact-item-icon">🕘</div>
+              <div class="contact-item-icon">&#128224;</div>
               <div class="contact-item-text">
-                <div class="label">Hours</div>
-                <p>Monday – Friday<br>9:00 AM – 6:00 PM PST</p>
+                <div class="label">Fax</div>
+                <p>(904) 687-0178</p>
               </div>
             </div>
           </div>
 
-          <!-- Form -->
           <div class="contact-form-card">
             <h3 style="margin-bottom:1.5rem;">Send us a message</h3>
             <form id="contact-form" onsubmit="handleSubmit(event)">
               <div class="form-row">
                 <div class="form-group">
-                  <label for="first-name">First Name</label>
-                  <input type="text" id="first-name" class="form-control" placeholder="Jane" required>
+                  <label for="first-name">First Name *</label>
+                  <input type="text" id="first-name" class="form-control" required>
                 </div>
                 <div class="form-group">
-                  <label for="last-name">Last Name</label>
-                  <input type="text" id="last-name" class="form-control" placeholder="Smith" required>
+                  <label for="last-name">Last Name *</label>
+                  <input type="text" id="last-name" class="form-control" required>
                 </div>
               </div>
               <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" class="form-control" placeholder="jane@company.com" required>
+                <label for="company">Company Name (optional)</label>
+                <input type="text" id="company" class="form-control">
               </div>
               <div class="form-group">
-                <label for="subject">Subject</label>
-                <input type="text" id="subject" class="form-control" placeholder="Project inquiry">
+                <label for="email">Work Email *</label>
+                <input type="email" id="email" class="form-control" required>
               </div>
               <div class="form-group">
-                <label for="message">Message</label>
-                <textarea id="message" class="form-control" placeholder="Tell us about your project or question..." required></textarea>
+                <label for="phone">Phone Number *</label>
+                <input type="tel" id="phone" class="form-control">
               </div>
-              <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;" id="submit-btn">
-                Send Message
-              </button>
-              <div id="form-feedback" style="margin-top:1rem; font-size:.9rem;"></div>
+              <div class="form-group">
+                <label for="message">Tell us about your project (optional)</label>
+                <textarea id="message" class="form-control"></textarea>
+              </div>
+              <button type="submit" class="btn btn-green" style="width:100%;" id="submit-btn">Send Message</button>
+              <div id="form-feedback" style="margin-top:1rem;font-size:.9rem;"></div>
             </form>
           </div>
         </div>
       </div>
     </section>
-    <!-- FAQ -->
-    <section class="section" style="padding-top:0;">
+
+    <!-- Offices -->
+    <section class="section section-alt">
       <div class="container">
         <div class="section-header">
-          <h2>Common Questions</h2>
+          <h2>Reach Us</h2>
+          <p>Visit us at any of our office locations.</p>
         </div>
-        <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-          <div class="feature-card" style="text-align:left;">
-            <h3 style="font-size:1rem;">How quickly can we start?</h3>
-            <p>Most engagements kick off within 1-2 weeks of signing. We keep a bench of senior engineers ready to deploy.</p>
+        <div class="offices-grid">
+          <div class="office-card">
+            <h4>Jacksonville, Florida (HQ)</h4>
+            <p>9995 Gate Parkway N, Suite 400<br>Jacksonville, FL 32246</p>
+            <p style="margin-top:.5rem;color:var(--blue);font-weight:600;">Phone: (904) 332-4534</p>
           </div>
-          <div class="feature-card" style="text-align:left;">
-            <h3 style="font-size:1rem;">Do you work with early-stage startups?</h3>
-            <p>Yes. Our Starter tier is designed for small teams that need high-quality engineering without a massive budget.</p>
+          <div class="office-card">
+            <h4>Jacksonville, Florida</h4>
+            <p>6817 Southpoint Parkway, Suite 2104<br>Jacksonville, FL 32216</p>
+            <p style="margin-top:.5rem;color:var(--blue);font-weight:600;">Phone: (904) 332-4534</p>
           </div>
-          <div class="feature-card" style="text-align:left;">
-            <h3 style="font-size:1rem;">What's your tech stack?</h3>
-            <p>We're stack-agnostic but most experienced with Python, TypeScript, React, Go, AWS, GCP, and Kubernetes.</p>
+          <div class="office-card">
+            <h4>Tallahassee, Florida</h4>
+            <p>2104 Delta Way, Suite 5<br>Tallahassee, FL 32303</p>
+            <p style="margin-top:.5rem;color:var(--blue);font-weight:600;">Phone: (850) 364-8807</p>
           </div>
-          <div class="feature-card" style="text-align:left;">
-            <h3 style="font-size:1rem;">Can you sign an NDA before the first call?</h3>
-            <p>Absolutely. Just mention it in your message and we'll have a mutual NDA ready before we schedule anything.</p>
+          <div class="office-card">
+            <h4>Frisco, Texas</h4>
+            <p>2591 Dallas Parkway, Suite 300<br>Frisco, TX 75034</p>
+            <p style="margin-top:.5rem;color:var(--blue);font-weight:600;">Phone: (469) 362-5454</p>
+          </div>
+          <div class="office-card">
+            <h4>Coimbatore, India</h4>
+            <p>192, NSR Road, Saibaba Colony<br>Coimbatore - 641011, India</p>
+            <p style="margin-top:.5rem;color:var(--blue);font-weight:600;">Phone: +91-422-4385890</p>
           </div>
         </div>
       </div>
@@ -133,49 +170,74 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p>© 2026 SGS Technologies. All rights reserved.</p>
+      <div class="footer-main">
+        <div class="footer-brand">
+          <a href="/" class="nav-logo" style="color:#fff;">SGS <span style="color:var(--blue-light);">Technologie</span></a>
+          <p>Delivering solutions beyond expectations since 2003.</p>
+          <div class="footer-contact-item">&#128205; <a href="https://maps.google.com/?q=9995+Gate+Parkway+N+Jacksonville+FL+32246">9995 Gate Parkway N, Suite 400, Jacksonville, FL 32246</a></div>
+          <div class="footer-contact-item">&#128231; <a href="mailto:info@sgstechnologies.net">info@sgstechnologies.net</a></div>
+          <div class="footer-contact-item">&#128222; <a href="tel:9043324534">(904) 332-4534</a></div>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="/software-engineering">Software Engineering</a></li>
+            <li><a href="/cloud-services">Cloud Services</a></li>
+            <li><a href="/cyber-security">Cyber Security</a></li>
+            <li><a href="/data-engineering">Data Engineering</a></li>
+            <li><a href="/services">All Services</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/testimonials">Testimonials</a></li>
+            <li><a href="/careers">Careers</a></li>
+            <li><a href="/contact">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/products">SMART&trade;</a></li>
+            <li><a href="/products">eNotify</a></li>
+            <li><a href="/products">e-WOTC</a></li>
+            <li><a href="/products">iDesk</a></li>
+            <li><a href="/products">All Products</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">&copy; 2026 SGS Technologie. All rights reserved.</div>
     </div>
   </footer>
 
   <script>
-    async function handleSubmit(e) {
-      e.preventDefault();
-      const btn = document.getElementById('submit-btn');
-      const feedback = document.getElementById('form-feedback');
-      btn.disabled = true;
-      btn.textContent = 'Sending…';
-      feedback.textContent = '';
-
-      try {
-        const res = await fetch('/submit-contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            first_name: document.getElementById('first-name').value.trim(),
-            last_name: document.getElementById('last-name').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            subject: document.getElementById('subject').value.trim(),
-            message: document.getElementById('message').value.trim(),
-          })
-        });
-
-        if (!res.ok) {
-          const err = await res.json();
-          throw new Error(err.detail || 'Something went wrong.');
-        }
-
-        const data = await res.json();
-        feedback.style.color = '#10b981';
-        feedback.textContent = '\u2713 ' + data.message;
-        document.getElementById('contact-form').reset();
-      } catch (err) {
-        feedback.style.color = '#ef4444';
-        feedback.textContent = 'Error: ' + err.message;
-      }
-
-      btn.disabled = false;
-      btn.textContent = 'Send Message';
+  async function handleSubmit(e) {
+    e.preventDefault();
+    var btn = document.getElementById('submit-btn');
+    var feedback = document.getElementById('form-feedback');
+    btn.disabled = true; btn.textContent = 'Sending\u2026'; feedback.textContent = '';
+    try {
+      var res = await fetch('/submit-contact', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          first_name: document.getElementById('first-name').value.trim(),
+          last_name: document.getElementById('last-name').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          subject: 'Contact page inquiry',
+          message: document.getElementById('message').value.trim()
+        })
+      });
+      if (!res.ok) { var err = await res.json(); throw new Error(err.detail || 'Something went wrong.'); }
+      var data = await res.json();
+      feedback.style.color = '#10b981'; feedback.textContent = '\u2713 ' + data.message;
+      document.getElementById('contact-form').reset();
+    } catch (err) {
+      feedback.style.color = '#ef4444'; feedback.textContent = 'Error: ' + err.message;
     }
+    btn.disabled = false; btn.textContent = 'Send Message';
+  }
   </script>
   <script src="/static/widget.js"></script>
 </body>

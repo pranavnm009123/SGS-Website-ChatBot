@@ -13,10 +13,17 @@ from embeddings import get_model
 log = logging.getLogger(__name__)
 
 SITE_PAGES = [
-    {"name": "Home",     "url": "/",          "file": "index.html",    "doc_id": "site_home"},
-    {"name": "About",    "url": "/about",     "file": "about.html",    "doc_id": "site_about"},
-    {"name": "Services", "url": "/services",  "file": "services.html", "doc_id": "site_services"},
-    {"name": "Contact",  "url": "/contact",   "file": "contact.html",  "doc_id": "site_contact"},
+    {"name": "Home",                 "url": "/",                      "file": "index.html",                "doc_id": "site_home"},
+    {"name": "About",                "url": "/about",                 "file": "about.html",                "doc_id": "site_about"},
+    {"name": "Services",             "url": "/services",              "file": "services.html",             "doc_id": "site_services"},
+    {"name": "Contact",              "url": "/contact",               "file": "contact.html",              "doc_id": "site_contact"},
+    {"name": "Careers",              "url": "/careers",               "file": "careers.html",              "doc_id": "site_careers"},
+    {"name": "Products",             "url": "/products",              "file": "products.html",             "doc_id": "site_products"},
+    {"name": "Testimonials",         "url": "/testimonials",          "file": "testimonials.html",         "doc_id": "site_testimonials"},
+    {"name": "Software Engineering", "url": "/software-engineering",  "file": "software-engineering.html", "doc_id": "site_software_engineering"},
+    {"name": "Cloud Services",       "url": "/cloud-services",        "file": "cloud-services.html",       "doc_id": "site_cloud_services"},
+    {"name": "Cyber Security",       "url": "/cyber-security",        "file": "cyber-security.html",       "doc_id": "site_cyber_security"},
+    {"name": "Data Engineering",     "url": "/data-engineering",      "file": "data-engineering.html",     "doc_id": "site_data_engineering"},
 ]
 
 _FILE_TO_PAGE = {p["file"]: p for p in SITE_PAGES}

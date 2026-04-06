@@ -1,4 +1,5 @@
-SGS Technologies - Policy & Website Q&A Evaluation Set
+SGS Policy PDFs & Website Q&A Evaluation Set
+(Website answers verified against policy-chatbot/frontend/*.html — SGS Technologie.)
 
 ================================================================================
 PART 1: SINGLE PDF QUESTIONS (5 TOTAL)
@@ -52,49 +53,49 @@ PART 2: CROSS-DOCUMENT PDF QUESTIONS (5 TOTAL)
 PART 3: WEBSITE-ONLY QUESTIONS (5 TOTAL)
 ================================================================================
 
-11. [EASY] According to the homepage, how many companies worldwide trust SGS Technologies?
-    - ANSWER: Over 500 companies.
-    - SOURCE: Website (index.html), Hero Section badge.
+11. [EASY] On the About page company overview, what does the "500+" stat measure?
+    - ANSWER: Projects Delivered (not "companies" — the label under the number is "Projects Delivered").
+    - SOURCE: Website (about.html), stat grid next to company overview.
 
-12. [MEDIUM] For government sector work, which two specific compliance standards does SGS build its digital services to meet?
-    - ANSWER: FedRAMP (security) and Section 508 (accessibility).
-    - SOURCE: Website (index.html), "Trusted Across Industries" - Government Section.
+12. [MEDIUM] On the homepage industries section, under Government & Legal, which three example civic applications are named?
+    - ANSWER: eNotify, SMART, and e-WOTC.
+    - SOURCE: Website (index.html), "We Drive Growth Across Industries" — Government & Legal card.
 
-13. [EASY] What are the four core features highlighted on the "Why Choose SGS" section of the homepage?
-    - ANSWER: Fast Delivery, Enterprise Security, Cloud Native, and Dedicated Support.
-    - SOURCE: Website (index.html), "Why Choose SGS Technologies?" section.
+13. [MEDIUM] On the homepage, what are the five pillar titles under "Our Philosophy is Simple"?
+    - ANSWER: We Bring Expertise; Tailored Solutions; Agility & Value; Impactful Change; Global Standards.
+    - SOURCE: Website (index.html), philosophy-section cards.
 
-14. [MEDIUM] Which executive said SGS cut their legal review costs by 60%, and what company are they from?
-    - ANSWER: David Park, VP Engineering at ClearLaw.
-    - SOURCE: Website (index.html), Testimonials section.
+14. [EASY] On the Testimonials page, who is identified as Former Director of Communications, Early Learning Coalition of Duval County?
+    - ANSWER: Chad Sykes Burns.
+    - SOURCE: Website (testimonials.html), Client Stories.
 
-15. [EASY] What three types of financial services systems does SGS build?
-    - ANSWER: Real-time fraud detection, regulatory reporting dashboards, and secure transaction processing systems.
-    - SOURCE: Website (index.html), "Trusted Across Industries" - Financial Services section.
+15. [EASY] On the Cloud Services page, which four major cloud platforms does SGS say it works across?
+    - ANSWER: AWS, Microsoft Azure, Google Cloud, and Oracle Cloud.
+    - SOURCE: Website (cloud-services.html), intro under "Scalable Cloud Solutions for Modern Enterprises".
 
 ================================================================================
 PART 4: HYBRID QUESTIONS (WEBSITE + PDF) (5 TOTAL)
 ================================================================================
 
-16. [MEDIUM] The website advertises "Enterprise Security" as a feature. According to the Information Security Protocol, what specific encryption standard is mandated for data in transit?
+16. [MEDIUM] The Cyber Security service page lists SOC 2, ISO 27001, HIPAA, and other certifications under Compliance & Audit. According to the Information Security Protocol, what specific encryption standard is mandated for data in transit?
     - ANSWER: TLS 1.3 (with TLS 1.2 permitted only for legacy integrations with CISO exception approval).
-    - SOURCE: Website (Features) + SGS_Information_Security_Protocol.pdf (Section 4.0)
+    - SOURCE: Website (cyber-security.html, Security Services) + SGS_Information_Security_Protocol.pdf (Section 4.0)
 
-17. [HARD] The website mentions HIPAA-compliant platforms for Healthcare clients. How does the Data Sovereignty Policy handle data for US government clients specifically?
+17. [HARD] That same page mentions HIPAA among compliance certifications customers can pursue. How does the Data Sovereignty Policy handle data for US government clients specifically?
     - ANSWER: US government client data must reside exclusively in FedRAMP-authorized US data centers with no foreign national access.
-    - SOURCE: Website (Industries) + SGS_Data_Sovereignty_Policy.pdf (Section 1.0)
+    - SOURCE: Website (cyber-security.html) + SGS_Data_Sovereignty_Policy.pdf (Section 1.0)
 
-18. [MEDIUM] The website claims "Fast Delivery" through agile processes. What is the deployment frequency target in the Cloud Architecture Standards CI/CD pipeline?
+18. [MEDIUM] The Cloud Services page highlights DevOps & CI/CD for faster, more reliable software releases. What is the deployment frequency target in the Cloud Architecture Standards CI/CD pipeline?
     - ANSWER: Multiple times per day for microservices, weekly for platform services, with a Mean Lead Time for Changes under 24 hours.
-    - SOURCE: Website (Features) + SGS_Cloud_Architecture_Standards.pdf (Section 4.0)
+    - SOURCE: Website (cloud-services.html) + SGS_Cloud_Architecture_Standards.pdf (Section 4.0)
 
-19. [HARD] Rachel Torres (COO, MedFirst Insurance) says processing time dropped to 20 minutes. What post-release monitoring window does SGS require after such deployments?
+19. [HARD] Catherin Demsky (Inspection Depot, Jacksonville Aviation Authority) says SGS helped deliver the project on time. What post-release monitoring window does SGS require after such deployments?
     - ANSWER: A mandatory 72-hour monitoring window checking error rates, p99 latency, CPU/memory utilization, and business metrics.
-    - SOURCE: Website (Testimonials) + SGS_Quality_Audit_Framework.pdf (Section 5.0)
+    - SOURCE: Website (index.html or testimonials.html, Testimonials) + SGS_Quality_Audit_Framework.pdf (Section 5.0)
 
-20. [MEDIUM] The website mentions SGS works with startups, government, healthcare, and Fortune 500 companies. How many new geographic markets is SGS targeting in 2026?
+20. [MEDIUM] The About page values list cites a proven track record with government and enterprise clients. How many new geographic markets is SGS targeting in 2026 per the Strategic Roadmap?
     - ANSWER: Three new markets: Southeast Asia, Eastern Europe, and Latin America.
-    - SOURCE: Website (Industries) + SGS_Strategic_Roadmap_2026.pdf (Section 1.0)
+    - SOURCE: Website (about.html, values list) + SGS_Strategic_Roadmap_2026.pdf (Section 1.0)
 
 ================================================================================
 PART 5: MULTI-DOCUMENT SYNTHESIS (3-5 PDFs) (5 TOTAL)
@@ -119,6 +120,30 @@ PART 5: MULTI-DOCUMENT SYNTHESIS (3-5 PDFs) (5 TOTAL)
 25. [HARD] Across the Strategic Roadmap, Sustainable Impact Charter, and Data Sovereignty Policy, what are SGS's key geographic and compliance considerations for global expansion?
     - ANSWER: Expanding into Southeast Asia, Eastern Europe, and Latin America (Strategic Roadmap, Section 1.0). Data must reside in customer's geographic region with centers in US, EU, and APAC (Data Sovereignty, Section 1.0). GDPR compliance with 30-day DSAR fulfillment for EU customers (Data Sovereignty, Section 2.0). Net-zero carbon by 2030 across all locations (Sustainable Impact, Section 1.0). Platinum-tier cloud partnerships with AWS, Azure, Google Cloud (Strategic Roadmap, Section 4.0).
     - SOURCE: SGS_Strategic_Roadmap_2026.pdf (Sections 1.0, 4.0) + SGS_Data_Sovereignty_Policy.pdf (Sections 1.0, 2.0) + SGS_Sustainable_Impact_Charter.pdf (Section 1.0)
+
+================================================================================
+PART 6: MULTI-PDF + WEBSITE SYNTHESIS (5 TOTAL)
+================================================================================
+
+26. [MEDIUM] The Cloud Services page describes cloud-native development using containers, microservices, and serverless. What do the Cloud Architecture Standards and Disaster Recovery Plan specify for production topology and availability?
+    - ANSWER: Active-active failover across two AWS regions with Route 53 health checks (DR Plan, Section 2.0); Kubernetes HPA scaling 3–50 replicas (Cloud Architecture, Section 2.0); 99.95% availability SLO (Cloud Architecture, Section 5.0).
+    - SOURCE: Website (cloud-services.html, Cloud-Native Development offering) + SGS_Cloud_Architecture_Standards.pdf (Sections 2.0, 5.0) + SGS_Disaster_Recovery_Plan.pdf (Section 2.0)
+
+27. [HARD] A testimonial from Inspection Depot / Jacksonville Aviation Authority credits SGS with on-time delivery and coordinated offshore and onshore work. How do release governance and security incident response timelines in policy compare to that kind of outcome?
+    - ANSWER: Quality Audit requires a mandatory 72-hour post-release monitoring window after deployments (Section 5.0). Separately, SEV-1 security incidents require a 15-minute response with mandatory executive notification (Information Security Protocol, Section 5.0)—contrasting delivery commitments with security and quality guardrails.
+    - SOURCE: Website (index.html or testimonials.html — Catherin Demsky) + SGS_Quality_Audit_Framework.pdf (Section 5.0) + SGS_Information_Security_Protocol.pdf (Section 5.0)
+
+28. [HARD] The homepage Banking & Financial Services card says SGS helps banks and capital markets with digital transformation, operational efficiency, security, and personalized customer experiences. What engineering quality gates and vendor rules apply when delivering such systems?
+    - ANSWER: At least two code reviewer approvals including one Senior Engineer, and 80% unit test coverage for backend services (Quality Audit, Sections 4.0 and 1.0). Vendor engagements over $25,000 annually need a minimum of three competitive bids, and vendor security questionnaire failures allow up to 60 days for remediation (Vendor Manual, Sections 2.0 and 3.0).
+    - SOURCE: Website (index.html, Banking & Financial Services) + SGS_Quality_Audit_Framework.pdf (Sections 1.0, 4.0) + SGS_Vendor_Compliance_Manual.pdf (Sections 2.0, 3.0)
+
+29. [MEDIUM] The Government & Legal industry card cites civic solutions such as eNotify, SMART, and e-WOTC. Where do internal policies reinforce where government-related data may reside and how strongly production services must stay available?
+    - ANSWER: US government client data must reside exclusively in FedRAMP-authorized US data centers with no foreign national access (Data Sovereignty, Section 1.0). Cloud Architecture sets a 99.95% availability SLO and describes multi-region, auto-scaling patterns for resilience (Cloud Architecture, Sections 5.0 and 2.0).
+    - SOURCE: Website (index.html, Government & Legal) + SGS_Data_Sovereignty_Policy.pdf (Section 1.0) + SGS_Cloud_Architecture_Standards.pdf (Sections 2.0, 5.0)
+
+30. [VERY HARD] The About page reports "500+" projects delivered and "21+" years in business. What roadmap, people, and sustainability commitments across internal documents support scaling that track record?
+    - ANSWER: Strategic Roadmap targets three new geographic markets (Southeast Asia, Eastern Europe, Latin America) and platinum-tier partnerships with AWS, Azure, and Google Cloud (Sections 1.0 and 4.0). Employee Handbook offers a $5,000 annual learning stipend, 16 weeks paid parental leave, and a 401(k) 4% match (Section 2.0). Sustainable Impact Charter commits to net-zero carbon by 2030, 24 hours paid volunteer time, and $2,000 donation matching (Sections 1.0 and 3.0).
+    - SOURCE: Website (about.html, stat grid) + SGS_Strategic_Roadmap_2026.pdf (Sections 1.0, 4.0) + SGS_Employee_Excellence_Handbook.pdf (Section 2.0) + SGS_Sustainable_Impact_Charter.pdf (Sections 1.0, 3.0)
 
 ================================================================================
 END OF EVALUATION SET

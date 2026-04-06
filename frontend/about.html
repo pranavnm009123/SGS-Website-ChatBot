@@ -3,183 +3,193 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About — SGS Technologies</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <title>About — SGS Technologie</title>
   <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/theme.js"></script>
 </head>
 <body>
 
   <nav class="site-nav">
     <div class="container nav-inner">
-      <a href="/" class="nav-logo">SGS<span>Tech</span></a>
+      <a href="/" class="nav-logo">SGS <span>Technologie</span></a>
       <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
       <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/about" class="active">About</a></li>
-        <li><a href="/services">Services</a></li>
-        <li><a href="/contact">Contact</a></li>
+        <li>
+          <a href="#">What we do <span class="arrow">&#9662;</span></a>
+          <div class="nav-dropdown">
+            <div class="dropdown-label">Services</div>
+            <a href="/services">All Services</a>
+            <a href="/software-engineering">Software Engineering</a>
+            <a href="/cloud-services">Cloud Services</a>
+            <a href="/cyber-security">Cyber Security</a>
+            <a href="/data-engineering">Data Engineering</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-label">Products</div>
+            <a href="/products">Our Products</a>
+          </div>
+        </li>
+        <li>
+          <a href="#" class="active">Who we are <span class="arrow">&#9662;</span></a>
+          <div class="nav-dropdown">
+            <a href="/about">About SGS</a>
+            <a href="/about#philosophy">Approach &amp; Philosophy</a>
+            <a href="/about#certifications">Certifications</a>
+          </div>
+        </li>
+        <li>
+          <a href="#">Insights <span class="arrow">&#9662;</span></a>
+          <div class="nav-dropdown">
+            <a href="/testimonials">Testimonials</a>
+            <a href="/testimonials#case-studies">Case Studies</a>
+          </div>
+        </li>
+        <li><a href="/careers">Careers</a></li>
+        <li class="nav-cta"><a href="/contact" class="btn btn-green btn-sm">Contact Us</a></li>
       </ul>
     </div>
   </nav>
 
   <main>
-    <!-- Hero -->
-    <section class="hero" style="padding: 5rem 0 3rem;">
+    <section class="page-hero">
       <div class="container">
-        <div class="hero-badge">Our Story</div>
-        <h1>We are <span>SGS Technologies</span></h1>
-        <p class="lead">Founded in 2010, SGS Technologies has grown from a two-person startup into a global technology consultancy serving clients across 30 countries.</p>
+        <div class="breadcrumb"><a href="/">Home</a> <span>/</span> About SGS</div>
+        <h1>About SGS Technologie</h1>
+        <p>An experienced software development company headquartered in Jacksonville, Florida, delivering solutions beyond expectations since 2003.</p>
       </div>
     </section>
 
-    <!-- Mission & Stats -->
-    <section class="section" style="padding-top: 2rem;">
+    <!-- Company Overview -->
+    <section class="section">
       <div class="container">
         <div class="about-grid">
           <div>
-            <p class="lead">Our mission is simple: help organizations harness the power of technology to do more, move faster, and create lasting impact.</p>
-            <p>We believe great software starts with great people. That's why we invest heavily in our team — attracting curious, driven engineers, designers, and strategists who bring creative thinking to every engagement.</p>
-            <ul class="values-list" style="margin-top: 1.5rem;">
-              <li>Integrity in every decision we make</li>
-              <li>Collaboration over individual heroics</li>
-              <li>Continuous learning and improvement</li>
-              <li>Delivering measurable outcomes for clients</li>
+            <p class="lead">Our aim is simple: develop technological solutions that benefit lives.</p>
+            <p>Being a client-centric company, our approaches are kept simple, transparent, and uniquely customized to meet each client's requirements. We commenced in 2003 with the core approach of delivering solutions even beyond expectations.</p>
+            <p style="margin-top:1rem;">From offering legacy modernization to partnering with industry leaders, we deliver in-house products that bring resolution, clarity, and control to your operations.</p>
+            <ul class="values-list">
+              <li>Client-centric approach with transparent communication</li>
+              <li>Full-cycle software development and modernization</li>
+              <li>Dedicated onshore and offshore delivery teams</li>
+              <li>Proven track record with government and enterprise clients</li>
             </ul>
           </div>
           <div class="stat-grid">
             <div class="stat-card">
+              <div class="number">21+</div>
+              <div class="label">Years in Business</div>
+            </div>
+            <div class="stat-card">
               <div class="number">500+</div>
-              <div class="label">Clients Served</div>
+              <div class="label">Projects Delivered</div>
             </div>
             <div class="stat-card">
-              <div class="number">15yr</div>
-              <div class="label">In Business</div>
+              <div class="number">5</div>
+              <div class="label">Office Locations</div>
             </div>
             <div class="stat-card">
-              <div class="number">120+</div>
-              <div class="label">Team Members</div>
-            </div>
-            <div class="stat-card">
-              <div class="number">30</div>
-              <div class="label">Countries</div>
+              <div class="number">6</div>
+              <div class="label">Industry Verticals</div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Team -->
-    <section class="section" style="padding-top: 0;">
+    <!-- Approach & Philosophy -->
+    <section class="section section-alt" id="philosophy">
       <div class="container">
         <div class="section-header">
-          <h2>Leadership Team</h2>
-          <p>The people guiding SGS Technologies's vision and strategy.</p>
+          <h2>Approach &amp; Philosophy</h2>
+          <p>We believe in your vision for your future. Here's how we make it happen.</p>
         </div>
-        <div class="team-grid">
-          <div class="team-card">
-            <div class="team-avatar">👩‍💼</div>
-            <h3>Sarah Mitchell</h3>
-            <div class="role">CEO & Co-Founder</div>
-            <p style="margin-top:.5rem; font-size:.88rem;">15 years in enterprise technology. Former VP at Salesforce.</p>
+        <div class="card-grid">
+          <div class="card">
+            <div class="card-icon">&#127919;</div>
+            <h3>Client-Centric</h3>
+            <p>Every business deserves our full attention. We take time to understand your goals before building a single line of code.</p>
           </div>
-          <div class="team-card">
-            <div class="team-avatar">👨‍💻</div>
-            <h3>James Okafor</h3>
-            <div class="role">CTO & Co-Founder</div>
-            <p style="margin-top:.5rem; font-size:.88rem;">Distributed systems expert. Led platform engineering at Stripe.</p>
+          <div class="card">
+            <div class="card-icon">&#128736;</div>
+            <h3>Agile Delivery</h3>
+            <p>Our agile methodology ensures rapid iteration, constant feedback, and on-time project completion.</p>
           </div>
-          <div class="team-card">
-            <div class="team-avatar">👩‍🔬</div>
-            <h3>Priya Anand</h3>
-            <div class="role">VP of Product</div>
-            <p style="margin-top:.5rem; font-size:.88rem;">Product strategist passionate about user-centric design.</p>
+          <div class="card">
+            <div class="card-icon">&#128640;</div>
+            <h3>Innovation-Driven</h3>
+            <p>We integrate cutting-edge technologies including AI, cloud, and automation to keep your solutions future-ready.</p>
           </div>
-          <div class="team-card">
-            <div class="team-avatar">👨‍🎨</div>
-            <h3>Carlos Rivera</h3>
-            <div class="role">Head of Design</div>
-            <p style="margin-top:.5rem; font-size:.88rem;">Award-winning UX designer. Previously at IDEO and Google.</p>
+          <div class="card">
+            <div class="card-icon">&#129309;</div>
+            <h3>True Partnership</h3>
+            <p>We work in lockstep with you at every stage, ensuring your insights shape every decision we make.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- History / Milestones -->
-    <section class="section" style="padding-top:0;">
+    <!-- Certifications & Partnerships -->
+    <section class="section" id="certifications">
       <div class="container">
         <div class="section-header">
-          <h2>Our Journey</h2>
-          <p>Key milestones from garage startup to global consultancy.</p>
+          <h2>Certifications &amp; Partnerships</h2>
+          <p>We hold global standards and partner with industry leaders to deliver excellence.</p>
         </div>
-        <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-          <div class="feature-card">
-            <div class="feature-icon" style="font-size:1.5rem;font-weight:700;">2010</div>
-            <h3>Founded</h3>
-            <p>Sarah and James start SGS Technologies in San Francisco with two laptops and a shared vision.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon" style="font-size:1.5rem;font-weight:700;">2014</div>
-            <h3>50 Employees</h3>
-            <p>Opened a second office in Austin, TX. Landed our first Fortune 500 client in financial services.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon" style="font-size:1.5rem;font-weight:700;">2018</div>
-            <h3>Global Expansion</h3>
-            <p>Established engineering hubs in London and Bangalore. Crossed 200 active client engagements.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon" style="font-size:1.5rem;font-weight:700;">2022</div>
-            <h3>AI Practice Launched</h3>
-            <p>Built a dedicated AI & ML team. Delivered first production RAG system for a government agency.</p>
-          </div>
-          <div class="feature-card">
-            <div class="feature-icon" style="font-size:1.5rem;font-weight:700;">2026</div>
-            <h3>Today</h3>
-            <p>120+ team members, 30 countries served, and a growing portfolio of AI-powered products.</p>
-          </div>
+        <div class="partners-grid">
+          <div class="partner-badge">ISO 9001:2015</div>
+          <div class="partner-badge">ISO/IEC 27001:2022</div>
+          <div class="partner-badge">Microsoft Partner</div>
+          <div class="partner-badge">IBM Partner</div>
+          <div class="partner-badge">ServiceNow Partner</div>
+          <div class="partner-badge">Salesforce Partner</div>
         </div>
       </div>
     </section>
 
-    <!-- Culture -->
-    <section class="section" style="padding-top:0;">
+    <!-- Office Locations -->
+    <section class="section section-alt">
       <div class="container">
         <div class="section-header">
-          <h2>Life at SGS Technologies</h2>
-          <p>What it's actually like working here.</p>
+          <h2>Our Offices</h2>
+          <p>Serving clients globally from our offices in the U.S. and India.</p>
         </div>
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">🌍</div>
-            <h3>Remote-First</h3>
-            <p>Work from anywhere. Our team spans 12 time zones. We care about output, not hours in a chair.</p>
+        <div class="offices-grid">
+          <div class="office-card">
+            <h4>&#127482;&#127480; Jacksonville, FL (HQ)</h4>
+            <p>9995 Gate Parkway N, Suite 400<br>Jacksonville, FL 32246</p>
+            <p style="margin-top:.5rem;">Phone: (904) 332-4534</p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">📚</div>
-            <h3>Learning Budget</h3>
-            <p>$3,000 per year for conferences, courses, books, or certifications. No approval hoops.</p>
+          <div class="office-card">
+            <h4>&#127482;&#127480; Jacksonville, FL</h4>
+            <p>6817 Southpoint Parkway, Suite 2104<br>Jacksonville, FL 32216</p>
+            <p style="margin-top:.5rem;">Phone: (904) 332-4534</p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">🏖️</div>
-            <h3>Flexible PTO</h3>
-            <p>Take the time you need. We trust you to manage your energy and your calendar.</p>
+          <div class="office-card">
+            <h4>&#127482;&#127480; Tallahassee, FL</h4>
+            <p>2104 Delta Way, Suite 5<br>Tallahassee, FL 32303</p>
+            <p style="margin-top:.5rem;">Phone: (850) 364-8807</p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">🧪</div>
-            <h3>Innovation Fridays</h3>
-            <p>Every other Friday is unstructured time to explore ideas, build prototypes, or contribute to open source.</p>
+          <div class="office-card">
+            <h4>&#127482;&#127480; Frisco, TX</h4>
+            <p>2591 Dallas Parkway, Suite 300<br>Frisco, TX 75034</p>
+            <p style="margin-top:.5rem;">Phone: (469) 362-5454</p>
+          </div>
+          <div class="office-card">
+            <h4>&#127470;&#127475; Coimbatore, India</h4>
+            <p>192, NSR Road, Saibaba Colony<br>Coimbatore - 641011, India</p>
+            <p style="margin-top:.5rem;">Phone: +91-422-4385890</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- CTA -->
-    <section class="cta-strip">
-      <div class="container">
-        <h2>Want to work with us?</h2>
-        <p>We're always looking for talented people and ambitious clients.</p>
-        <div class="hero-actions">
-          <a href="/contact" class="btn btn-primary" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4)">Get in Touch</a>
+    <section class="cta-section">
+      <div class="container" style="text-align:center;">
+        <h2>Want to Work With Us?</h2>
+        <p style="max-width:500px;margin:0 auto 2rem;">Whether you're a potential client or looking to join our team, we'd love to hear from you.</p>
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+          <a href="/contact" class="btn btn-green btn-lg">Contact Us</a>
+          <a href="/careers" class="btn btn-outline-white btn-lg">View Careers</a>
         </div>
       </div>
     </section>
@@ -187,7 +197,45 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p>© 2026 SGS Technologies. All rights reserved.</p>
+      <div class="footer-main">
+        <div class="footer-brand">
+          <a href="/" class="nav-logo" style="color:#fff;">SGS <span style="color:var(--blue-light);">Technologie</span></a>
+          <p>Delivering solutions beyond expectations since 2003.</p>
+          <div class="footer-contact-item">&#128205; <a href="https://maps.google.com/?q=9995+Gate+Parkway+N+Jacksonville+FL+32246">9995 Gate Parkway N, Suite 400, Jacksonville, FL 32246</a></div>
+          <div class="footer-contact-item">&#128231; <a href="mailto:info@sgstechnologies.net">info@sgstechnologies.net</a></div>
+          <div class="footer-contact-item">&#128222; <a href="tel:9043324534">(904) 332-4534</a></div>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="/software-engineering">Software Engineering</a></li>
+            <li><a href="/cloud-services">Cloud Services</a></li>
+            <li><a href="/cyber-security">Cyber Security</a></li>
+            <li><a href="/data-engineering">Data Engineering</a></li>
+            <li><a href="/services">All Services</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/testimonials">Testimonials</a></li>
+            <li><a href="/careers">Careers</a></li>
+            <li><a href="/contact">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/products">SMART&trade;</a></li>
+            <li><a href="/products">eNotify</a></li>
+            <li><a href="/products">e-WOTC</a></li>
+            <li><a href="/products">iDesk</a></li>
+            <li><a href="/products">All Products</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">&copy; 2026 SGS Technologie. All rights reserved.</div>
     </div>
   </footer>
 

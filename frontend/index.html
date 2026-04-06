@@ -3,144 +3,483 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SGS Technologies — Innovative Solutions</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <title>SGS Technologie — Software Development Company Jacksonville, Florida</title>
   <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/theme.js"></script>
 </head>
 <body>
 
+  <!-- ── Navigation ────────────────────────────────────────── -->
   <nav class="site-nav">
     <div class="container nav-inner">
-      <a href="/" class="nav-logo">SGS<span>Tech</span></a>
+      <a href="/" class="nav-logo">SGS <span>Technologie</span></a>
       <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-links').classList.toggle('open')">&#9776;</button>
       <ul class="nav-links">
-        <li><a href="/" class="active">Home</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/services">Services</a></li>
-        <li><a href="/contact">Contact</a></li>
+        <li>
+          <a href="#" class="active">What we do <span class="arrow">&#9662;</span></a>
+          <div class="nav-dropdown">
+            <div class="dropdown-label">Services</div>
+            <a href="/services">All Services</a>
+            <a href="/software-engineering">Software Engineering</a>
+            <a href="/cloud-services">Cloud Services</a>
+            <a href="/cyber-security">Cyber Security</a>
+            <a href="/data-engineering">Data Engineering</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-label">Industries</div>
+            <a href="/services#industries">Banking &amp; Financial</a>
+            <a href="/services#industries">Healthcare</a>
+            <a href="/services#industries">Government</a>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-label">Products</div>
+            <a href="/products">Our Products</a>
+          </div>
+        </li>
+        <li>
+          <a href="#">Who we are <span class="arrow">&#9662;</span></a>
+          <div class="nav-dropdown">
+            <a href="/about">About SGS</a>
+            <a href="/about#philosophy">Approach &amp; Philosophy</a>
+            <a href="/about#certifications">Certifications</a>
+          </div>
+        </li>
+        <li>
+          <a href="#">Insights <span class="arrow">&#9662;</span></a>
+          <div class="nav-dropdown">
+            <a href="/testimonials">Testimonials</a>
+            <a href="/testimonials#case-studies">Case Studies</a>
+          </div>
+        </li>
+        <li><a href="/careers">Careers</a></li>
+        <li class="nav-cta"><a href="/contact" class="btn btn-green btn-sm">Contact Us</a></li>
       </ul>
     </div>
   </nav>
 
   <main>
-    <!-- Hero -->
-    <section class="hero">
+    <!-- ── Hero Carousel ─────────────────────────────────────── -->
+    <section class="hero-carousel" id="hero-carousel">
+      <div class="carousel-track" id="carousel-track">
+        <div class="carousel-slide slide-ai">
+          <div class="carousel-content">
+            <h1>Empowering AI Solutions</h1>
+            <p>Harnessing intelligence for tomorrow. Machine learning meets real-world impact to transform your business operations.</p>
+            <a href="/services" class="btn btn-outline-white btn-lg">Explore AI Services</a>
+          </div>
+        </div>
+        <div class="carousel-slide slide-sf">
+          <div class="carousel-content">
+            <h1>Salesforce Implementation</h1>
+            <p>Empower sales, customer engagement, and revenue with comprehensive Salesforce solutions tailored to your enterprise.</p>
+            <a href="/services" class="btn btn-outline-white btn-lg">Learn More</a>
+          </div>
+        </div>
+        <div class="carousel-slide slide-itsm">
+          <div class="carousel-content">
+            <h1>ITSM Solutions</h1>
+            <p>Streamline workflows, automate processes, and improve service delivery with scalable IT Service Management.</p>
+            <a href="/services" class="btn btn-outline-white btn-lg">Discover ITSM</a>
+          </div>
+        </div>
+        <div class="carousel-slide slide-erp">
+          <div class="carousel-content">
+            <h1>Integrated ERP Solutions</h1>
+            <p>Manage budgets, supply chains, and HR operations all in one customized ERP platform built for your needs.</p>
+            <a href="/services" class="btn btn-outline-white btn-lg">See ERP Solutions</a>
+          </div>
+        </div>
+        <div class="carousel-slide slide-custom">
+          <div class="carousel-content">
+            <h1>Software Built For You</h1>
+            <p>We design and build scalable software solutions specially crafted for you and your business needs.</p>
+            <a href="/contact" class="btn btn-green btn-lg">Get Started</a>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-arrows">
+        <button class="carousel-arrow" id="carousel-prev">&#10094;</button>
+        <button class="carousel-arrow" id="carousel-next">&#10095;</button>
+      </div>
+      <div class="carousel-nav" id="carousel-nav"></div>
+    </section>
+
+    <!-- ── Together We Evolve ────────────────────────────────── -->
+    <section class="evolve-section">
       <div class="container">
-        <div class="hero-badge">Trusted by 500+ companies worldwide</div>
-        <h1>Build the Future with<br><span>SGS Technologies</span></h1>
-        <p class="lead">We deliver cutting-edge technology solutions that transform how organizations operate, collaborate, and grow — from strategy to execution.</p>
-        <div class="hero-actions">
-          <a href="/services" class="btn btn-primary">Explore Services</a>
-          <a href="/contact" class="btn btn-outline">Get in Touch</a>
+        <h2>Together We <span>Evolve</span></h2>
+        <p>We create transformative software solutions and strong sustainable teams that help businesses evolve. Our AI-driven and data-informed approach has resulted in lasting change across sectors from healthcare and finance to education and labor.</p>
+        <div class="evolve-cards">
+          <div class="evolve-card">
+            <div class="evolve-card-icon">&#128188;</div>
+            <h4>Careers</h4>
+            <p>Explore careers and discover your potential with SGS tech experts.</p>
+            <a href="/careers" style="font-weight:600;font-size:.9rem;">View Openings &rarr;</a>
+          </div>
+          <div class="evolve-card">
+            <div class="evolve-card-icon">&#128161;</div>
+            <h4>Insights</h4>
+            <p>Explore our ideas, technology understanding, and real-time service delivery.</p>
+            <a href="/testimonials" style="font-weight:600;font-size:.9rem;">Read More &rarr;</a>
+          </div>
+          <div class="evolve-card">
+            <div class="evolve-card-icon">&#128640;</div>
+            <h4>Products</h4>
+            <p>Advanced online solutions developed for your immediate software needs.</p>
+            <a href="/products" style="font-weight:600;font-size:.9rem;">See Products &rarr;</a>
+          </div>
+          <div class="evolve-card">
+            <div class="evolve-card-icon">&#9729;&#65039;</div>
+            <h4>Cloud Services</h4>
+            <p>Step into the world of cloud with advanced integration and scalable solutions.</p>
+            <a href="/cloud-services" style="font-weight:600;font-size:.9rem;">Learn More &rarr;</a>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Features -->
-    <section class="section">
+    <!-- ── Our Philosophy ────────────────────────────────────── -->
+    <section class="philosophy-section" id="philosophy">
       <div class="container">
         <div class="section-header">
-          <h2>Why Choose SGS Technologies?</h2>
-          <p>We combine deep technical expertise with a people-first approach to deliver outcomes that matter.</p>
+          <h2>Our Philosophy is <span>Simple</span></h2>
+          <p>We believe in your vision for your future.</p>
         </div>
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">🚀</div>
-            <h3>Fast Delivery</h3>
-            <p>Agile processes and an experienced team mean your project ships on time, every time.</p>
+        <div class="philosophy-grid">
+          <div class="philosophy-card">
+            <div class="phi-icon">&#127891;</div>
+            <h4>We Bring Expertise</h4>
+            <p>Our crew of software engineers, designers, and project managers are constantly updated on best practices and always on the lookout for innovation.</p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">🔒</div>
-            <h3>Enterprise Security</h3>
-            <p>Security-first architecture ensures your data and operations are always protected.</p>
+          <div class="philosophy-card">
+            <div class="phi-icon">&#127919;</div>
+            <h4>Tailored Solutions</h4>
+            <p>Every business is unique and deserves our full attention. We take time to understand your needs before crafting the perfect solution.</p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">☁️</div>
-            <h3>Cloud Native</h3>
-            <p>Scalable cloud infrastructure built for high availability and global reach.</p>
+          <div class="philosophy-card">
+            <div class="phi-icon">&#9889;</div>
+            <h4>Agility &amp; Value</h4>
+            <p>Time-to-market matters. Our agile development approach ensures your project goes smoothly, adapts to changes, and finishes on time.</p>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">🤝</div>
-            <h3>Dedicated Support</h3>
-            <p>A committed partnership from discovery through post-launch support.</p>
+          <div class="philosophy-card">
+            <div class="phi-icon">&#129309;</div>
+            <h4>Impactful Change</h4>
+            <p>Your vision, our expertise. We believe in collaborative partnerships, working in lockstep with you at every stage of development.</p>
+          </div>
+          <div class="philosophy-card">
+            <div class="phi-icon">&#127760;</div>
+            <h4>Global Standards</h4>
+            <p>ISO 9001:2015 and ISO/IEC 27001:2022 certified. Partnerships with Microsoft, IBM, ServiceNow, and Salesforce reflect our commitment to excellence.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Clients / Trust -->
-    <section class="section">
+    <!-- ── Industries ────────────────────────────────────────── -->
+    <section class="industries-section" id="industries">
       <div class="container">
         <div class="section-header">
-          <h2>Trusted Across Industries</h2>
-          <p>We work with startups, government agencies, healthcare systems, and Fortune 500 companies.</p>
+          <h2>We Drive Growth Across Industries</h2>
+          <p>Delivering digital transformation across sectors that shape the future.</p>
         </div>
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">🏥</div>
-            <h3>Healthcare</h3>
-            <p>HIPAA-compliant platforms, patient portals, and clinical data pipelines for hospitals and health tech startups.</p>
+        <div class="industries-grid">
+          <div class="industry-card">
+            <div class="industry-card-header">
+              <div class="ind-icon">&#127974;</div>
+              <h4>Banking &amp; Financial Services</h4>
+            </div>
+            <div class="industry-card-body">
+              <p>We assist banks and capital markets in pursuing digital transformation, enhancing operational efficiency, security, and delivering personalized customer experiences.</p>
+              <a href="/services">Learn more &rarr;</a>
+            </div>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">🏛️</div>
-            <h3>Government</h3>
-            <p>Secure, accessible digital services for federal and state agencies — built to FedRAMP and Section 508 standards.</p>
+          <div class="industry-card">
+            <div class="industry-card-header">
+              <div class="ind-icon">&#127973;</div>
+              <h4>Healthcare</h4>
+            </div>
+            <div class="industry-card-body">
+              <p>We help healthcare providers deliver quality care and foster faster patient recovery with every digital innovation they need.</p>
+              <a href="/services">Learn more &rarr;</a>
+            </div>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">💰</div>
-            <h3>Financial Services</h3>
-            <p>Real-time fraud detection, regulatory reporting dashboards, and secure transaction processing systems.</p>
+          <div class="industry-card">
+            <div class="industry-card-header">
+              <div class="ind-icon">&#9889;</div>
+              <h4>Energy &amp; Utilities</h4>
+            </div>
+            <div class="industry-card-body">
+              <p>From emissions reduction to automating tasks, we help energy and utility partners with innovative solutions for a sustainable future.</p>
+              <a href="/services">Learn more &rarr;</a>
+            </div>
           </div>
-          <div class="feature-card">
-            <div class="feature-icon">🎓</div>
-            <h3>Education</h3>
-            <p>Learning management systems, student analytics platforms, and AI-powered tutoring tools for universities.</p>
+          <div class="industry-card">
+            <div class="industry-card-header">
+              <div class="ind-icon">&#127963;</div>
+              <h4>Government &amp; Legal</h4>
+            </div>
+            <div class="industry-card-body">
+              <p>As a trusted partner of government entities, we offer customized applications like eNotify, SMART, and e-WOTC to address civic needs.</p>
+              <a href="/products">Learn more &rarr;</a>
+            </div>
+          </div>
+          <div class="industry-card">
+            <div class="industry-card-header">
+              <div class="ind-icon">&#128722;</div>
+              <h4>Consumer Goods &amp; Services</h4>
+            </div>
+            <div class="industry-card-body">
+              <p>From understanding consumer convenience to forecasting market trends, we help enterprises with scalable digital solutions.</p>
+              <a href="/services">Learn more &rarr;</a>
+            </div>
+          </div>
+          <div class="industry-card">
+            <div class="industry-card-header">
+              <div class="ind-icon">&#128225;</div>
+              <h4>Communication &amp; Media</h4>
+            </div>
+            <div class="industry-card-body">
+              <p>Uplift your communication organization with enhanced performance, flexibility, and lean digital-first processes to fuel growth.</p>
+              <a href="/services">Learn more &rarr;</a>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Testimonial -->
-    <section class="section" style="padding-top:0;">
+    <!-- ── Client Logos ──────────────────────────────────────── -->
+    <section class="clients-section">
       <div class="container">
         <div class="section-header">
-          <h2>What Our Clients Say</h2>
+          <h2>Our Clients</h2>
         </div>
-        <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
-          <div class="feature-card" style="text-align:left;">
-            <p style="font-style:italic;margin-bottom:1rem;">"SGS Technologies rebuilt our entire claims processing system in 4 months. Processing time dropped from 3 days to 20 minutes. The ROI was immediate."</p>
-            <p style="font-weight:600;">— Rachel Torres, COO at MedFirst Insurance</p>
-          </div>
-          <div class="feature-card" style="text-align:left;">
-            <p style="font-style:italic;margin-bottom:1rem;">"Their AI team integrated a document intelligence system that cut our legal review costs by 60%. Genuinely impressive work."</p>
-            <p style="font-weight:600;">— David Park, VP Engineering at ClearLaw</p>
-          </div>
-          <div class="feature-card" style="text-align:left;">
-            <p style="font-style:italic;margin-bottom:1rem;">"We've worked with a lot of consultancies. SGS is the first one where every engineer they put on our project was senior-level. No filler."</p>
-            <p style="font-weight:600;">— Amira Hassan, CTO at FinLeap</p>
-          </div>
+        <div class="clients-track">
+          <div class="client-logo-text">Jacksonville Port Authority</div>
+          <div class="client-logo-text">Early Learning Coalition</div>
+          <div class="client-logo-text">Inspection Depot</div>
+          <div class="client-logo-text">Aviation Authority</div>
+          <div class="client-logo-text">City of Jacksonville</div>
+          <div class="client-logo-text">State of Florida</div>
         </div>
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="cta-strip">
+    <!-- ── Testimonials ──────────────────────────────────────── -->
+    <section class="testimonials-section">
       <div class="container">
-        <h2>Ready to get started?</h2>
-        <p>Join hundreds of organizations that trust SGS Technologies to power their growth.</p>
-        <div class="hero-actions">
-          <a href="/contact" class="btn btn-primary" style="background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.4)">Contact Us</a>
-          <a href="/about" class="btn btn-outline">Learn About Us</a>
+        <div class="section-header">
+          <h2>Client Stories</h2>
+          <p>Hear what our clients have to say about working with SGS Technologie.</p>
+        </div>
+        <div class="testimonials-grid">
+          <div class="testimonial-card">
+            <div class="quote-icon">&ldquo;</div>
+            <blockquote>SGS helped bring our vision to life. They provided us with the original mock-ups of the design to get started. I really feel like SGS has taken ownership of this project and is invested in providing a quality product for the community.</blockquote>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">CS</div>
+              <div class="testimonial-author-info">
+                <h4>Chad Sykes Burns</h4>
+                <small>Former Dir. of Communications, Early Learning Coalition</small>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="quote-icon">&ldquo;</div>
+            <blockquote>Whenever we needed a program available at any point, they had it done. Their dedicated offshore and onshore team helped us understand the full work cycle, and their innovative decisions helped deliver the project on time.</blockquote>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">CD</div>
+              <div class="testimonial-author-info">
+                <h4>Catherin Demsky</h4>
+                <small>Inspection Depot, Jacksonville Aviation Authority</small>
+              </div>
+            </div>
+          </div>
+          <div class="testimonial-card">
+            <div class="quote-icon">&ldquo;</div>
+            <blockquote>I find the strength of SGS is their customer care and service. It has been a long time since I worked with somebody where you get that one-on-one attention from a business. That is their biggest asset.</blockquote>
+            <div class="testimonial-author">
+              <div class="testimonial-avatar">JK</div>
+              <div class="testimonial-author-info">
+                <h4>Joanne Kazmierski</h4>
+                <small>Manager, Community Relations, Jacksonville Port Authority</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:2.5rem;">
+          <a href="/testimonials" class="btn btn-outline">View All Testimonials</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA + Contact Form ────────────────────────────────── -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-grid">
+          <div>
+            <h2>Let's Create Something Remarkable Together</h2>
+            <p style="margin-bottom:2rem;">Partner with SGS Technologie to bring your vision to life.</p>
+            <div class="cta-steps">
+              <div class="cta-step">
+                <div class="cta-step-num">1</div>
+                <div>
+                  <h4>We'll Chat</h4>
+                  <p>Our sales manager will reach out within 24 hours for a friendly, thoughtful conversation.</p>
+                </div>
+              </div>
+              <div class="cta-step">
+                <div class="cta-step-num">2</div>
+                <div>
+                  <h4>Explore Your Vision</h4>
+                  <p>We'll analyze your vision, craft solutions, and propose a timeline solidifying your expectations.</p>
+                </div>
+              </div>
+              <div class="cta-step">
+                <div class="cta-step-num">3</div>
+                <div>
+                  <h4>Make Your Mark</h4>
+                  <p>Once you're ready, we'll finalize a contract and bring your idea to life.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="cta-form-card">
+            <h3>Get in Touch</h3>
+            <form id="cta-form" onsubmit="handleCtaSubmit(event)">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="cta-first">First Name *</label>
+                  <input type="text" id="cta-first" class="form-control" required>
+                </div>
+                <div class="form-group">
+                  <label for="cta-last">Last Name *</label>
+                  <input type="text" id="cta-last" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="cta-email">Work Email *</label>
+                <input type="email" id="cta-email" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="cta-phone">Phone Number *</label>
+                <input type="tel" id="cta-phone" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="cta-msg">Tell us about your project (optional)</label>
+                <textarea id="cta-msg" class="form-control" rows="3"></textarea>
+              </div>
+              <button type="submit" class="btn btn-green" style="width:100%;" id="cta-submit-btn">Submit</button>
+              <div id="cta-feedback" style="margin-top:.75rem;font-size:.9rem;"></div>
+            </form>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- ── Footer ──────────────────────────────────────────────── -->
   <footer class="site-footer">
     <div class="container">
-      <p>© 2026 SGS Technologies. All rights reserved.</p>
+      <div class="footer-main">
+        <div class="footer-brand">
+          <a href="/" class="nav-logo" style="color:#fff;">SGS <span style="color:var(--blue-light);">Technologie</span></a>
+          <p>A renowned software development company based in Jacksonville, Florida. Delivering solutions beyond expectations since 2003.</p>
+          <div class="footer-contact-item">&#128205; <a href="https://maps.google.com/?q=9995+Gate+Parkway+N+Jacksonville+FL+32246">9995 Gate Parkway N, Suite 400, Jacksonville, FL 32246</a></div>
+          <div class="footer-contact-item">&#128231; <a href="mailto:info@sgstechnologies.net">info@sgstechnologies.net</a></div>
+          <div class="footer-contact-item">&#128222; <a href="tel:9043324534">(904) 332-4534</a></div>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="/software-engineering">Software Engineering</a></li>
+            <li><a href="/cloud-services">Cloud Services</a></li>
+            <li><a href="/cyber-security">Cyber Security</a></li>
+            <li><a href="/data-engineering">Data Engineering</a></li>
+            <li><a href="/services">All Services</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <ul>
+            <li><a href="/about">About Us</a></li>
+            <li><a href="/testimonials">Testimonials</a></li>
+            <li><a href="/careers">Careers</a></li>
+            <li><a href="/contact">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Products</h4>
+          <ul>
+            <li><a href="/products">SMART&trade;</a></li>
+            <li><a href="/products">eNotify</a></li>
+            <li><a href="/products">e-WOTC</a></li>
+            <li><a href="/products">iDesk</a></li>
+            <li><a href="/products">All Products</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 SGS Technologie. All rights reserved.
+      </div>
     </div>
   </footer>
+
+  <!-- ── Carousel JS ─────────────────────────────────────────── -->
+  <script>
+  (function() {
+    var track = document.getElementById('carousel-track');
+    var slides = track.querySelectorAll('.carousel-slide');
+    var nav = document.getElementById('carousel-nav');
+    var idx = 0;
+    slides.forEach(function(_, i) {
+      var dot = document.createElement('button');
+      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', function() { goTo(i); });
+      nav.appendChild(dot);
+    });
+    function goTo(i) {
+      idx = i;
+      track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+      nav.querySelectorAll('.carousel-dot').forEach(function(d, j) {
+        d.classList.toggle('active', j === idx);
+      });
+    }
+    document.getElementById('carousel-prev').addEventListener('click', function() {
+      goTo((idx - 1 + slides.length) % slides.length);
+    });
+    document.getElementById('carousel-next').addEventListener('click', function() {
+      goTo((idx + 1) % slides.length);
+    });
+    setInterval(function() { goTo((idx + 1) % slides.length); }, 6000);
+  })();
+  </script>
+
+  <!-- ── CTA form handler ────────────────────────────────────── -->
+  <script>
+  async function handleCtaSubmit(e) {
+    e.preventDefault();
+    var btn = document.getElementById('cta-submit-btn');
+    var fb = document.getElementById('cta-feedback');
+    btn.disabled = true; btn.textContent = 'Sending\u2026'; fb.textContent = '';
+    try {
+      var res = await fetch('/submit-contact', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          first_name: document.getElementById('cta-first').value.trim(),
+          last_name: document.getElementById('cta-last').value.trim(),
+          email: document.getElementById('cta-email').value.trim(),
+          subject: 'Homepage inquiry',
+          message: document.getElementById('cta-msg').value.trim()
+        })
+      });
+      if (!res.ok) { var err = await res.json(); throw new Error(err.detail || 'Failed'); }
+      var data = await res.json();
+      fb.style.color = '#10b981'; fb.textContent = '\u2713 ' + data.message;
+      document.getElementById('cta-form').reset();
+    } catch (err) {
+      fb.style.color = '#ef4444'; fb.textContent = 'Error: ' + err.message;
+    }
+    btn.disabled = false; btn.textContent = 'Submit';
+  }
+  </script>
 
   <script src="/static/widget.js"></script>
 </body>

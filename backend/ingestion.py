@@ -11,6 +11,7 @@ log = logging.getLogger(__name__)
 def ingest_document(doc_id, filepath, filename):
     try:
         text_content = []
+        low_text_pages = 0
         
         # 1. Extract text with PyMuPDF
         doc = fitz.open(filepath)
@@ -20,7 +21,7 @@ def ingest_document(doc_id, filepath, filename):
             # 2. Iterate through pages for text and tables
             with pdfplumber.open(filepath) as pdf:
                 for i in range(page_count):
-                    page_text = doc[i].get_text()
+                    page_text = doc[i].get_text().strip()
 
                     # Extract tables with pdfplumber
                     table_text = ""
@@ -32,10 +33,23 @@ def ingest_document(doc_id, filepath, filename):
                             row_text = " | ".join([str(cell) if cell is not None else "" for cell in row])
                             table_text += row_text + "\n"
 
-                    combined_page_text = f"{page_text}\n{table_text}"
+                    combined_page_text = f"{page_text}\n{table_text}".strip()
+                    if len(combined_page_text) < 40:
+                        low_text_pages += 1
                     text_content.append({"text": combined_page_text, "page": i + 1})
         finally:
             doc.close()
+
+        if not text_content:
+            raise ValueError("No pages were extracted from the PDF.")
+
+        if low_text_pages:
+            log.warning(
+                "PDF %s had low extracted text on %d/%d pages",
+                filename,
+                low_text_pages,
+                page_count,
+            )
 
         # 3. Split combined text
         text_splitter = RecursiveCharacterTextSplitter(
@@ -45,11 +59,16 @@ def ingest_document(doc_id, filepath, filename):
         
         chunks = []
         for item in text_content:
+            if not item["text"].strip():
+                continue
             page_chunks = text_splitter.split_text(item["text"])
             total_page_chunks = len(page_chunks)
             for page_chunk_idx, chunk in enumerate(page_chunks):
+                cleaned_chunk = chunk.strip()
+                if not cleaned_chunk:
+                    continue
                 chunks.append({
-                    "text": chunk,
+                    "text": cleaned_chunk,
                     "metadata": {
                         "doc_id": doc_id,
                         "filename": filename,
@@ -60,6 +79,12 @@ def ingest_document(doc_id, filepath, filename):
                         "source_label": f"{filename} (Page {item['page']})",
                     }
                 })
+
+        if not chunks:
+            raise ValueError(
+                "No searchable text could be extracted from this PDF. "
+                "It may be scanned, image-only, or encrypted."
+            )
 
         # 4. Generate embeddings and upsert into ChromaDB
         db = get_db()

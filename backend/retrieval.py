@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 import re
 import requests
 from db import get_db
@@ -8,26 +9,62 @@ from embeddings import get_model
 
 log = logging.getLogger(__name__)
 
-OLLAMA_URL = "http://localhost:11434/api/chat"
-OLLAMA_MODEL = "qwen3:8b"
-OLLAMA_OPTIONS = {
-    "temperature": 0.15,
-    "top_p": 0.85,
-    "top_k": 20,
-    "repeat_penalty": 1.15,
-    "num_ctx": 4096,
-    "num_predict": 512,
-}
-SITE_DOC_IDS = ["site_home", "site_about", "site_services", "site_contact"]
 
-PDF_GAP_THRESHOLD   = 0.08  # PDFs included only if within this gap of best site match
-PDF_ABS_THRESHOLD   = 0.35  # PDFs never included if best PDF distance exceeds this (not relevant enough)
-SITE_ABS_THRESHOLD  = 0.60  # site chunks ignored if best site chunk is too weak
-SITE_CONTEXT_MARGIN = 0.15  # how far from best site chunk to include in LLM context
-PDF_MARGIN          = 0.06  # within PDF pool, keep chunks within this of best PDF match
-MAX_SITE_CONTEXT_CHUNKS = 6
-MAX_PDF_CONTEXT_CHUNKS = 4
-PER_SOURCE_CHUNK_CAP = 2
+def _env_float(name, default):
+    value = os.getenv(name)
+    if value is None:
+        return default
+    try:
+        return float(value)
+    except ValueError:
+        log.warning("Invalid float for %s=%r, using default %s", name, value, default)
+        return default
+
+
+def _env_int(name, default):
+    value = os.getenv(name)
+    if value is None:
+        return default
+    try:
+        return int(value)
+    except ValueError:
+        log.warning("Invalid int for %s=%r, using default %s", name, value, default)
+        return default
+
+
+FALLBACK_ANSWER = (
+    "I don't have that information right now — feel free to reach out to us at "
+    "info@sgstechnologies.net or call (904) 332-4534 and we'll be happy to help!"
+)
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/api/chat")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen3:8b")
+OLLAMA_TIMEOUT_SECONDS = _env_int("OLLAMA_TIMEOUT_SECONDS", 180)
+OLLAMA_STREAM_TIMEOUT_SECONDS = _env_int("OLLAMA_STREAM_TIMEOUT_SECONDS", 240)
+OLLAMA_OPTIONS = {
+    "temperature": _env_float("OLLAMA_TEMPERATURE", 0.15),
+    "top_p": _env_float("OLLAMA_TOP_P", 0.85),
+    "top_k": _env_int("OLLAMA_TOP_K", 20),
+    "repeat_penalty": _env_float("OLLAMA_REPEAT_PENALTY", 1.15),
+    "num_ctx": _env_int("OLLAMA_NUM_CTX", 4096),
+    "num_predict": _env_int("OLLAMA_NUM_PREDICT", 512),
+}
+SITE_DOC_IDS = [
+    "site_home", "site_about", "site_services", "site_contact",
+    "site_careers", "site_products", "site_testimonials",
+    "site_software_engineering", "site_cloud_services",
+    "site_cyber_security", "site_data_engineering",
+]
+
+PDF_ABS_THRESHOLD = _env_float("RETRIEVAL_PDF_ABS_THRESHOLD", 0.48)
+SITE_ABS_THRESHOLD = _env_float("RETRIEVAL_SITE_ABS_THRESHOLD", 0.60)
+SITE_CONTEXT_MARGIN = _env_float("RETRIEVAL_SITE_MARGIN", 0.15)
+PDF_MARGIN = _env_float("RETRIEVAL_PDF_MARGIN", 0.10)
+MAX_SITE_CONTEXT_CHUNKS = _env_int("RETRIEVAL_MAX_SITE_CHUNKS", 6)
+MAX_PDF_CONTEXT_CHUNKS = _env_int("RETRIEVAL_MAX_PDF_CHUNKS", 6)
+MAX_SITE_CONTEXT_CHUNKS_MULTI = _env_int("RETRIEVAL_MAX_SITE_CHUNKS_MULTI", 5)
+MAX_PDF_CONTEXT_CHUNKS_MULTI = _env_int("RETRIEVAL_MAX_PDF_CHUNKS_MULTI", 8)
+PER_SOURCE_CHUNK_CAP = _env_int("RETRIEVAL_PER_SOURCE_CHUNK_CAP", 2)
+PER_SOURCE_CHUNK_CAP_MULTI = _env_int("RETRIEVAL_PER_SOURCE_CHUNK_CAP_MULTI", 3)
 
 
 def _query_pool(db, query_embedding, doc_ids, n):
@@ -54,6 +91,7 @@ def _query_pool(db, query_embedding, doc_ids, n):
             })
         return rows
     except Exception:
+        log.exception("Vector query failed for doc_ids=%s", doc_ids[:5])
         return []
 
 
@@ -75,25 +113,58 @@ def _source_key(row):
     return ("website", meta.get("url", "/"))
 
 
-def _select_diverse(rows, max_chunks):
+def _select_diverse(rows, max_chunks, per_source_cap=PER_SOURCE_CHUNK_CAP, prioritize_source_diversity=False):
     if not rows:
         return []
-    selected = []
-    per_source = {}
-    seen_text = set()
 
+    deduped = []
+    seen_text = set()
     for row in rows:
-        if len(selected) >= max_chunks:
-            break
-        key = _source_key(row)
-        if per_source.get(key, 0) >= PER_SOURCE_CHUNK_CAP:
-            continue
         text_key = _normalized_text(row["text"])
         if text_key in seen_text:
             continue
         seen_text.add(text_key)
-        per_source[key] = per_source.get(key, 0) + 1
-        selected.append(row)
+        deduped.append(row)
+
+    if not prioritize_source_diversity:
+        selected = []
+        per_source = {}
+        for row in deduped:
+            if len(selected) >= max_chunks:
+                break
+            key = _source_key(row)
+            if per_source.get(key, 0) >= per_source_cap:
+                continue
+            per_source[key] = per_source.get(key, 0) + 1
+            selected.append(row)
+        return selected
+
+    grouped = {}
+    ordered_keys = []
+    for row in deduped:
+        key = _source_key(row)
+        if key not in grouped:
+            grouped[key] = []
+            ordered_keys.append(key)
+        grouped[key].append(row)
+
+    selected = []
+    per_source = {key: 0 for key in ordered_keys}
+    while len(selected) < max_chunks:
+        added = False
+        for key in ordered_keys:
+            if len(selected) >= max_chunks:
+                break
+            if per_source[key] >= per_source_cap:
+                continue
+            bucket = grouped[key]
+            if not bucket:
+                continue
+            selected.append(bucket.pop(0))
+            per_source[key] += 1
+            added = True
+        if not added:
+            break
     return selected
 
 
@@ -109,54 +180,298 @@ def _snippet(text, limit=180):
     return cleaned[: limit - 1].rstrip() + "…"
 
 
-SYSTEM_PROMPT = """You are Alex, a virtual assistant for SGS Technologies. You are part of the team.
+_SOURCE_WORD_RE = re.compile(r"[a-z0-9]+")
+_SOURCE_STOPWORDS = {
+    "sgs",
+    "pdf",
+    "page",
+    "pages",
+    "document",
+    "documents",
+    "policy",
+    "plan",
+    "framework",
+    "guidelines",
+    "standards",
+    "charter",
+    "manual",
+    "protocol",
+    "home",
+}
+_QUESTION_STOPWORDS = {
+    "across",
+    "about",
+    "what",
+    "which",
+    "where",
+    "when",
+    "their",
+    "there",
+    "these",
+    "those",
+    "using",
+    "within",
+    "trace",
+    "full",
+    "lifecycle",
+    "global",
+    "considerations",
+    "question",
+    "production",
+    "review",
+}
+
+
+def _tokens(text):
+    return _SOURCE_WORD_RE.findall(_normalized_text(text))
+
+
+def _source_terms(row):
+    meta = row["meta"]
+    if meta.get("source_type") == "pdf":
+        text = meta.get("filename", "")
+    else:
+        text = f"{meta.get('page_name', '')} {meta.get('url', '')}"
+
+    terms = []
+    for token in _tokens(text):
+        if token in _SOURCE_STOPWORDS or token.isdigit() or len(token) < 4:
+            continue
+        terms.append(token)
+    return set(terms)
+
+
+def _question_mentions_source(question, row):
+    question_terms = set(_tokens(question))
+    source_terms = _source_terms(row)
+    if not source_terms:
+        return False
+    overlap = question_terms & source_terms
+    threshold = 2 if len(source_terms) >= 2 else 1
+    return len(overlap) >= threshold
+
+
+def _filter_to_named_sources(question, rows):
+    matching = [row for row in rows if _question_mentions_source(question, row)]
+    return matching if matching else rows
+
+
+def _question_terms(question):
+    return {
+        token
+        for token in _tokens(question)
+        if token not in _QUESTION_STOPWORDS and len(token) >= 4
+    }
+
+
+def _row_text_terms(row):
+    return {
+        token
+        for token in _tokens(row["text"])
+        if token not in _QUESTION_STOPWORDS and len(token) >= 4
+    }
+
+
+def _row_priority(question, row):
+    question_terms = _question_terms(question)
+    if not question_terms:
+        return (0, 0, -row["distance"])
+
+    text_terms = _row_text_terms(row)
+    overlap = len(question_terms & text_terms)
+    source_overlap = len(question_terms & _source_terms(row))
+    text = _normalized_text(row["text"])
+    penalty = 0
+    if "revision history" in text or "official executive publication" in text:
+        penalty += 2
+    if "this document defines the official" in text:
+        penalty += 1
+    return (source_overlap, overlap - penalty, -row["distance"])
+
+
+def _rank_rows(question, rows):
+    return sorted(rows, key=lambda row: _row_priority(question, row), reverse=True)
+
+
+def _is_low_signal_chunk(text):
+    normalized = _normalized_text(text)
+    low_signal_phrases = (
+        "official executive publication",
+        "this document defines the official",
+        "appendix: revision history",
+        "initial publication. approved by the board of directors",
+    )
+    return any(phrase in normalized for phrase in low_signal_phrases)
+
+
+def _prune_low_signal_rows(rows):
+    high_signal = [row for row in rows if not _is_low_signal_chunk(row["text"])]
+    return high_signal if high_signal else rows
+
+
+def _question_prefers_pdfs(question):
+    normalized = _normalized_text(question)
+    website_cues = ("website", "homepage", "home page", "advertises", "mentions", "site")
+    if any(cue in normalized for cue in website_cues):
+        return False
+    return any(
+        cue in normalized
+        for cue in (
+            "across the ",
+            "using the ",
+            "compare ",
+            "within the ",
+            "from the ",
+        )
+    )
+
+
+def _looks_multi_source(question):
+    normalized = _normalized_text(question)
+    cues = [
+        "across ",
+        "compare ",
+        "both ",
+        "trace ",
+        "full lifecycle",
+        "full picture",
+        "using the ",
+        "interact ",
+    ]
+    if any(cue in normalized for cue in cues):
+        return True
+    return normalized.count(",") >= 2 and " and " in normalized
+
+
+def _context_limits(question):
+    if _looks_multi_source(question):
+        return {
+            "site_chunks": MAX_SITE_CONTEXT_CHUNKS_MULTI,
+            "pdf_chunks": MAX_PDF_CONTEXT_CHUNKS_MULTI,
+            "pdf_per_source_cap": PER_SOURCE_CHUNK_CAP_MULTI,
+        }
+    return {
+        "site_chunks": MAX_SITE_CONTEXT_CHUNKS,
+        "pdf_chunks": MAX_PDF_CONTEXT_CHUNKS,
+        "pdf_per_source_cap": PER_SOURCE_CHUNK_CAP,
+    }
+
+
+SYSTEM_PROMPT = """You are Alex, a virtual assistant for SGS Technologie, a software development company headquartered in Jacksonville, Florida. You are part of the team.
 
 RULES:
 - Your name is **Alex**. ONLY introduce yourself if the user specifically asks who you are, what your name is, or what you do. For all other questions, just answer directly.
 - Speak in first-person plural ("we", "our", "us") as a company representative.
 - Answer using ONLY the provided context. Never invent, guess, or paraphrase vaguely.
+- If the answer requires combining facts from multiple context blocks or documents, synthesize them into one grounded response instead of using the fallback.
+- If relevant facts are present anywhere in the context, answer with those facts. Do not use the fallback just because the answer spans multiple snippets.
 - When the context contains numbers, prices, or specific details, lead with those — quote them exactly.
 - Be concise and professional. Use short paragraphs.
 - Use **bold** for key terms or names. Use bullet points when listing 3+ items.
 - Do NOT include source citations, bracketed references, or filenames — sources are shown separately in the UI.
 
 FALLBACK (use when the context does not contain specific facts to answer the question):
-- Say EXACTLY: "I don't have that information right now — feel free to reach out to us at hello@sgstech.com and we'll be happy to help!"
+- Say EXACTLY: "I don't have that information right now — feel free to reach out to us at info@sgstechnologies.net or call (904) 332-4534 and we'll be happy to help!"
 - If you use this fallback, output ONLY that sentence. Do not add anything before or after it. Do not combine it with partial answers or guesses."""
 
 
 def _build_messages(question, context):
     return [
         {"role": "system", "content": SYSTEM_PROMPT},
-        {"role": "user", "content": f"Context:\n{context}\n\nQuestion: {question} /no_think"},
+        {
+            "role": "user",
+            "content": (
+                "Use the context below to answer the question. "
+                "If the needed facts appear across multiple snippets, combine them into one answer.\n\n"
+                f"Context:\n{context}\n\nQuestion: {question}"
+            ),
+        },
     ]
 
 
 _THINK_RE = re.compile(r"<think>[\s\S]*?</think>", re.DOTALL)
 
 
+def _finalize_answer(answer):
+    cleaned = _THINK_RE.sub("", answer or "").strip()
+    return cleaned or FALLBACK_ANSWER
+
+
+def _split_sentences(text):
+    pieces = re.split(r"(?<=[.!?])\s+", re.sub(r"\s+", " ", text).strip())
+    return [piece.strip() for piece in pieces if piece.strip()]
+
+
+def _extractive_answer_from_context(question, context, max_sentences=5):
+    question_terms = _question_terms(question)
+    scored = []
+    seen = set()
+
+    for block in context.split("\n\n---\n\n"):
+        if ": " in block:
+            _, text = block.split(": ", 1)
+        else:
+            text = block
+
+        for sentence in _split_sentences(text):
+            normalized = _normalized_text(sentence)
+            if normalized in seen or _is_low_signal_chunk(sentence):
+                continue
+            seen.add(normalized)
+
+            sentence_terms = {
+                token for token in _tokens(sentence)
+                if token not in _QUESTION_STOPWORDS and len(token) >= 4
+            }
+            overlap = len(question_terms & sentence_terms)
+            if overlap == 0:
+                continue
+
+            bonus = 0
+            if re.search(r"\b\d", sentence):
+                bonus += 1
+            if any(char in sentence for char in ("%","$",":")):
+                bonus += 1
+            scored.append((overlap + bonus, sentence))
+
+    if not scored:
+        return None
+
+    scored.sort(key=lambda item: item[0], reverse=True)
+    selected = [sentence for _, sentence in scored[:max_sentences]]
+    if len(selected) == 1:
+        return selected[0]
+    return "\n".join(f"- {sentence}" for sentence in selected)
+
+
 def _build_context_and_sources(question):
     query_embedding = get_model().encode(question).tolist()
     db = get_db()
     approved_pdf_ids = get_approved_doc_ids()
+    limits = _context_limits(question)
 
-    site_rows = _query_pool(db, query_embedding, SITE_DOC_IDS, 10)
-    pdf_rows = _query_pool(db, query_embedding, approved_pdf_ids, 8)
+    site_rows = _query_pool(db, query_embedding, SITE_DOC_IDS, 12)
+    pdf_rows = _query_pool(db, query_embedding, approved_pdf_ids, 18)
 
     site_best = site_rows[0]["distance"] if site_rows else 1.0
     pdf_best  = pdf_rows[0]["distance"] if pdf_rows else 1.0
 
-    include_pdfs = (
-        bool(approved_pdf_ids)
-        and pdf_best <= PDF_ABS_THRESHOLD
-        and pdf_best <= site_best + PDF_GAP_THRESHOLD
+    raw_site = _apply_margin(site_rows, SITE_CONTEXT_MARGIN) if site_best <= SITE_ABS_THRESHOLD else []
+    raw_pdf = _apply_margin(pdf_rows, PDF_MARGIN) if approved_pdf_ids and pdf_best <= PDF_ABS_THRESHOLD else []
+
+    raw_pdf = _rank_rows(question, _prune_low_signal_rows(_filter_to_named_sources(question, raw_pdf)))
+    raw_site = _rank_rows(question, _prune_low_signal_rows(_filter_to_named_sources(question, raw_site)))
+
+    if raw_pdf and _question_prefers_pdfs(question):
+        raw_site = []
+
+    site_context_chunks = _select_diverse(raw_site, limits["site_chunks"])
+    pdf_chunks = _select_diverse(
+        raw_pdf,
+        limits["pdf_chunks"],
+        per_source_cap=limits["pdf_per_source_cap"],
+        prioritize_source_diversity=True,
     )
-
-    raw_site = _apply_margin(site_rows, SITE_CONTEXT_MARGIN)
-    raw_pdf = _apply_margin(pdf_rows, PDF_MARGIN) if include_pdfs else []
-
-    site_context_chunks = _select_diverse(raw_site, MAX_SITE_CONTEXT_CHUNKS) if site_best <= SITE_ABS_THRESHOLD else []
-    pdf_chunks = _select_diverse(raw_pdf, MAX_PDF_CONTEXT_CHUNKS)
 
     if not site_context_chunks and not pdf_chunks:
         return None, []
@@ -245,7 +560,7 @@ def answer_question(question):
 
     if context is None:
         return {
-            "answer": "I couldn't find anything relevant to that question in the available content.",
+            "answer": FALLBACK_ANSWER,
             "sources": []
         }
 
@@ -255,11 +570,15 @@ def answer_question(question):
         response = requests.post(
             OLLAMA_URL,
             json={"model": OLLAMA_MODEL, "messages": messages, "stream": False, "options": OLLAMA_OPTIONS},
-            timeout=60,
+            timeout=OLLAMA_TIMEOUT_SECONDS,
         )
         response.raise_for_status()
         answer = response.json().get("message", {}).get("content", "")
-        answer = _THINK_RE.sub("", answer).strip()
+        answer = _finalize_answer(answer)
+        if answer == FALLBACK_ANSWER and context and sources:
+            extractive_answer = _extractive_answer_from_context(question, context)
+            if extractive_answer:
+                answer = extractive_answer
         return {"answer": answer, "sources": sources}
     except Exception as e:
         log.error("Error calling Ollama: %s", e)
@@ -271,10 +590,17 @@ def answer_question(question):
 
 def answer_question_stream(question):
     """Generator that yields SSE events: token chunks, then a final sources event."""
+    if _looks_multi_source(question):
+        result = answer_question(question)
+        yield f"data: {json.dumps({'type': 'token', 'content': result['answer']})}\n\n"
+        yield f"data: {json.dumps({'type': 'sources', 'sources': result['sources']})}\n\n"
+        yield "data: [DONE]\n\n"
+        return
+
     context, sources = _build_context_and_sources(question)
 
     if context is None:
-        msg = json.dumps({"type": "token", "content": "I couldn't find anything relevant to that question in the available content."})
+        msg = json.dumps({"type": "token", "content": FALLBACK_ANSWER})
         yield f"data: {msg}\n\n"
         src_msg = json.dumps({"type": "sources", "sources": []})
         yield f"data: {src_msg}\n\n"
@@ -287,13 +613,14 @@ def answer_question_stream(question):
         response = requests.post(
             OLLAMA_URL,
             json={"model": OLLAMA_MODEL, "messages": messages, "stream": True, "options": OLLAMA_OPTIONS},
-            timeout=120,
+            timeout=OLLAMA_STREAM_TIMEOUT_SECONDS,
             stream=True,
         )
 
         response.raise_for_status()
 
         in_think = False
+        emitted_text = False
         for line in response.iter_lines():
             if line:
                 chunk = json.loads(line)
@@ -310,10 +637,13 @@ def answer_question_stream(question):
                     else:
                         continue
                 if token:
+                    emitted_text = True
                     yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
                 if chunk.get("done"):
                     break
 
+        if not emitted_text:
+            yield f"data: {json.dumps({'type': 'token', 'content': FALLBACK_ANSWER})}\n\n"
         yield f"data: {json.dumps({'type': 'sources', 'sources': sources})}\n\n"
         yield "data: [DONE]\n\n"
 
