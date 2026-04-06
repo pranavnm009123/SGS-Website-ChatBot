@@ -27,3 +27,4 @@ venv.bak/
 .DS_Store
 *.swp
 CLAUDE.md
+ppt_generation_brief.txt

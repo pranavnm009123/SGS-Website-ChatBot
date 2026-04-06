@@ -34,7 +34,10 @@
     <div class="docs-card">
       <div class="docs-card-header">
         <h3>Document Library</h3>
-        <button class="btn btn-outline btn-sm" id="reindex-btn">↺ Re-index Website</button>
+        <div style="display:flex;gap:.5rem;">
+          <button class="btn btn-outline btn-sm" id="reindex-btn">↺ Re-index Website</button>
+          <button class="btn btn-sm" id="purge-btn" style="background:#7f1d1d;color:#fca5a5;border:1px solid #991b1b;">🗑 Remove All PDFs</button>
+        </div>
       </div>
       <div style="overflow-x:auto;">
         <table class="data-table">
@@ -51,6 +54,17 @@
             <tr><td colspan="5" style="color:var(--text-muted);text-align:center;">Loading…</td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+
+    <!-- Danger zone -->
+    <div class="docs-card" style="border:1px solid #7f1d1d;margin-top:1.5rem;">
+      <div class="docs-card-header" style="flex-direction:column;align-items:flex-start;gap:.5rem;">
+        <h3 style="color:#f87171;">Danger Zone</h3>
+        <p style="color:var(--text-muted);font-size:.85rem;margin:0;">
+          Wipe the entire database — removes <strong>all PDFs</strong>, <strong>all website vectors</strong>, and <strong>all indexed data</strong>. The chatbot will have no knowledge until content is re-uploaded and the site is re-indexed.
+        </p>
+        <button class="btn btn-sm" id="purge-all-btn" style="background:#450a0a;color:#f87171;border:1px solid #7f1d1d;margin-top:.5rem;">⚠ Purge Entire Database</button>
       </div>
     </div>
   </div>

@@ -85,8 +85,11 @@ def index_one_page(frontend_dir: str, page: dict):
             "source_type": "website",
             "page_name": page["name"],
             "url": page["url"],
+            "chunk_index": i,
+            "page_chunk_count": len(chunks),
+            "source_label": f"{page['name']} Page",
         }
-        for _ in chunks
+        for i, _ in enumerate(chunks)
     ]
     ids = [f"{page['doc_id']}_{i}" for i in range(len(chunks))]
 

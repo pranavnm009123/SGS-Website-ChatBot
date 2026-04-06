@@ -1,113 +1,167 @@
-# ACME Corp Policy Chatbot & Website
+# SGS Technologies — Policy chatbot and site
 
-A full-stack, locally hosted web application and Retrieval-Augmented Generation (RAG) chatbot designed for "ACME Corp" (or any corporate entity). The project combines a modern frontend website with an intelligent FastAPI backend powered by local LLMs (Ollama) and vector search (ChromaDB) to answer user questions using both website content and uploaded PDF documents.
+A small static marketing site plus a RAG chatbot. The bot uses **FastAPI**, **ChromaDB**, and **Ollama** on your machine. Answers are built from:
 
-## 🚀 Features
+- HTML under `frontend/` (indexed on startup and when files change)
+- PDFs you upload via the admin UI after you approve them (`backend/uploads/`)
 
-- **Modern Website Features**: Vanilla HTML, CSS, and JS web pages (Home, About, Services, Contact) featuring a responsive and dynamic design.
-- **RAG Chatbot Widget**: A floating chat widget built into the website with real-time token streaming (`/chat/stream`), answering user queries strictly based on indexed context.
-- **Admin Panel**: Accessible at `/admin`, allowing administrators to:
-  - Upload, approve, and delete PDF documents.
-  - See real-time statuses of processing documents.
-  - Manually trigger website re-indexing.
-- **Dual Knowledge Sources**:
-  - **PDFs**: Asynchronously chunked, embedded, and added to ChromaDB upon approval.
-  - **Website Pages**: HTML content is automatically extracted, chunked, and synchronized into ChromaDB. Changes to frontend HTML files instantly trigger a background re-indexing via a watchdog observer.
-- **100% Local Inference**: Powered by local embedding models (`BAAI/bge-large-en-v1.5`) and a local LLM (`llama3.1`) hosted via Ollama. No data leaves your machine.
+Responses stream to the page and show source cards under each reply.
 
-## 🛠️ Tech Stack
+---
 
-- **Backend**: FastAPI, Uvicorn, Python 3.9+
-- **Frontend**: Vanilla HTML5, CSS3, JavaScript
-- **Vector Database**: ChromaDB (persistent local storage)
-- **Local LLM**: Ollama (`llama3.1:latest`)
-- **Embeddings**: SentenceTransformers (`BAAI/bge-large-en-v1.5` - 1024 dims)
-- **PDF Processing**: PyMuPDF (`fitz`), LangChain text splitters
+## Prerequisites
 
-## 📋 Prerequisites
-
-Before you begin, ensure you have the following installed:
 1. **Python 3.9+**
-2. **Ollama**: Download and install from [ollama.com](https://ollama.com).
-3. **Llama 3.1 Model**: Run `ollama run llama3.1` in your terminal to pull the model down prior to starting.
+2. **[Ollama](https://ollama.com)** installed and on your `PATH` (so `ollama` works in a terminal)
+3. **Network** the first time you run — it downloads the embedding model and the `qwen3:8b` Ollama model
 
-## ⚙️ Setup & Installation
+---
 
-1. Clone this repository (or navigate to the project directory).
-2. Use the provided setup script to automatically create a virtual environment, install dependencies, and start the server:
+## Run the app
+
+All commands assume your current directory is **`policy-chatbot/`** (the folder that contains `run.sh`, `backend/`, and `frontend/`).
+
+### Easiest: startup script
 
 ```bash
-cd policy-chatbot
 bash run.sh
 ```
 
-**What `run.sh` does:**
-- Creates a Python virtual environment (`venv`).
-- Activates it and installs packages from `backend/requirements.txt`.
-- Checks if Ollama is running and attempts to pull/run `llama3.1`.
-- Starts the FastAPI server (`uvicorn`) with hot-reloading.
+If you prefer `./run.sh`, make it executable once: `chmod +x run.sh`.
 
-If you prefer to start it manually (after dependencies are installed):
+**Windows:** `run.sh` is a bash script. Use **Git Bash**, **WSL**, or skip to [Manual start](#manual-start) and run the same steps in PowerShell where applicable (`python`, `pip`, `ollama` in PATH).
+
+The script will:
+
+1. Create `venv/` if it does not exist  
+2. `pip install -r backend/requirements.txt`  
+3. Start `ollama serve` in the background if no `ollama` process is running  
+4. `ollama pull qwen3:8b`  
+5. Start the API with **Uvicorn on port 8000** (from `backend/`)
+
+When the server is up, open:
+
+| URL | What |
+|-----|------|
+| [http://localhost:8000/](http://localhost:8000/) | Site home |
+| [http://localhost:8000/about](http://localhost:8000/about) | About |
+| [http://localhost:8000/services](http://localhost:8000/services) | Services |
+| [http://localhost:8000/contact](http://localhost:8000/contact) | Contact |
+| [http://localhost:8000/admin](http://localhost:8000/admin) | PDF upload / approve / indexing |
+| [http://localhost:8000/api/docs](http://localhost:8000/api/docs) | OpenAPI (Swagger) |
+
+**Stop:** Press **Ctrl+C** in the terminal where Uvicorn is running. If the script started Ollama in the background, stop it separately (e.g. quit the Ollama app or kill the `ollama` process) if you do not want it left running.
+
+### Manual start
+
+Use this if you are not using `run.sh` or you want full control.
+
+1. Start Ollama yourself (`ollama serve` in another terminal, or the desktop app). Chat will not work until Ollama is up at `http://localhost:11434`.
+2. From **`policy-chatbot/`**:
+
+```bash
+python3 -m venv venv
+source venv/bin/activate   # Windows (cmd): venv\Scripts\activate.bat
+pip install -r backend/requirements.txt
+ollama pull qwen3:8b
+cd backend
+python3 -m uvicorn main:app --reload --port 8000
+```
+
+---
+
+## Check that it is running
+
+With the server still up, in **another** terminal from **`policy-chatbot/`**:
+
 ```bash
 source venv/bin/activate
-cd backend
-python -m uvicorn main:app --reload --port 8000
+python verify_backend.py
 ```
 
-## 💻 Usage
+(`requests` is already listed in `backend/requirements.txt`.)
 
-Once the server is running, you can access the application in your browser:
+---
 
-- **Public Website Site & Chatbot**: [http://localhost:8000/](http://localhost:8000/)
-- **Admin Panel**: [http://localhost:8000/admin](http://localhost:8000/admin)
-- **API Documentation (Swagger)**: [http://localhost:8000/api/docs](http://localhost:8000/api/docs)
+## Admin: PDFs and API key
 
-### Uploading Documents
-1. Navigate to the Admin Panel.
-2. Drag and drop (or select) a PDF to upload.
-3. The document will appear as `pending`. Click **Approve** to trigger the background ingestion process (extracting text, generating embeddings, and storing in ChromaDB).
-4. Wait for the status to turn `approved`. The chatbot can now use information from the document!
+1. Open `/admin`.
+2. Upload PDFs, then **Approve** each one you want in the index.
+3. Wait until status is `approved`, then ask the bot; retrieval uses approved files only.
 
-### Editing the Website
-Any time you edit and save an HTML page inside the `frontend/` directory, the backend's automatic file watcher will instantly update the indexed ChromaDB vectors. You do not need to restart the server.
+**API key:** Admin routes expect header **`X-Admin-Key`**. Default is `localdev123` in `backend/security.py` — keep the same value in `frontend/admin.js` if you change it.
 
-## 🔒 Security & Admin Access
+**Document flow:** `pending` → `processing` → `approved` (see `backend/doc_registry.py`). Reject removes the file and sets `rejected`.
 
-- The API endpoints (like document approval, deletion, and site re-indexing) are secured using an Admin Key.
-- Default Admin Key: `localdev123` (used internally by the frontend logic).
-- API rate limits are applied to upload and chat endpoints to prevent abuse.
+**Dangerous admin actions (require the same key):**
 
-## 🏛️ Architecture & Key Components
+- `POST /reindex-site` — rebuild website chunk index from `frontend/` HTML  
+- `POST /purge-database` — drop PDF vectors and uploads; website vectors stay  
+- `POST /purge-all` — wipe the Chroma collection and uploads  
 
-```mermaid
-flowchart TD
-    User([User]) -->|Browses Site / Chats| Frontend[Frontend HTML/JS]
-    Admin([Admin]) -->|Uploads / Manages PDFs| AdminPanel[Admin Panel]
-    
-    Frontend -->|POST /chat/stream| FastAPI[FastAPI Backend]
-    AdminPanel -->|POST /upload| FastAPI
-    
-    subgraph Data Processing
-        FastAPI -->|Extracts & Embeds| Ingestion[Ingestion Engine]
-        Ingestion -->|Saves Vectors| ChromaDB[(ChromaDB)]
-        Static[Website HTML Changed] -->|Watchdog Detects| SiteIndexer[Site Indexer]
-        SiteIndexer -->|Saves Vectors| ChromaDB
-    end
-    
-    subgraph Inference & RAG
-        FastAPI -->|Semantic Search| Retrieval[Retrieval Engine]
-        Retrieval <-->|Fetches Top-K Context| ChromaDB
-        Retrieval -->|Prompt + Context| Ollama((Ollama LLaMA 3.1))
-    end
-    
-    Ollama -->|Streams Response| FastAPI
-    FastAPI -->|SSE Stream| Frontend
+After a full purge, trigger a site re-index and re-approve PDFs as needed.
+
+---
+
+## Where data lives
+
+| Path | Contents |
+|------|----------|
+| `backend/chroma_db/` | Vector store |
+| `backend/uploads/` | Uploaded PDFs |
+
+First startup can take a while (embedding model `BAAI/bge-large-en-v1.5` and Ollama pull).
+
+---
+
+## Chat behavior (sources)
+
+- Sources are cards under the assistant message (not inline `[1]` citations).
+- They come from the same chunks passed into the model; filtering is in `backend/retrieval.py`.
+
+---
+
+## Stack (reference)
+
+- Backend: FastAPI, Uvicorn  
+- Frontend: static HTML/CSS/JS (`widget.js`, `admin.js`)  
+- Vectors: ChromaDB (local persistence)  
+- Embeddings: SentenceTransformers — `BAAI/bge-large-en-v1.5`  
+- LLM: Ollama — `qwen3:8b`  
+- PDFs: PyMuPDF (`fitz`), pdfplumber  
+
+---
+
+## Project layout
+
+```text
+policy-chatbot/
+  backend/
+    main.py            # App, routes, static files
+    retrieval.py       # RAG + Ollama
+    ingestion.py       # PDF ingest
+    site_indexer.py    # HTML index + file watcher
+    db.py              # Chroma + embedding migration
+    doc_registry.py    # Upload / approval state
+    security.py        # Sanitization, admin auth, rate limits
+    embeddings.py      # Embedding model id
+    requirements.txt
+  frontend/
+    *.html, widget.js, admin.js, style.css
+  run.sh
+  verify_backend.py
 ```
 
-- `backend/main.py`: Central FastAPI application routing, background task handling, and static file serving.
-- `backend/retrieval.py`: Handles querying ChromaDB with user input, generating a contextual prompt, and managing the stream from Ollama.
-- `backend/ingestion.py`: Logic for chunking and embedding PDF documents.
-- `backend/site_indexer.py`: Logic for stripping HTML tags from static pages and generating website vectors, alongside the `watchdog` process.
-- `backend/db.py`: Singleton manager for the local persistent ChromaDB collection.
-- `backend/doc_registry.py`: JSON-based tracker for document processing states (`pending` -> `processing` -> `approved`).
-- `frontend/widget.js`: Self-contained script bounding the chat UI logic, maintaining session history locally in the browser.
+---
+
+## Troubleshooting
+
+| Problem | What to try |
+|---------|-------------|
+| Ollama errors | Confirm something is listening on `http://localhost:11434` and `ollama serve` (or the app) is running. |
+| Vague or empty answers | Let startup finish (site index runs on boot). For PDFs, they must be **approved**. |
+| 401/403 on admin | `X-Admin-Key` must match `backend/security.py` (and `admin.js`). |
+| Port 8000 in use | Stop the other process or run Uvicorn on another port. |
+| First reply very slow | Normal while models load and warm up. |
+
+Rate limits apply to chat, upload, and contact endpoints (`backend/security.py`).

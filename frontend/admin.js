@@ -5,6 +5,8 @@ const fileInput  = document.getElementById('file-input');
 const statusEl   = document.getElementById('upload-status');
 const tbody      = document.getElementById('docs-tbody');
 const reindexBtn = document.getElementById('reindex-btn');
+const purgeBtn   = document.getElementById('purge-btn');
+const purgeAllBtn = document.getElementById('purge-all-btn');
 
 let selectedFiles = [];
 
@@ -187,6 +189,49 @@ reindexBtn.addEventListener('click', async () => {
 function esc(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
+
+// ── Remove all PDFs ─────────────────────────────────────────────────────────
+purgeBtn.addEventListener('click', async () => {
+  if (!confirm('This will delete all uploaded PDFs and their vectors. Website data will NOT be affected. Continue?')) return;
+  purgeBtn.disabled = true;
+  purgeBtn.textContent = 'Removing…';
+  try {
+    const res = await fetch('/purge-database', {
+      method: 'POST',
+      headers: { 'X-Admin-Key': ADMIN_KEY }
+    });
+    if (!res.ok) throw new Error('Purge failed');
+    purgeBtn.textContent = '✓ Removed';
+    setTimeout(() => { purgeBtn.textContent = '🗑 Remove All PDFs'; purgeBtn.disabled = false; }, 2000);
+    fetchDocs();
+  } catch (err) {
+    alert(err.message);
+    purgeBtn.textContent = '🗑 Remove All PDFs';
+    purgeBtn.disabled = false;
+  }
+});
+
+// ── Purge entire database ────────────────────────────────────────────────────
+purgeAllBtn.addEventListener('click', async () => {
+  if (!confirm('⚠️ WARNING: This will permanently delete ALL data from the database — PDFs AND website vectors. The chatbot will have no knowledge until you re-index. Continue?')) return;
+  if (!confirm('Are you absolutely sure? This cannot be undone.')) return;
+  purgeAllBtn.disabled = true;
+  purgeAllBtn.textContent = 'Purging…';
+  try {
+    const res = await fetch('/purge-all', {
+      method: 'POST',
+      headers: { 'X-Admin-Key': ADMIN_KEY }
+    });
+    if (!res.ok) throw new Error('Purge failed');
+    purgeAllBtn.textContent = '✓ Purged';
+    setTimeout(() => { purgeAllBtn.textContent = '⚠ Purge Entire DB'; purgeAllBtn.disabled = false; }, 2000);
+    fetchDocs();
+  } catch (err) {
+    alert(err.message);
+    purgeAllBtn.textContent = '⚠ Purge Entire DB';
+    purgeAllBtn.disabled = false;
+  }
+});
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 fetchDocs();

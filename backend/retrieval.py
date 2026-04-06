@@ -11,7 +11,7 @@ log = logging.getLogger(__name__)
 OLLAMA_URL = "http://localhost:11434/api/chat"
 OLLAMA_MODEL = "qwen3:8b"
 OLLAMA_OPTIONS = {
-    "temperature": 0.3,
+    "temperature": 0.15,
     "top_p": 0.85,
     "top_k": 20,
     "repeat_penalty": 1.15,
@@ -22,14 +22,17 @@ SITE_DOC_IDS = ["site_home", "site_about", "site_services", "site_contact"]
 
 PDF_GAP_THRESHOLD   = 0.08  # PDFs included only if within this gap of best site match
 PDF_ABS_THRESHOLD   = 0.35  # PDFs never included if best PDF distance exceeds this (not relevant enough)
+SITE_ABS_THRESHOLD  = 0.60  # site chunks ignored if best site chunk is too weak
 SITE_CONTEXT_MARGIN = 0.15  # how far from best site chunk to include in LLM context
-SITE_SOURCE_MARGIN  = 0.05  # tighter margin for which pages appear as source tags
 PDF_MARGIN          = 0.06  # within PDF pool, keep chunks within this of best PDF match
+MAX_SITE_CONTEXT_CHUNKS = 6
+MAX_PDF_CONTEXT_CHUNKS = 4
+PER_SOURCE_CHUNK_CAP = 2
 
 
 def _query_pool(db, query_embedding, doc_ids, n):
     if not doc_ids:
-        return [], [], []
+        return []
     try:
         r = db.collection.query(
             query_embeddings=[query_embedding],
@@ -37,30 +40,89 @@ def _query_pool(db, query_embedding, doc_ids, n):
             where={"doc_id": {"$in": doc_ids}},
             include=["documents", "metadatas", "distances"],
         )
-        return r["documents"][0], r["metadatas"][0], r["distances"][0]
+        docs = r.get("documents", [[]])[0] or []
+        metas = r.get("metadatas", [[]])[0] or []
+        dists = r.get("distances", [[]])[0] or []
+        ids = r.get("ids", [[]])[0] or []
+        rows = []
+        for i, (doc, meta, dist) in enumerate(zip(docs, metas, dists)):
+            rows.append({
+                "id": ids[i] if i < len(ids) else "",
+                "text": doc,
+                "meta": meta or {},
+                "distance": float(dist),
+            })
+        return rows
     except Exception:
-        return [], [], []
-
-
-def _apply_margin(docs, metas, dists, margin):
-    if not dists:
         return []
-    cutoff = dists[0] + margin
-    return [(doc, meta, dist) for doc, meta, dist in zip(docs, metas, dists) if dist <= cutoff]
 
 
-SYSTEM_PROMPT = """You are Alex, a friendly and knowledgeable virtual assistant for SGS Technologies. You are part of the team.
+def _apply_margin(rows, margin):
+    if not rows:
+        return []
+    cutoff = rows[0]["distance"] + margin
+    return [row for row in rows if row["distance"] <= cutoff]
+
+
+def _normalized_text(text):
+    return re.sub(r"\s+", " ", (text or "")).strip().lower()
+
+
+def _source_key(row):
+    meta = row["meta"]
+    if meta.get("source_type") == "pdf":
+        return ("pdf", meta.get("filename", "document"))
+    return ("website", meta.get("url", "/"))
+
+
+def _select_diverse(rows, max_chunks):
+    if not rows:
+        return []
+    selected = []
+    per_source = {}
+    seen_text = set()
+
+    for row in rows:
+        if len(selected) >= max_chunks:
+            break
+        key = _source_key(row)
+        if per_source.get(key, 0) >= PER_SOURCE_CHUNK_CAP:
+            continue
+        text_key = _normalized_text(row["text"])
+        if text_key in seen_text:
+            continue
+        seen_text.add(text_key)
+        per_source[key] = per_source.get(key, 0) + 1
+        selected.append(row)
+    return selected
+
+
+def _relevance(distance):
+    # Chroma cosine distance: lower is better; convert to a stable 0..1 score.
+    return round(1.0 / (1.0 + max(distance, 0.0)), 3)
+
+
+def _snippet(text, limit=180):
+    cleaned = re.sub(r"\s+", " ", (text or "")).strip()
+    if len(cleaned) <= limit:
+        return cleaned
+    return cleaned[: limit - 1].rstrip() + "…"
+
+
+SYSTEM_PROMPT = """You are Alex, a virtual assistant for SGS Technologies. You are part of the team.
 
 RULES:
-- Your name is **Alex**. ONLY introduce yourself if the user specifically asks who you are, what your name is, or what you do. For all other questions, just answer directly without mentioning your name or role.
+- Your name is **Alex**. ONLY introduce yourself if the user specifically asks who you are, what your name is, or what you do. For all other questions, just answer directly.
 - Speak in first-person plural ("we", "our", "us") as a company representative.
-- Answer using ONLY the provided context. Never invent information.
-- Be warm, concise, and professional. Use short paragraphs.
+- Answer using ONLY the provided context. Never invent, guess, or paraphrase vaguely.
+- When the context contains numbers, prices, or specific details, lead with those — quote them exactly.
+- Be concise and professional. Use short paragraphs.
 - Use **bold** for key terms or names. Use bullet points when listing 3+ items.
 - Do NOT include source citations, bracketed references, or filenames — sources are shown separately in the UI.
-- If the context contains pricing or numbers, quote them exactly.
-- If comparing documents, clearly state which document each fact comes from.
-- If the answer is not in the context, say: "I don't have that information right now — feel free to reach out to us at hello@sgstech.com and we'll be happy to help!\""""
+
+FALLBACK (use when the context does not contain specific facts to answer the question):
+- Say EXACTLY: "I don't have that information right now — feel free to reach out to us at hello@sgstech.com and we'll be happy to help!"
+- If you use this fallback, output ONLY that sentence. Do not add anything before or after it. Do not combine it with partial answers or guesses."""
 
 
 def _build_messages(question, context):
@@ -78,11 +140,11 @@ def _build_context_and_sources(question):
     db = get_db()
     approved_pdf_ids = get_approved_doc_ids()
 
-    site_docs, site_metas, site_dists = _query_pool(db, query_embedding, SITE_DOC_IDS, 8)
-    pdf_docs,  pdf_metas,  pdf_dists  = _query_pool(db, query_embedding, approved_pdf_ids, 6)
+    site_rows = _query_pool(db, query_embedding, SITE_DOC_IDS, 10)
+    pdf_rows = _query_pool(db, query_embedding, approved_pdf_ids, 8)
 
-    site_best = site_dists[0] if site_dists else 1.0
-    pdf_best  = pdf_dists[0]  if pdf_dists  else 1.0
+    site_best = site_rows[0]["distance"] if site_rows else 1.0
+    pdf_best  = pdf_rows[0]["distance"] if pdf_rows else 1.0
 
     include_pdfs = (
         bool(approved_pdf_ids)
@@ -90,42 +152,90 @@ def _build_context_and_sources(question):
         and pdf_best <= site_best + PDF_GAP_THRESHOLD
     )
 
-    site_context_chunks = _apply_margin(site_docs, site_metas, site_dists, SITE_CONTEXT_MARGIN)
-    site_source_chunks  = _apply_margin(site_docs, site_metas, site_dists, SITE_SOURCE_MARGIN)
-    pdf_chunks          = _apply_margin(pdf_docs,  pdf_metas,  pdf_dists,  PDF_MARGIN) if include_pdfs else []
+    raw_site = _apply_margin(site_rows, SITE_CONTEXT_MARGIN)
+    raw_pdf = _apply_margin(pdf_rows, PDF_MARGIN) if include_pdfs else []
+
+    site_context_chunks = _select_diverse(raw_site, MAX_SITE_CONTEXT_CHUNKS) if site_best <= SITE_ABS_THRESHOLD else []
+    pdf_chunks = _select_diverse(raw_pdf, MAX_PDF_CONTEXT_CHUNKS)
 
     if not site_context_chunks and not pdf_chunks:
         return None, []
 
     # ── Build context for LLM ─────────────────────────────────────────────────
     context_parts = []
-    for text, meta, _ in pdf_chunks:
+    used_chunks = []
+
+    for row in pdf_chunks:
+        text = row["text"]
+        meta = row["meta"]
         filename = meta.get("filename", "document")
         page     = meta.get("page", "?")
         context_parts.append(f"[{filename} — Page {page}]: {text}")
+        used_chunks.append(row)
 
-    for text, meta, _ in site_context_chunks:
+    for row in site_context_chunks:
+        text = row["text"]
+        meta = row["meta"]
         page_name = meta.get("page_name", "")
         context_parts.append(f"[{page_name} Page]: {text}")
+        used_chunks.append(row)
 
     context = "\n\n---\n\n".join(context_parts)
 
-    # ── Build source tags for UI ──────────────────────────────────────────────
+    # ── Sources = exactly what was used as context ────────────────────────────
     sources = []
-    seen = set()
+    source_index = {}
+    ordered_keys = []
 
-    for _, meta, _ in pdf_chunks:
-        filename = meta.get("filename", "document")
-        if filename not in seen:
-            sources.append({"type": "pdf", "filename": filename, "url": f"/pdf/{filename}"})
-            seen.add(filename)
+    for row in used_chunks:
+        meta = row["meta"]
+        key = _source_key(row)
+        if key not in source_index:
+            ordered_keys.append(key)
+            if key[0] == "pdf":
+                filename = meta.get("filename", "document")
+                source_index[key] = {
+                    "type": "pdf",
+                    "filename": filename,
+                    "url": f"/pdf/{filename}",
+                    "source_id": f"pdf::{filename}",
+                    "distance": row["distance"],
+                    "relevance": _relevance(row["distance"]),
+                    "snippet": _snippet(row["text"]),
+                    "chunk_count": 1,
+                    "pages": [meta.get("page", "?")],
+                }
+            else:
+                url = meta.get("url", "/")
+                page_name = meta.get("page_name", "Website")
+                source_index[key] = {
+                    "type": "website",
+                    "page_name": page_name,
+                    "url": url,
+                    "source_id": f"web::{url}",
+                    "distance": row["distance"],
+                    "relevance": _relevance(row["distance"]),
+                    "snippet": _snippet(row["text"]),
+                    "chunk_count": 1,
+                }
+            continue
 
-    for _, meta, _ in site_source_chunks:
-        url       = meta.get("url", "/")
-        page_name = meta.get("page_name", "")
-        if url not in seen:
-            sources.append({"type": "website", "page_name": page_name, "url": url})
-            seen.add(url)
+        src = source_index[key]
+        src["chunk_count"] += 1
+        if row["distance"] < src["distance"]:
+            src["distance"] = row["distance"]
+            src["relevance"] = _relevance(row["distance"])
+            src["snippet"] = _snippet(row["text"])
+        if src["type"] == "pdf":
+            page = meta.get("page", "?")
+            if page not in src["pages"]:
+                src["pages"].append(page)
+
+    for key in ordered_keys:
+        src = source_index[key]
+        if src["type"] == "pdf":
+            src["pages"] = sorted(src["pages"], key=lambda p: (str(type(p)), p))
+        sources.append(src)
 
     return context, sources
 

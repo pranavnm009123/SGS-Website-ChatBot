@@ -17,7 +17,7 @@ from doc_registry import get_docs, add_doc, update_doc_status, delete_doc, get_d
 from ingestion import ingest_document
 from retrieval import answer_question, answer_question_stream
 from security import limiter, sanitize_input, validate_admin, validate_file
-from db import get_db, check_and_migrate
+from db import get_db, check_and_migrate, Database
 from embeddings import EMBEDDING_MODEL
 from site_indexer import index_site_pages, start_site_watcher
 
@@ -228,6 +228,70 @@ async def remove_doc(doc_id: str, x_admin_key: str = Header(None)):
         db.collection.delete(where={"doc_id": doc_id})
         delete_doc(doc_id)
     return {"status": "success"}
+
+
+# ── Database purge ───────────────────────────────────────────────────────────
+
+@app.post("/purge-database")
+async def purge_database(x_admin_key: str = Header(None)):
+    """Wipe all PDF documents from ChromaDB and clear the uploads directory."""
+    validate_admin(x_admin_key)
+    db = get_db()
+
+    # Delete all PDF vectors (keep site vectors)
+    for doc in get_docs():
+        try:
+            db.collection.delete(where={"doc_id": doc["doc_id"]})
+        except Exception:
+            pass
+        if os.path.exists(doc["filepath"]):
+            os.remove(doc["filepath"])
+
+    # Reset registry
+    from doc_registry import save_docs
+    save_docs([])
+
+    # Clean uploads dir
+    for f in os.listdir(UPLOAD_DIR):
+        fp = os.path.join(UPLOAD_DIR, f)
+        if os.path.isfile(fp):
+            os.remove(fp)
+
+    log.info("Database purged: all PDF documents removed")
+    return {"status": "ok", "message": "All PDF documents and vectors have been purged."}
+
+
+# ── Full database purge ─────────────────────────────────────────────────────
+
+@app.post("/purge-all")
+async def purge_all(x_admin_key: str = Header(None)):
+    """Wipe EVERYTHING from ChromaDB (PDFs + website vectors) and clear uploads."""
+    validate_admin(x_admin_key)
+    db = get_db()
+
+    # Drop and recreate the entire collection
+    try:
+        db.client.delete_collection("approved_docs")
+    except Exception:
+        pass
+    db.collection = db.client.get_or_create_collection(
+        name="approved_docs",
+        metadata={"hnsw:space": "cosine"}
+    )
+    Database._instance.collection = db.collection
+
+    # Clear document registry
+    from doc_registry import save_docs
+    save_docs([])
+
+    # Clean uploads dir
+    for f in os.listdir(UPLOAD_DIR):
+        fp = os.path.join(UPLOAD_DIR, f)
+        if os.path.isfile(fp):
+            os.remove(fp)
+
+    log.info("Full database purge: all vectors, PDFs, and site index removed")
+    return {"status": "ok", "message": "Entire database wiped — PDFs and website vectors removed."}
 
 
 # ── Site re-index ────────────────────────────────────────────────────────────

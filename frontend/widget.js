@@ -93,19 +93,21 @@
   var closeBtn   = panel.querySelector('.widget-close');
   var refreshBtn = panel.querySelector('#widget-refresh');
 
+  var activeStreamController = null;
+
+  function abortActiveStream() {
+    if (activeStreamController) {
+      activeStreamController.abort();
+      activeStreamController = null;
+    }
+  }
+
   // ── Toggle ───────────────────────────────────────────────────────────────────
   function openPanel()  { panel.classList.add('open'); btn.classList.add('active'); localStorage.setItem(OPEN_KEY, '1'); }
   function closePanel() { panel.classList.remove('open'); btn.classList.remove('active'); localStorage.removeItem(OPEN_KEY); }
 
   btn.addEventListener('click', function () { panel.classList.contains('open') ? closePanel() : openPanel(); });
   closeBtn.addEventListener('click', closePanel);
-  refreshBtn.addEventListener('click', function () {
-    localStorage.removeItem(STORAGE_KEY);
-    msgList.innerHTML = '';
-    showWelcome();
-  });
-
-  if (localStorage.getItem(OPEN_KEY)) openPanel();
 
   // ── Message helpers ──────────────────────────────────────────────────────────
   function escapeHtml(str) {
@@ -140,7 +142,6 @@
     if (!sources || !sources.length) return;
     var wrap = document.createElement('div');
     wrap.className = 'wm-sources';
-    var linkIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
     sources.forEach(function (s) {
       var a = document.createElement('a');
       var url;
@@ -148,13 +149,15 @@
         a.className = 'wm-source-tag';
         url = window.location.origin + s.url;
         a.href = url;
-        a.innerHTML = escapeHtml(s.page_name) + ' ' + linkIcon;
+        a.innerHTML = escapeHtml(s.page_name || s.source_label || 'Website') + ' ' + linkIcon;
       } else {
         a.className = 'wm-source-tag wm-source-pdf';
         url = window.location.origin + (s.url || ('/pdf/' + encodeURIComponent(s.filename)));
         a.href = url;
-        a.innerHTML = escapeHtml(s.filename) + ' ' + linkIcon;
+        a.innerHTML = escapeHtml(s.filename || s.source_label || 'document.pdf') + ' ' + linkIcon;
       }
+      if (s.source_id) a.setAttribute('data-source-id', s.source_id);
+      if (s.snippet) a.title = s.snippet;
       a.addEventListener('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -215,6 +218,8 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
   }
 
+  var linkIcon = '<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
+
   function loadHistory() {
     try {
       var entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -222,6 +227,24 @@
         var el = document.createElement('div');
         el.className = e.cls;
         el.innerHTML = e.html;
+        // Re-attach link icons and click handlers on restored source tags
+        if (e.cls.indexOf('wm-sources') !== -1) {
+          el.querySelectorAll('.wm-source-tag').forEach(function (a) {
+            if (!a.querySelector('svg')) {
+              a.innerHTML = a.textContent.trim() + ' ' + linkIcon;
+            }
+            var url = a.href;
+            a.addEventListener('click', function (ev) {
+              ev.preventDefault();
+              ev.stopPropagation();
+              try {
+                saveHistory();
+                sessionStorage.setItem('sgs_source_nav', '1');
+              } catch (_) {}
+              setTimeout(function () { window.location.href = url; }, 50);
+            });
+          });
+        }
         msgList.appendChild(el);
       });
     } catch (_) {}
@@ -233,10 +256,26 @@
     scroll();
   }
 
+  function resetConversation() {
+    abortActiveStream();
+    localStorage.removeItem(STORAGE_KEY);
+    msgList.innerHTML = '';
+    showWelcome();
+    input.disabled = false;
+    sendBtn.disabled = false;
+  }
+
+  refreshBtn.addEventListener('click', resetConversation);
+
   // ── Send (streaming) ──────────────────────────────────────────────────────────
   async function send() {
     var question = input.value.trim();
     if (!question) return;
+
+    abortActiveStream();
+    var controller = new AbortController();
+    var signal = controller.signal;
+    activeStreamController = controller;
 
     // Remove suggestion chips if present
     var allSugg = msgList.querySelectorAll('.wm-suggestions');
@@ -255,17 +294,16 @@
       var res = await fetch('/chat/stream', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: question })
+        body: JSON.stringify({ question: question }),
+        signal: signal
       });
+
+      if (signal.aborted) return;
 
       if (res.status === 429) {
         typing.remove();
         appendBubble('Too many messages \u2014 please wait a moment and try again.', 'bot', false);
         scroll();
-        saveHistory();
-        input.disabled = false;
-        sendBtn.disabled = false;
-        input.focus();
         return;
       }
 
@@ -273,10 +311,6 @@
         typing.remove();
         appendBubble('Something went wrong. Please try again.', 'bot', false);
         scroll();
-        saveHistory();
-        input.disabled = false;
-        sendBtn.disabled = false;
-        input.focus();
         return;
       }
 
@@ -292,6 +326,7 @@
       while (true) {
         var chunk = await reader.read();
         if (chunk.done) break;
+        if (signal.aborted) return;
         buffer += decoder.decode(chunk.value, { stream: true });
 
         var lines = buffer.split('\n');
@@ -326,24 +361,37 @@
         }
       }
 
+      if (signal.aborted) return;
+
       if (!typingRemoved) {
         typing.remove();
         bubble = appendBubble('', 'bot', false).bubble;
       }
-      if (!fullText) {
+      if (!fullText && bubble) {
         bubble.textContent = 'No answer returned.';
       }
 
     } catch (err) {
-      typing.remove();
-      appendBubble('Could not reach the server. Please try again shortly.', 'bot', false);
+      if (err.name === 'AbortError') {
+        try { typing.remove(); } catch (_) {}
+        return;
+      }
+      try { typing.remove(); } catch (_) {}
+      if (!signal.aborted) {
+        appendBubble('Could not reach the server. Please try again shortly.', 'bot', false);
+      }
+    } finally {
+      if (activeStreamController === controller) {
+        activeStreamController = null;
+      }
+      if (!signal.aborted) {
+        scroll();
+        saveHistory();
+        input.disabled = false;
+        sendBtn.disabled = false;
+        input.focus();
+      }
     }
-
-    scroll();
-    saveHistory();
-    input.disabled = false;
-    sendBtn.disabled = false;
-    input.focus();
   }
 
   sendBtn.addEventListener('click', send);
@@ -357,7 +405,10 @@
     loadHistory();
   } else {
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(OPEN_KEY);
   }
   if (!msgList.children.length) showWelcome();
   scroll();
+
+  if (localStorage.getItem(OPEN_KEY)) openPanel();
 })();

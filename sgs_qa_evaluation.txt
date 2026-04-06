@@ -1,126 +1,125 @@
-SGS Technologies — Expanded Policy & Website Q&A Evaluation Set
-Generated: 2026-04-01
+SGS Technologies - Policy & Website Q&A Evaluation Set
 
 ================================================================================
-PART 1: QUESTIONS FROM PDF DOCUMENTS (10 TOTAL)
+PART 1: SINGLE PDF QUESTIONS (5 TOTAL)
 ================================================================================
 
---- SINGLE DOCUMENT QUESTIONS ---
+1. [EASY] What is the Recovery Time Objective (RTO) for mission-critical systems at SGS?
+   - ANSWER: 1 hour.
+   - SOURCE: SGS_Disaster_Recovery_Plan.pdf, Section 1.0
 
-1. [EASY] According to the SGS_Information_Security_Protocol, what specific version of TLS is mandatory for all digital interaction encryption?
-   - ANSWER: TLS 1.3.
-   - SOURCE: SGS_Information_Security_Protocol.pdf, Page 3 (Section 2.0: Data Protection)
+2. [EASY] How many days of PTO do SGS employees receive?
+   - ANSWER: 20 days PTO plus 10 company holidays.
+   - SOURCE: SGS_Employee_Excellence_Handbook.pdf, Section 2.0
 
-2. [EASY] In the SGS_Employee_Excellence_Handbook, how frequently are employees required to disclose potential conflicts of interest, such as secondary employment?
-   - ANSWER: On an annual basis.
-   - SOURCE: SGS_Employee_Excellence_Handbook.pdf, Page 4 (Section 3.0: Ethical Conduct)
+3. [MEDIUM] What is the minimum number of competitive bids required for vendor engagements exceeding $25,000 annually?
+   - ANSWER: A minimum of three competitive bids.
+   - SOURCE: SGS_Vendor_Compliance_Manual.pdf, Section 2.0
 
-3. [MEDIUM] Based on the SGS_Data_Sovereignty_Policy, what specific tier of penalties can be applied for non-compliance with the established frameworks?
-   - ANSWER: Tiered penalties ranging from formal warnings to contract termination.
-   - SOURCE: SGS_Data_Sovereignty_Policy.pdf, Page 6 (Section 5.0: Compliance Monitoring)
+4. [MEDIUM] What is the response time requirement for a SEV-1 (Critical) security incident?
+   - ANSWER: 15 minutes, with mandatory executive notification.
+   - SOURCE: SGS_Information_Security_Protocol.pdf, Section 5.0
 
-4. [MEDIUM] Under the 'Workplace Health and Sustainable Environment' section in the SGS_Sustainable_Impact_Charter, which ISO standard must all physical offices comply with?
-   - ANSWER: ISO 14001.
-   - SOURCE: SGS_Sustainable_Impact_Charter.pdf, Page 5 (Section 4.0: Workplace Health)
-
-5. [EASY] According to the SGS_Technical_Debt_Guidelines, how often will internal audits be conducted to ensure strict adherence to the policy frameworks?
-   - ANSWER: Quarterly.
-   - SOURCE: SGS_Technical_Debt_Guidelines.pdf, Page 6 (Section 5.0: Compliance Monitoring)
-
---- MULTIPLE/CROSS-DOCUMENT QUESTIONS ---
-
-6. [MEDIUM] Both the Cloud Architecture and Information Security Protocols discuss system access. What is the mandatory authentication method (MFA) required for all internal SGS systems?
-   - ANSWER: Multi-factor authentication (MFA).
-   - SOURCE: SGS_Cloud_Architecture_Standards.pdf (Page 3) & SGS_Information_Security_Protocol.pdf (Page 3)
-
-7. [MEDIUM] Looking at both the Strategic Roadmap and the Quality Audit Framework, what is the name of the core delivery model that employees must use for all project interactions?
-   - ANSWER: The 'Agile First' delivery model.
-   - SOURCE: SGS_Strategic_Roadmap_2026.pdf (Page 2) & SGS_Quality_Audit_Framework.pdf (Page 2)
-
-8. [HARD] Between the Vendor Compliance Manual and the Ethical Conduct policy, what specific types of secondary financial stakes are employees required to disclose?
-   - ANSWER: Significant financial stakes in competing enterprises.
-   - SOURCE: SGS_Vendor_Compliance_Manual.pdf (Page 4) & SGS_Corporate_Governance.pdf (Page 4)
-
-9. [HARD] How does the general 'Operational Excellence' policy across SGS documents define the requirement for client deliverables before final sign-off?
-   - ANSWER: They must undergo multiple tiers of quality assurance.
-   - SOURCE: Found in Section 1.0 (Page 2) of all SGS Policy PDFs.
-
-10. [MEDIUM] Across the various policy frameworks, which specific individual/role is granted the authority to report investigations directly to the Board of Directors?
-    - ANSWER: The Compliance Officer.
-    - SOURCE: Found in Section 5.0 (Page 6) of all SGS Policy PDFs.
+5. [EASY] What percentage of sprint capacity must engineering teams allocate to technical debt reduction?
+   - ANSWER: A minimum of 20% (approximately 2 days per developer per sprint).
+   - SOURCE: SGS_Technical_Debt_Guidelines.pdf, Section 2.0
 
 ================================================================================
-PART 2: QUESTIONS FROM WEBSITE CONTENT (5 TOTAL)
+PART 2: CROSS-DOCUMENT PDF QUESTIONS (5 TOTAL)
+================================================================================
+
+6. [MEDIUM] Both the Cloud Architecture Standards and Disaster Recovery Plan discuss system availability. What SLO availability target does the Cloud Architecture doc set, and what is the Tier 1 RTO in the DR plan?
+   - ANSWER: 99.95% availability (Cloud Architecture, Section 5.0) and 1-hour RTO (Disaster Recovery, Section 1.0).
+   - SOURCE: SGS_Cloud_Architecture_Standards.pdf (Section 5.0) + SGS_Disaster_Recovery_Plan.pdf (Section 1.0)
+
+7. [HARD] Compare the vendor security assessment process with the information security vulnerability management program. How do their remediation timelines differ?
+   - ANSWER: Vendor VSQ failures allow up to 60 days for remediation (Vendor Manual, Section 3.0). Critical vulnerabilities (CVSS 9.0+) must be patched within 48 hours (InfoSec Protocol, Section 3.0).
+   - SOURCE: SGS_Vendor_Compliance_Manual.pdf (Section 3.0) + SGS_Information_Security_Protocol.pdf (Section 3.0)
+
+8. [MEDIUM] What code review standard is required before merging, and what testing coverage threshold must backend services meet?
+   - ANSWER: At least two reviewer approvals including one Senior Engineer (Quality Audit, Section 4.0) and 80% unit test coverage for backend services (Quality Audit, Section 1.0).
+   - SOURCE: SGS_Quality_Audit_Framework.pdf (Sections 1.0 and 4.0)
+
+9. [HARD] How does the data retention schedule in the Data Sovereignty Policy interact with the vendor offboarding data return timeline in the Vendor Compliance Manual?
+   - ANSWER: Active customer data is retained for contract duration plus 12 months (Data Sovereignty, Section 4.0), while vendors must return or destroy all SGS data within 14 days of termination (Vendor Manual, Section 5.0).
+   - SOURCE: SGS_Data_Sovereignty_Policy.pdf (Section 4.0) + SGS_Vendor_Compliance_Manual.pdf (Section 5.0)
+
+10. [MEDIUM] What are the Innovation Lab budget allocation and the total projected revenue for FY2026?
+    - ANSWER: The Innovation Lab receives 15% of R&D budget (~$4.2 million), and total projected revenue is $38.7 million.
+    - SOURCE: SGS_Strategic_Roadmap_2026.pdf (Sections 3.0 and 5.0)
+
+================================================================================
+PART 3: WEBSITE-ONLY QUESTIONS (5 TOTAL)
 ================================================================================
 
 11. [EASY] According to the homepage, how many companies worldwide trust SGS Technologies?
     - ANSWER: Over 500 companies.
-    - SOURCE: Website (index.html), Hero Section Badge.
+    - SOURCE: Website (index.html), Hero Section badge.
 
-12. [MEDIUM] For government sector work, which two specific compliance standards (one security, one accessibility) does SGS build its digital services to meet?
-    - ANSWER: FedRAMP (Security) and Section 508 (Accessibility).
+12. [MEDIUM] For government sector work, which two specific compliance standards does SGS build its digital services to meet?
+    - ANSWER: FedRAMP (security) and Section 508 (accessibility).
     - SOURCE: Website (index.html), "Trusted Across Industries" - Government Section.
 
-13. [EASY] On the 'Why Choose SGS' section of the website, what are the four core features highlighted as technical advantages?
+13. [EASY] What are the four core features highlighted on the "Why Choose SGS" section of the homepage?
     - ANSWER: Fast Delivery, Enterprise Security, Cloud Native, and Dedicated Support.
-    - SOURCE: Website (index.html), "Why Choose SGS Technologies?" Section.
+    - SOURCE: Website (index.html), "Why Choose SGS Technologies?" section.
 
-14. [MEDIUM] Which specific executive (Name and Company) provided the testimonial stating that SGS cut their legal review costs by 60%?
+14. [MEDIUM] Which executive said SGS cut their legal review costs by 60%, and what company are they from?
     - ANSWER: David Park, VP Engineering at ClearLaw.
-    - SOURCE: Website (index.html), Testimonials Section.
+    - SOURCE: Website (index.html), Testimonials section.
 
-15. [EASY] According to the Financial Services section on the website, what are the three specific types of systems SGS builds for the finance industry?
+15. [EASY] What three types of financial services systems does SGS build?
     - ANSWER: Real-time fraud detection, regulatory reporting dashboards, and secure transaction processing systems.
-    - SOURCE: Website (index.html), "Trusted Across Industries" - Financial Services Section.
+    - SOURCE: Website (index.html), "Trusted Across Industries" - Financial Services section.
 
 ================================================================================
-PART 3: HYBRID QUESTIONS (WEBSITE + PDFs)
+PART 4: HYBRID QUESTIONS (WEBSITE + PDF) (5 TOTAL)
 ================================================================================
 
-16. [MEDIUM] The website mentions Rachel Torres (COO at MedFirst) saw processing time drop to 20 minutes. According to the 'Operational Excellence' section in the PDFs, what delivery model is credited for this efficiency?
-    - ANSWER: The 'Agile First' delivery model.
-    - SOURCE: Website (Testimonials) + Any SGS PDF, Page 2 (Section 1.0).
+16. [MEDIUM] The website advertises "Enterprise Security" as a feature. According to the Information Security Protocol, what specific encryption standard is mandated for data in transit?
+    - ANSWER: TLS 1.3 (with TLS 1.2 permitted only for legacy integrations with CISO exception approval).
+    - SOURCE: Website (Features) + SGS_Information_Security_Protocol.pdf (Section 4.0)
 
-17. [MEDIUM] SGS provides HIPAA-compliant platforms for Healthcare on its website. Looking at 'Data Protection' (Section 2.0) in the PDFs, what encryption protocol is mandated to protect such data?
-    - ANSWER: TLS 1.3.
-    - SOURCE: Website (Industries) + Any SGS PDF, Page 3 (Section 2.0).
+17. [HARD] The website mentions HIPAA-compliant platforms for Healthcare clients. How does the Data Sovereignty Policy handle data for US government clients specifically?
+    - ANSWER: US government client data must reside exclusively in FedRAMP-authorized US data centers with no foreign national access.
+    - SOURCE: Website (Industries) + SGS_Data_Sovereignty_Policy.pdf (Section 1.0)
 
-18. [HARD] The website lists "Enterprise Security" as a key feature. According to the 'Compliance Monitoring' sections in the PDFs, who investigates deviations from these security standards?
-    - ANSWER: The Compliance Officer investigating and reporting to the Board.
-    - SOURCE: Website (Features) + Any SGS PDF, Page 6 (Section 5.0).
+18. [MEDIUM] The website claims "Fast Delivery" through agile processes. What is the deployment frequency target in the Cloud Architecture Standards CI/CD pipeline?
+    - ANSWER: Multiple times per day for microservices, weekly for platform services, with a Mean Lead Time for Changes under 24 hours.
+    - SOURCE: Website (Features) + SGS_Cloud_Architecture_Standards.pdf (Section 4.0)
 
-19. [MEDIUM] SGS claims to build for "sustainable growth" on its homepage. How is this roadmap implemented in physical offices according to the Sustainable Impact Charter?
-    - ANSWER: Mandatory compliance with ISO 14001 environmental management standards.
-    - SOURCE: Website (Hero/CTA) + SGS_Sustainable_Impact_Charter.pdf, Page 5 (Section 4.0).
+19. [HARD] Rachel Torres (COO, MedFirst Insurance) says processing time dropped to 20 minutes. What post-release monitoring window does SGS require after such deployments?
+    - ANSWER: A mandatory 72-hour monitoring window checking error rates, p99 latency, CPU/memory utilization, and business metrics.
+    - SOURCE: Website (Testimonials) + SGS_Quality_Audit_Framework.pdf (Section 5.0)
 
-20. [HARD] The website highlights David Park's AI integration success. Based on the 'Ethical Conduct' policy, what annual disclosure would David Park likely need to make if he were an SGS employee?
-    - ANSWER: Annual disclosure of potential conflicts of interest, including financial stakes in competing enterprises.
-    - SOURCE: Website (Testimonials) + Any SGS PDF, Page 4 (Section 3.0).
-
-================================================================================
-PART 4: MULTI-DOCUMENT QUESTIONS (3-5 PDFs)
-================================================================================
-
-21. [HARD] Based on the Cloud Architecture, Information Security, and Data Sovereignty PDFs, what three-layered approach does SGS use for system integrity (Version, Auth, and Audit)?
-    - ANSWER: TLS 1.3 encryption, Multi-factor authentication (MFA), and Quarterly internal audits.
-    - SOURCE: SGS_Cloud_Architecture_Standards.pdf (P3), SGS_Information_Security_Protocol.pdf (P3), SGS_Data_Sovereignty_Policy.pdf (P6).
-
-22. [HARD] Synthesize the annual reporting requirements found in the Employee Handbook, Corporate Governance, and Vendor Compliance Manual. What is the primary focus of these disclosures?
-    - ANSWER: Reporting potential conflicts of interest, bribery/corruption zero-tolerance, and financial stakes in competitors.
-    - SOURCE: Handbook (P4), Governance (P4), Vendor Manual (P4).
-
-23. [HARD] Using the Strategic Roadmap, Quality Audit Framework, and Project Management Methodology, identify the mandatory requirement for all client deliverables before they reach sign-off.
-    - ANSWER: Meticulous record keeping and undergoing multiple tiers of quality assurance.
-    - SOURCE: Strategic Roadmap (P2), Quality Audit (P2), Project Mgmt (P2).
-
-24. [VERY HARD] Combine the risk mitigation strategies from the Disaster Recovery Plan, Cybersecurity Incident Response, and Technical Debt Guidelines. At what point in the 'Project Lifecycle' must these strategies be integrated?
-    - ANSWER: Risk mitigation must be integrated into every phase of the project lifecycle.
-    - SOURCE: DR Plan (P2), Incident Response (P2), Tech Debt (P2).
-
-25. [MEDIUM] List four "SGS Policy" documents where the 'Workplace Health and Sustainable Environment' (Section 4.0) appears on Page 5.
-    - ANSWER: Any 4 from the 10 SGS PDFs (e.g., Strategic Roadmap, InfoSec Protocol, Employee Handbook, Sustainable Impact Charter).
-    - SOURCE: All SGS Policy PDFs (P5).
+20. [MEDIUM] The website mentions SGS works with startups, government, healthcare, and Fortune 500 companies. How many new geographic markets is SGS targeting in 2026?
+    - ANSWER: Three new markets: Southeast Asia, Eastern Europe, and Latin America.
+    - SOURCE: Website (Industries) + SGS_Strategic_Roadmap_2026.pdf (Section 1.0)
 
 ================================================================================
-END OF ENHANCED EVALUATION SET
+PART 5: MULTI-DOCUMENT SYNTHESIS (3-5 PDFs) (5 TOTAL)
+================================================================================
+
+21. [HARD] Across the Disaster Recovery Plan, Cloud Architecture Standards, and Information Security Protocol, what is the full picture of how SGS handles a production system outage?
+    - ANSWER: Active-active failover across two AWS regions with automated Route 53 health checks (DR Plan, Section 2.0). Services auto-scale via Kubernetes HPA with 3-50 replicas (Cloud Arch, Section 2.0). SEV-1 incidents require 15-minute response with executive notification (InfoSec, Section 5.0).
+    - SOURCE: SGS_Disaster_Recovery_Plan.pdf (Section 2.0) + SGS_Cloud_Architecture_Standards.pdf (Section 2.0) + SGS_Information_Security_Protocol.pdf (Section 5.0)
+
+22. [HARD] Using the Employee Handbook, Sustainable Impact Charter, and Strategic Roadmap, describe SGS's investment in its people and culture.
+    - ANSWER: $5,000 annual learning stipend, 16 weeks paid parental leave, 401(k) 4% match (Employee Handbook, Section 2.0). 24 hours paid volunteer time, $2,000 donation matching (Sustainable Impact, Section 3.0). 40% women/non-binary workforce target (Sustainable Impact, Section 2.0). Hiring across 3 new geographic regions (Strategic Roadmap, Section 1.0).
+    - SOURCE: SGS_Employee_Excellence_Handbook.pdf (Section 2.0) + SGS_Sustainable_Impact_Charter.pdf (Sections 2.0, 3.0) + SGS_Strategic_Roadmap_2026.pdf (Section 1.0)
+
+23. [VERY HARD] Across the Quality Audit Framework, Technical Debt Guidelines, and Cloud Architecture Standards, trace the full lifecycle of a code change from review to production.
+    - ANSWER: Two reviewer approvals incl. one Senior Engineer (Quality Audit, Section 4.0). CI/CD pipeline: lint, test, build, security scan, staging, manual approval, blue-green deploy (Cloud Arch, Section 4.0). 80% backend test coverage required (Quality Audit, Section 1.0). 5-gate release sign-off process (Quality Audit, Section 3.0). 72-hour post-release monitoring (Quality Audit, Section 5.0). 20% sprint time reserved for tech debt (Tech Debt, Section 2.0).
+    - SOURCE: SGS_Quality_Audit_Framework.pdf (Sections 1.0, 3.0, 4.0, 5.0) + SGS_Cloud_Architecture_Standards.pdf (Section 4.0) + SGS_Technical_Debt_Guidelines.pdf (Section 2.0)
+
+24. [HARD] Using the Data Sovereignty Policy, Information Security Protocol, and Vendor Compliance Manual, what happens when a data breach occurs involving a third-party vendor?
+    - ANSWER: Internal escalation to CISO within 1 hour (Data Sovereignty, Section 5.0). GDPR breach notification to supervisory authority within 72 hours (Data Sovereignty, Section 5.0). Vendor system access revoked within 24 hours (Vendor Manual, Section 5.0). Incident classified as SEV-1 or SEV-2 based on scope (InfoSec, Section 5.0). Vendor undergoes formal review and potential contract termination (Vendor Manual, Section 4.0).
+    - SOURCE: SGS_Data_Sovereignty_Policy.pdf (Section 5.0) + SGS_Information_Security_Protocol.pdf (Section 5.0) + SGS_Vendor_Compliance_Manual.pdf (Sections 4.0, 5.0)
+
+25. [HARD] Across the Strategic Roadmap, Sustainable Impact Charter, and Data Sovereignty Policy, what are SGS's key geographic and compliance considerations for global expansion?
+    - ANSWER: Expanding into Southeast Asia, Eastern Europe, and Latin America (Strategic Roadmap, Section 1.0). Data must reside in customer's geographic region with centers in US, EU, and APAC (Data Sovereignty, Section 1.0). GDPR compliance with 30-day DSAR fulfillment for EU customers (Data Sovereignty, Section 2.0). Net-zero carbon by 2030 across all locations (Sustainable Impact, Section 1.0). Platinum-tier cloud partnerships with AWS, Azure, Google Cloud (Strategic Roadmap, Section 4.0).
+    - SOURCE: SGS_Strategic_Roadmap_2026.pdf (Sections 1.0, 4.0) + SGS_Data_Sovereignty_Policy.pdf (Sections 1.0, 2.0) + SGS_Sustainable_Impact_Charter.pdf (Section 1.0)
+
+================================================================================
+END OF EVALUATION SET
 ================================================================================

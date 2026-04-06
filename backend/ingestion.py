@@ -46,14 +46,18 @@ def ingest_document(doc_id, filepath, filename):
         chunks = []
         for item in text_content:
             page_chunks = text_splitter.split_text(item["text"])
-            for chunk in page_chunks:
+            total_page_chunks = len(page_chunks)
+            for page_chunk_idx, chunk in enumerate(page_chunks):
                 chunks.append({
                     "text": chunk,
                     "metadata": {
                         "doc_id": doc_id,
                         "filename": filename,
                         "page": item["page"],
-                        "source_type": "pdf"
+                        "source_type": "pdf",
+                        "chunk_index": page_chunk_idx,
+                        "page_chunk_count": total_page_chunks,
+                        "source_label": f"{filename} (Page {item['page']})",
                     }
                 })
 
