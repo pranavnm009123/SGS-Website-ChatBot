@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import re
+from urllib.parse import quote
 import requests
 from db import get_db
 from doc_registry import get_approved_doc_ids
@@ -196,7 +197,6 @@ _SOURCE_STOPWORDS = {
     "charter",
     "manual",
     "protocol",
-    "home",
 }
 _QUESTION_STOPWORDS = {
     "across",
@@ -220,10 +220,56 @@ _QUESTION_STOPWORDS = {
     "production",
     "review",
 }
+_QUESTION_SOURCE_CUES = {
+    "pdf",
+    "document",
+    "documents",
+    "policy",
+    "plan",
+    "framework",
+    "guidelines",
+    "standards",
+    "charter",
+    "manual",
+    "protocol",
+    "page",
+    "pages",
+    "website",
+    "homepage",
+    "site",
+}
+_PDF_SOURCE_CUES = {
+    "pdf",
+    "document",
+    "documents",
+    "policy",
+    "plan",
+    "framework",
+    "guidelines",
+    "standards",
+    "charter",
+    "manual",
+    "protocol",
+}
+_WEBSITE_SOURCE_CUES = {
+    "page",
+    "pages",
+    "website",
+    "homepage",
+    "site",
+}
 
 
 def _tokens(text):
     return _SOURCE_WORD_RE.findall(_normalized_text(text))
+
+
+def _question_source_terms(question):
+    normalized = _normalized_text(question)
+    terms = set(_tokens(question))
+    if "homepage" in terms or "home page" in normalized:
+        terms.add("home")
+    return terms
 
 
 def _source_terms(row):
@@ -242,7 +288,7 @@ def _source_terms(row):
 
 
 def _question_mentions_source(question, row):
-    question_terms = set(_tokens(question))
+    question_terms = _question_source_terms(question)
     source_terms = _source_terms(row)
     if not source_terms:
         return False
@@ -251,9 +297,52 @@ def _question_mentions_source(question, row):
     return len(overlap) >= threshold
 
 
+def _question_has_explicit_source_reference(question):
+    normalized = _normalized_text(question)
+    question_tokens = _question_source_terms(question)
+    if question_tokens & _QUESTION_SOURCE_CUES:
+        return True
+    if any(phrase in normalized for phrase in ("according to", "from the ", "on the ", "in the ")):
+        return True
+    return False
+
+
+def _question_explicitly_targets_pdf(question):
+    return bool(_question_source_terms(question) & _PDF_SOURCE_CUES)
+
+
+def _question_explicitly_targets_website(question):
+    return bool(_question_source_terms(question) & _WEBSITE_SOURCE_CUES)
+
+
+def _question_source_overlap(question, row):
+    question_terms = _question_source_terms(question)
+    overlap = len(question_terms & _source_terms(row))
+    meta = row["meta"]
+    if meta.get("source_type") == "website" and _normalized_text(meta.get("page_name", "")) == "home" and "home" in question_terms:
+        overlap += 1
+    return overlap
+
+
 def _filter_to_named_sources(question, rows):
+    if not rows:
+        return []
     matching = [row for row in rows if _question_mentions_source(question, row)]
-    return matching if matching else rows
+    if matching:
+        best_overlap = max(_question_source_overlap(question, row) for row in matching)
+        return [row for row in matching if _question_source_overlap(question, row) == best_overlap]
+
+    if not _question_has_explicit_source_reference(question):
+        return rows
+
+    source_type = rows[0]["meta"].get("source_type")
+    if source_type == "website" and _question_explicitly_targets_pdf(question) and not _question_explicitly_targets_website(question):
+        return []
+
+    best_overlap = max(_question_source_overlap(question, row) for row in rows)
+    if best_overlap <= 0:
+        return []
+    return [row for row in rows if _question_source_overlap(question, row) == best_overlap]
 
 
 def _question_terms(question):
@@ -270,6 +359,10 @@ def _row_text_terms(row):
         for token in _tokens(row["text"])
         if token not in _QUESTION_STOPWORDS and len(token) >= 4
     }
+
+
+def _row_text_overlap(question, row):
+    return len(_question_terms(question) & _row_text_terms(row))
 
 
 def _row_priority(question, row):
@@ -307,6 +400,32 @@ def _is_low_signal_chunk(text):
 def _prune_low_signal_rows(rows):
     high_signal = [row for row in rows if not _is_low_signal_chunk(row["text"])]
     return high_signal if high_signal else rows
+
+
+def _filter_selected_chunks(question, rows):
+    if not rows or _looks_multi_source(question):
+        return rows
+
+    explicit_source = _question_has_explicit_source_reference(question)
+    aligned = []
+    for row in rows:
+        source_overlap = _question_source_overlap(question, row)
+        text_overlap = _row_text_overlap(question, row)
+        if source_overlap > 0 or text_overlap > 0:
+            aligned.append(row)
+
+    if not aligned:
+        return rows[:1]
+
+    if not explicit_source:
+        return aligned
+
+    strong_source_rows = [row for row in aligned if _question_source_overlap(question, row) > 0]
+    if strong_source_rows:
+        return strong_source_rows
+
+    strong_text_rows = [row for row in aligned if _row_text_overlap(question, row) >= 2]
+    return strong_text_rows or aligned[:1]
 
 
 def _question_prefers_pdfs(question):
@@ -444,6 +563,28 @@ def _extractive_answer_from_context(question, context, max_sentences=5):
     return "\n".join(f"- {sentence}" for sentence in selected)
 
 
+def _page_number(value):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _page_sort_key(value):
+    page = _page_number(value)
+    if page is not None:
+        return (0, page)
+    return (1, str(value))
+
+
+def _pdf_source_url(filename, pages):
+    base_url = f"/pdf/{quote(filename)}"
+    first_page = next((page for page in (_page_number(value) for value in pages) if page is not None), None)
+    if first_page is None:
+        return base_url
+    return f"{base_url}#page={first_page}"
+
+
 def _build_context_and_sources(question):
     query_embedding = get_model().encode(question).tolist()
     db = get_db()
@@ -472,6 +613,8 @@ def _build_context_and_sources(question):
         per_source_cap=limits["pdf_per_source_cap"],
         prioritize_source_diversity=True,
     )
+    site_context_chunks = _filter_selected_chunks(question, site_context_chunks)
+    pdf_chunks = _filter_selected_chunks(question, pdf_chunks)
 
     if not site_context_chunks and not pdf_chunks:
         return None, []
@@ -509,16 +652,17 @@ def _build_context_and_sources(question):
             ordered_keys.append(key)
             if key[0] == "pdf":
                 filename = meta.get("filename", "document")
+                page = meta.get("page", "?")
                 source_index[key] = {
                     "type": "pdf",
                     "filename": filename,
-                    "url": f"/pdf/{filename}",
+                    "url": _pdf_source_url(filename, [page]),
                     "source_id": f"pdf::{filename}",
                     "distance": row["distance"],
                     "relevance": _relevance(row["distance"]),
                     "snippet": _snippet(row["text"]),
                     "chunk_count": 1,
-                    "pages": [meta.get("page", "?")],
+                    "pages": [page],
                 }
             else:
                 url = meta.get("url", "/")
@@ -549,7 +693,8 @@ def _build_context_and_sources(question):
     for key in ordered_keys:
         src = source_index[key]
         if src["type"] == "pdf":
-            src["pages"] = sorted(src["pages"], key=lambda p: (str(type(p)), p))
+            src["pages"] = sorted(src["pages"], key=_page_sort_key)
+            src["url"] = _pdf_source_url(src["filename"], src["pages"])
         sources.append(src)
 
     return context, sources

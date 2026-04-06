@@ -209,6 +209,48 @@
     return { wrap: wrap, bubble: bubble };
   }
 
+  function numericPages(pages) {
+    if (!Array.isArray(pages)) return [];
+    return pages
+      .map(function (page) { return parseInt(page, 10); })
+      .filter(function (page, index, arr) {
+        return Number.isFinite(page) && arr.indexOf(page) === index;
+      })
+      .sort(function (a, b) { return a - b; });
+  }
+
+  function formatPdfPages(pages) {
+    var nums = numericPages(pages);
+    if (!nums.length) return '';
+
+    var ranges = [];
+    var start = nums[0];
+    var end = nums[0];
+
+    for (var i = 1; i < nums.length; i++) {
+      var page = nums[i];
+      if (page === end + 1) {
+        end = page;
+        continue;
+      }
+      ranges.push(start === end ? String(start) : (start + '-' + end));
+      start = page;
+      end = page;
+    }
+    ranges.push(start === end ? String(start) : (start + '-' + end));
+
+    return ranges.length === 1 && ranges[0].indexOf('-') === -1
+      ? ' (p. ' + ranges[0] + ')'
+      : ' (pp. ' + ranges.join(', ') + ')';
+  }
+
+  function sourceLabel(source) {
+    if (source.type === 'website') {
+      return source.page_name || source.source_label || 'Website';
+    }
+    return (source.filename || source.source_label || 'document.pdf') + formatPdfPages(source.pages);
+  }
+
   function appendSources(sources) {
     if (!sources || !sources.length) return;
     var wrap = document.createElement('div');
@@ -220,12 +262,12 @@
         a.className = 'wm-source-tag';
         url = window.location.origin + s.url;
         a.href = url;
-        a.innerHTML = escapeHtml(s.page_name || s.source_label || 'Website') + ' ' + linkIcon;
+        a.innerHTML = escapeHtml(sourceLabel(s)) + ' ' + linkIcon;
       } else {
         a.className = 'wm-source-tag wm-source-pdf';
         url = window.location.origin + (s.url || ('/pdf/' + encodeURIComponent(s.filename)));
         a.href = url;
-        a.innerHTML = escapeHtml(s.filename || s.source_label || 'document.pdf') + ' ' + linkIcon;
+        a.innerHTML = escapeHtml(sourceLabel(s)) + ' ' + linkIcon;
       }
       if (s.source_id) a.setAttribute('data-source-id', s.source_id);
       if (s.snippet) a.title = s.snippet;

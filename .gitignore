@@ -39,3 +39,9 @@ venv.bak/
 *.swp
 CLAUDE.md
 ppt_generation_brief.txt
+
+# PPT generator tooling + generated deck (regenerate locally)
+generate_simple_overview_ppt.py
+requirements-ppt.txt
+SGS_Chatbot_Feature_Overview.pptx
+~$*.pptx
