@@ -4,6 +4,7 @@ backend/chroma_db/
 backend/approved_docs.json
 backend/.embedding_model
 backend/test_pdfs/
+backend/generate_test_pdfs.py
 
 # Eval: only sgs_qa_evaluation.txt is tracked — outputs and runners stay local
 eval_model_results.json
